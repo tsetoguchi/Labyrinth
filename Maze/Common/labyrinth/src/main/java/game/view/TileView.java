@@ -107,7 +107,7 @@ class TileView extends JPanel {
     }
 
     private void drawGem(Graphics g, String gemName, int x, int y) throws IOException {
-        File gemFile = new File(gemName);
+        File gemFile = new File(gemName + ".png");
         BufferedImage gemImg = ImageIO.read(gemFile);
         g.drawImage(gemImg, x, y, this.imgSideLen, this.imgSideLen, null);
     }
