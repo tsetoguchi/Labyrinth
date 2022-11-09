@@ -10,10 +10,6 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.Optional;
 import java.util.Queue;
@@ -22,11 +18,13 @@ import java.util.Queue;
  * The controller which accepts updates from the referee and draws the board state, using interactive buttons
  * to switch between states shown.
  */
-public class ObserverController implements ActionListener {
-    ObserverView view;
-    ObserverGameProjection currentState;
-    Queue<ObserverGameProjection> nextStates;
-    boolean gameOver;
+public class ObserverController implements ActionListener, IObserver {
+
+    private final ObserverView view;
+
+    private ObserverGameProjection currentState;
+    private Queue<ObserverGameProjection> nextStates;
+    private boolean gameOver;
 
     public ObserverController(ObserverGameProjection currentState) {
         this.currentState = currentState;
@@ -40,22 +38,26 @@ public class ObserverController implements ActionListener {
     /**
      * Accept a new state from the referee and add it to the queue of states that can be displayed.
      */
-    public void acceptState(ObserverGameProjection newState) {
+    @Override
+    public void update(ObserverGameProjection newState) {
         this.nextStates.add(newState);
+        this.view.enableNextButton(true);
     }
 
-    public void initialize(ObserverGameProjection initialState) {
-        this.acceptState(initialState);
-        this.advanceState();
-        this.view.setVisible(true);
-    }
 
     /**
      * Accept an update from the referee informing the observer that the game is over.
      */
-    public void acceptGameOver() {
+    @Override
+    public void gameOver() {
         this.gameOver = true;
     }
+
+//    public void initialize(ObserverGameProjection initialState) {
+//        this.acceptState(initialState);
+//        this.advanceState();
+//        this.view.setVisible(true);
+//    }
 
     @Override
     public void actionPerformed(ActionEvent e) {

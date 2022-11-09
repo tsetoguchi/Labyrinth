@@ -22,19 +22,19 @@ public class ObserverView extends JFrame {
     private static final int CELL_SIDE_LEN = 80;
 
     public ObserverView(ObserverGameProjection currentState) {
-//        this.setLayout(new FlowLayout());
+        this.setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
         this.currentState = currentState;
-        this.setPreferredSize(new Dimension(1000, 800));
+//        this.setPreferredSize(new Dimension(1000, 800));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         this.nextButton = new JButton("Next");
         this.nextButton.setActionCommand("Next");
-        this.nextButton.setBounds(30, 600, 100, 40);
+//        this.nextButton.setBounds(30, 600, 100, 40);
         this.add(this.nextButton);
 
         this.saveButton = new JButton("Save");
         this.saveButton.setActionCommand("Save");
-        this.saveButton.setBounds(160, 600, 100, 40);
+//        this.saveButton.setBounds(160, 600, 100, 40);
         this.add(this.saveButton);
 
         this.drawCurrentState();
@@ -65,6 +65,10 @@ public class ObserverView extends JFrame {
             return Optional.of(saveFile.getAbsolutePath());
         }
         return Optional.empty();
+    }
+
+    public void enableNextButton(boolean enabled) {
+        this.nextButton.setEnabled(enabled);
     }
 
     private void drawNewState() {

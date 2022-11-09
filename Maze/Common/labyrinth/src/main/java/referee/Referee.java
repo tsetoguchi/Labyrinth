@@ -1,9 +1,10 @@
 package referee;
 
-import game.controller.ObserverController;
+import game.controller.IObserver;
 import game.model.*;
 import game.model.projections.ObserverGameProjection;
 import game.model.projections.PlayerGameProjection;
+import player.Player;
 import player.TurnPlan;
 import referee.clients.PlayerClient;
 
@@ -13,7 +14,6 @@ import static game.model.GameStatus.*;
 import static referee.PlayerResult.*;
 
 /**
- *
  * The referee handles:
  * A player asking to perform an illegal slide (TODO)
  * A player asking to move to an inaccessible position (TODO)
@@ -21,12 +21,14 @@ import static referee.PlayerResult.*;
  * Leaving for the remote communication layer:
  * A player not responding for a long period of time (TODO)
  */
-public class Referee {
-    private final Game game;
-    /** Stores which client should be used to talk to each Player. **/
-    private final Map<PlayerAvatar, PlayerClient> playerToClientMap;
+public class Referee implements IReferee {
+    private Game game;
+    /**
+     * Stores which client should be used to talk to each Player.
+     **/
+    private Map<PlayerAvatar, PlayerClient> playerToClientMap;
     private final List<PlayerAvatar> playersReachedGoalList;
-    private final Optional<ObserverController> observer;
+    private final List<IObserver> observers;
 
     /**
      * Creates a referee and assigns it a game to moderate, as well as a list of clients which should be used to
@@ -34,21 +36,15 @@ public class Referee {
      * Game.
      * Accepts an optional observer which will be updated as the game progresses.
      */
-    public Referee(Game game, List<PlayerClient> playerClients, Optional<ObserverController> observer) {
+    public Referee(Game game, List<PlayerClient> playerClients, List<IObserver> observers) {
         this.game = game;
-        this.playerToClientMap = new HashMap<>();
-        if (playerClients.size() != game.getPlayerList().size()) {
-            throw new IllegalArgumentException("Amount of clients and players does not match.");
-        }
-        for (int i = 0; i < playerClients.size(); i++) {
-            this.playerToClientMap.put(game.getPlayerList().get(i), playerClients.get(i));
-        }
+        this.playerToClientMap = this.mapPlayerAvatarsToPlayerClients(game, playerClients);
         this.playersReachedGoalList = new ArrayList<>();
-        this.observer = observer;
+        this.observers = observers;
     }
 
     public Referee(Game game, List<PlayerClient> playerClients) {
-        this(game, playerClients, Optional.empty());
+        this(game, playerClients, List.of());
     }
 
     /**
@@ -66,6 +62,17 @@ public class Referee {
         this.informObserverOfGameEnd();
     }
 
+    public void resume(Game game, List<PlayerClient> playerClients) {
+        this.playerToClientMap = mapPlayerAvatarsToPlayerClients(game, playerClients);
+        this.game = game;
+        this.runGame();
+    }
+
+    @Override
+    public void addObserver(IObserver observer) {
+        this.observers.add(observer);
+    }
+
     /**
      * Execute one in-game turn from start to finish, kicking the active player if it misbehaves.
      */
@@ -75,8 +82,7 @@ public class Referee {
         if (isValidTurnPlan(turnPlan)) {
             if (turnPlan.isEmpty()) {
                 this.game.skipTurn();
-            }
-            else {
+            } else {
                 Direction slideDirection = turnPlan.get().getSlideDirection();
                 int slideIndex = turnPlan.get().getSlideIndex();
                 int rotations = turnPlan.get().getSpareTileRotations();
@@ -87,8 +93,7 @@ public class Referee {
                 this.remindPlayersReturnHome();
                 this.informObserverOfState();
             }
-        }
-        else {
+        } else {
             this.playerToClientMap.remove(this.game.getActivePlayer());
             this.game.kickActivePlayer();
         }
@@ -134,8 +139,7 @@ public class Referee {
         for (PlayerAvatar player : this.game.getPlayerList()) {
             if (winners.contains(player)) {
                 results.put(player, WINNER);
-            }
-            else {
+            } else {
                 results.put(player, LOSER);
             }
         }
@@ -158,8 +162,7 @@ public class Referee {
         if (playersThatReachedGoal.size() > 0) {
             distancesToCompare = this.mapPlayersToDistanceFromHome();
             contenders = playersThatReachedGoal;
-        }
-        else {
+        } else {
             distancesToCompare = this.mapPlayersToDistanceFromGoal();
             contenders = this.game.getPlayerList();
         }
@@ -208,6 +211,17 @@ public class Referee {
         return playerDistanceMap;
     }
 
+    private Map<PlayerAvatar, PlayerClient> mapPlayerAvatarsToPlayerClients(Game game, List<PlayerClient> playerClients) {
+        Map<PlayerAvatar, PlayerClient> map = new HashMap<>();
+        if (playerClients.size() != game.getPlayerList().size()) {
+            throw new IllegalArgumentException("Amount of clients and players does not match.");
+        }
+        for (int i = 0; i < playerClients.size(); i++) {
+            map.put(game.getPlayerList().get(i), playerClients.get(i));
+        }
+        return map;
+    }
+
     private void remindPlayersReturnHome() {
         for (PlayerAvatar player : this.game.getPlayerList()) {
             if (player.hasReachedGoal() && !this.playersReachedGoalList.contains(player)) {
@@ -218,14 +232,15 @@ public class Referee {
     }
 
     private void informObserverOfState() {
-        if (this.observer.isPresent()) {
-            this.observer.get().acceptState(new ObserverGameProjection(this.game));
+        for (IObserver observer : this.observers) {
+            observer.update(new ObserverGameProjection(this.game));
         }
     }
 
     private void informObserverOfGameEnd() {
-        if (this.observer.isPresent()) {
-            this.observer.get().acceptGameOver();
+
+        for (IObserver observer : this.observers) {
+            observer.gameOver();
         }
     }
 }

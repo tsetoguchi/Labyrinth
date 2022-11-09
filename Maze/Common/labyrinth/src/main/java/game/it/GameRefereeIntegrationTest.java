@@ -41,7 +41,7 @@ public class GameRefereeIntegrationTest {
             Referee referee;
             if (includeObserver) {
                 ObserverController observer = new ObserverController(new ObserverGameProjection(game)); //todo change
-                referee = new Referee(game, clients, Optional.of(observer));
+                referee = new Referee(game, clients, List.of(observer));
             }
             else {
                 referee = new Referee(game, clients);
