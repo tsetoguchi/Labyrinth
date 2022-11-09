@@ -1,0 +1,3 @@
+#!/bin/bash
+
+java -jar "$(pwd)/../Maze/Common/labyrinth/target/labyrinth-1.0-SNAPSHOT-jar-with-dependencies.jar" "board" $1

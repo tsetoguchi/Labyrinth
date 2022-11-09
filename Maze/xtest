@@ -1,0 +1,5 @@
+#!/bin/bash
+
+cd $(dirname $0)/Common/labyrinth/
+# Run Maven test and print only the line which shows the results
+mvn clean test | tail -r | sed -n '/Tests run:/p' | head -n 1

@@ -1,0 +1,14 @@
+Pair: recursive-koodotk
+Commit: 07e4845d2edc417fb13365dd68589f2e607a72ed
+Self-eval: https://github.khoury.northeastern.edu/CS4500-F22/recursive-koodotk/blob/29776c0e78daffcb35a6de62f15783ef40acfead/E/self-E.md
+Score: 20/30
+Grader: Connie Tang
+
+Self-eval:
+10/10: accurate self-eval
+
+Programming:
+0/10: dealing with tcp part as a separate function/method -- not completely factored out of main
+10/10: found re-used functionality for C
+
+Commit URL: https://github.khoury.northeastern.edu/CS4500-F22/recursive-koodotk/tree/07e4845d2edc417fb13365dd68589f2e607a72ed

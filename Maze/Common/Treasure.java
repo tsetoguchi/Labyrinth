@@ -1,0 +1,1 @@
+labyrinth/src/main/java/game/model/Treasure.java

@@ -1,0 +1,14 @@
+(testing /course/cs4500f22/ta/github/recursive-koodotk/4/xstate)
+(testing /course/cs4500f22/ta/github/4/3/Tests/0-in.json /course/cs4500f22/ta/github/4/3/Tests/0-out.json)
+Exception in thread "main" java.lang.NullPointerException
+	at game.it.processing.MazeJsonParser.getGame(MazeJsonParser.java:50)
+	at game.it.GameIntegrationTest.executeTest(GameIntegrationTest.java:23)
+	at game.it.TestRunner.main(TestRunner.java:19)
+(testing /course/cs4500f22/ta/github/4/3/Tests/1-in.json /course/cs4500f22/ta/github/4/3/Tests/1-out.json)
+Exception in thread "main" java.lang.NullPointerException
+	at game.it.processing.MazeJsonParser.getGame(MazeJsonParser.java:50)
+	at game.it.GameIntegrationTest.executeTest(GameIntegrationTest.java:23)
+	at game.it.TestRunner.main(TestRunner.java:19)
+((/course/cs4500f22/ta/github/4/3/Tests/0-in.json /course/cs4500f22/ta/github/4/3/Tests/0-out.json) (/course/cs4500f22/ta/github/4/3/Tests/1-in.json /course/cs4500f22/ta/github/4/3/Tests/1-out.json))
+((passed 2) (total 2) (partial-score 2))
+

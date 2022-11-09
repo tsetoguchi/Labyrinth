@@ -1,0 +1,10 @@
+Pair: recursive-koodotk
+Commit: d3f858600f41e2e3cb9bae1e594eca3437de3440
+Self-eval: 
+Score: 35/40
+Grader: Ryan Jung
+
+<free text>
+Commit URL: https://github.khoury.northeastern.edu/CS4500-F22/recursive-koodotk/tree/d3f858600f41e2e3cb9bae1e594eca3437de3440
+
+-5 for invalid output: not JSON

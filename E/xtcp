@@ -1,0 +1,3 @@
+#!/bin/bash
+
+java -jar "$(pwd)/Other/xtcp/target/xtcp-1.0-SNAPSHOT-jar-with-dependencies.jar" $1

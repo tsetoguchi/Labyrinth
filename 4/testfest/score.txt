@@ -1,0 +1,12 @@
+Delivery
+5/5 pts: Deliverable xstate exists with the right permissions
+5/5 pts: Deliverable strategy.pp exists
+5/5 pts: Deliverable player-protocol.md exists
+0/5 pts: Extra or missing tests
+Functionality
+0/50 pts: Passed 0 out of 5 tests (see MF.txt)
+0/50 pts: 0 valid tests (see audit.txt)
+0/30 bonus pts (other teams failing your tests)
+Inspection
+97/110 pts: See inspection.md
+Total: 112/230 pts

@@ -1,0 +1,1 @@
+../Common/labyrinth/src/main/java/player/SimpleCandidateStrategy.java
