@@ -7,7 +7,7 @@ import game.model.projections.PlayerGameProjection;
 import java.util.Optional;
 
 /**
- * A single player in the game of Labyrinth.
+ * A single player in the game of Labyrinth. Represents the controls of an actual player to interact with any Referee.
  */
 public interface Player {
 
