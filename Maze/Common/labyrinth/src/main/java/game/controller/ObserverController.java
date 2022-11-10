@@ -87,6 +87,7 @@ public class ObserverController implements ActionListener, IObserver {
 
     private void updateView() {
         if (this.nextStates.isEmpty() && this.gameOver) {
+            System.out.println("game over*************************");
 //            this.view.displayGameOver();
         } else {
             this.view.updateView(this.currentState);

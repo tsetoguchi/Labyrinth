@@ -52,7 +52,7 @@ class TileView extends JPanel {
   }
 
   @Override
-  protected void paintComponent(Graphics g) {
+  public void paintComponent(Graphics g) {
     //Set background color?
     this.drawPathways(g);
     this.drawGems(g);

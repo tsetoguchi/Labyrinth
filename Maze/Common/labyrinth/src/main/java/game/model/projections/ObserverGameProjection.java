@@ -59,4 +59,15 @@ public class ObserverGameProjection {
     public int getActivePlayer() {
         return this.activePlayer;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder string = new StringBuilder();
+        string.append(this.activePlayer);
+        string.append(" ");
+        for (PublicPlayerProjection player : this.getPlayers()) {
+            string.append(player.getColor().toString());
+        }
+        return string.toString();
+    }
 }

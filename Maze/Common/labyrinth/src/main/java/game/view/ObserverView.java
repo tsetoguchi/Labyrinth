@@ -13,10 +13,10 @@ import java.util.Optional;
  */
 public class ObserverView extends JFrame {
 
-  ObserverGameProjection currentState;
+  private ObserverGameProjection currentState;
 
   private BoardView boardFrame;
-  private TileView spareTile;
+  private JPanel spareTilePanel;
 
   private JButton nextButton;
   private JButton saveButton;
@@ -24,10 +24,17 @@ public class ObserverView extends JFrame {
   private static final int CELL_SIDE_LEN = 80;
 
   public ObserverView(ObserverGameProjection currentState) {
-    this.setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+
+//    getContentPane(), BoxLayout.Y_AXIS)
+    this.setLayout(new GridBagLayout());
     this.currentState = currentState;
 //        this.setPreferredSize(new Dimension(1000, 800));
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+    this.boardFrame = this.currentBoardView();
+    this.addSpareTile(currentSpareTileView());
+    this.add(this.spareTilePanel);
+
 
     this.nextButton = new JButton("Next");
     this.nextButton.setActionCommand("Next");
@@ -44,11 +51,14 @@ public class ObserverView extends JFrame {
 
   public void updateView(ObserverGameProjection newState) {
     System.out.println("Updating");
+
+    this.getContentPane().remove(this.boardFrame);
+    this.getContentPane().remove(this.spareTilePanel);
+
+    System.out.println("Current State: " + this.currentState.toString());
     this.currentState = newState;
-//        this.remove(this.boardFrame);
-//        this.remove(this.spareTile);
-//        this.revalidate();
-//        this.repaint();
+    System.out.println("New State: " + this.currentState.toString());
+
     this.drawCurrentState();
   }
 
@@ -73,36 +83,45 @@ public class ObserverView extends JFrame {
   }
 
   private void drawNewState() {
-    this.boardFrame = new BoardView(this.currentState.getBoard(), this.currentState.getPlayers(),
-        CELL_SIDE_LEN);
-    this.spareTile = new TileView(this.currentState.getBoard().getSpareTile(), CELL_SIDE_LEN);
+    this.boardFrame = this.currentBoardView();
     this.boardFrame.populateBoard();
     this.repaint();
   }
 
   private void drawCurrentState() {
-    this.boardFrame = new BoardView(this.currentState.getBoard(), this.currentState.getPlayers(),
-        CELL_SIDE_LEN);
-    this.spareTile = new TileView(this.currentState.getBoard().getSpareTile(), CELL_SIDE_LEN);
+    this.boardFrame = this.currentBoardView();
+
     this.boardFrame.populateBoard();
+
     this.add(this.boardFrame);
-    this.addSpareTile(this.spareTile);
+    this.addSpareTile(currentSpareTileView());
+
     this.pack();
-    this.boardFrame.repaint();
-    this.spareTile.repaint();
-    this.repaint();
     this.revalidate();
+    this.repaint();
+//    this.boardFrame.repaint();
+//    this.spareTile.repaint();
+//    this.repaint();
     this.setVisible(true);
     System.out.println("");
   }
 
+  private TileView currentSpareTileView() {
+    return new TileView(this.currentState.getBoard().getSpareTile(), CELL_SIDE_LEN);
+  }
+
+  private BoardView currentBoardView() {
+    return new BoardView(this.currentState.getBoard(), this.currentState.getPlayers(),
+        CELL_SIDE_LEN);
+  }
+
   private void addSpareTile(TileView tile) {
     JPanel panel = new JPanel();
-    panel.setBounds(30, 700, CELL_SIDE_LEN, CELL_SIDE_LEN);
+    panel.setBounds(this.getBounds().height + 300, 700, CELL_SIDE_LEN, CELL_SIDE_LEN);
     panel.setSize(CELL_SIDE_LEN, CELL_SIDE_LEN);
     panel.add(tile);
     panel.setBorder(BorderFactory.createLineBorder(Color.black));
-    this.add(panel);
+    this.spareTilePanel = panel;
   }
 
   public void addActionListener(ActionListener listener) {

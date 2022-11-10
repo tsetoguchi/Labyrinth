@@ -13,8 +13,8 @@ import java.util.List;
  * The JFrame component which displays a board and the objects populating it. Does not include the spare tile.
  */
 public class BoardView extends JPanel {
-    private final ReadOnlyBoardProjection board;
-    private final List<PublicPlayerProjection> players;
+    private ReadOnlyBoardProjection board;
+    private List<PublicPlayerProjection> players;
     private final TileView[][] tileGrid;
     private final int width;
     private final int height;
@@ -36,9 +36,14 @@ public class BoardView extends JPanel {
         //this.setBorder(BorderFactory.createLineBorder(Color.black));
     }
 
+    public void update(ReadOnlyBoardProjection board, List<PublicPlayerProjection> players) {
+        this.board = board;
+        this.players = players;
+    }
+
     @Override
     public void paint(Graphics g) {
-
+        super.paint(g);
     }
 
     public void populateBoard() {
