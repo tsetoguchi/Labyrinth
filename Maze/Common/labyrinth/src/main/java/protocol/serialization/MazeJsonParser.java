@@ -5,6 +5,8 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import game.it.BadFM;
+import game.it.BadTestPlayer;
 import game.it.TestPlayer;
 import game.it.processing.IntegrationTestUtils;
 import game.model.*;
@@ -182,6 +184,36 @@ public class MazeJsonParser {
             }
         }
         return players;
+    }
+
+    public List<Player> getBadPlayers() throws IOException {
+        List<Player> players = new ArrayList<>();
+        while (this.parser.nextToken() != JsonToken.END_ARRAY) {
+            // read PS
+            while (this.parser.nextToken() != JsonToken.END_ARRAY) {
+                String name = this.parser.getText();
+                this.readNext();
+                Strategy strategy = this.getStrategy();
+                this.readNext();
+                BadFM badFM = this.getBadFM();
+                Player player = new BadTestPlayer(name, strategy, badFM);
+                players.add(player);
+            }
+        }
+        return players;
+    }
+
+    private BadFM getBadFM() throws IOException {
+        switch(this.parser.getValueAsString()) {
+            case "setUp":
+                return BadFM.SETUP;
+            case "takeTurn":
+                return BadFM.TAKETURN;
+            case "win":
+                return BadFM.WIN;
+            default:
+                throw new MazeJsonProcessingException("Strategy was not a valid Strategy Designation.");
+        }
     }
 
     /**

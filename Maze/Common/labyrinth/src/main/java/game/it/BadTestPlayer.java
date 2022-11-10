@@ -14,7 +14,7 @@ public class  BadTestPlayer implements Player {
   private final String name;
   private final BadFM badFM;
 
-  public BadTestPlayer(Strategy strategy, String name, BadFM badFM) {
+  public BadTestPlayer(String name, Strategy strategy, BadFM badFM) {
     this.strategy = strategy;
     this.name = name;
     this.badFM = badFM;
