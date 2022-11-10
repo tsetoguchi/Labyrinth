@@ -2,6 +2,7 @@ package game.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import game.model.projections.ObserverGameProjection;
+
 import game.view.OldObserverView;
 import protocol.serialization.MazeJsonSerializer;
 
@@ -18,13 +19,20 @@ import java.util.Queue;
  * The controller which accepts updates from the referee and draws the board state, using interactive buttons
  * to switch between states shown.
  */
-public class ObserverController implements ActionListener, IObserver {
+public class ObserverController implements IObserver, ActionListener {
 
     private final OldObserverView view;
 
-    private ObserverGameProjection currentState;
     private Queue<ObserverGameProjection> nextStates;
+
+
+    private ObserverGameProjection currentState;
+
     private boolean gameOver;
+
+
+
+
 
     public ObserverController(ObserverGameProjection currentState) {
         this.currentState = currentState;
@@ -32,7 +40,10 @@ public class ObserverController implements ActionListener, IObserver {
 
         this.view = new OldObserverView(currentState);
         this.nextStates = new LinkedList<>();
-        this.view.addActionListener(this);
+        this.gameOver = false;
+
+
+//        this.view.addActionListener(this);
     }
 
     /**
@@ -41,7 +52,7 @@ public class ObserverController implements ActionListener, IObserver {
     @Override
     public void update(ObserverGameProjection newState) {
         this.nextStates.add(newState);
-        this.view.enableNextButton(true);
+//        this.view.enableNextButton(true);
     }
 
 
@@ -92,6 +103,7 @@ public class ObserverController implements ActionListener, IObserver {
 //            this.view.displayGameOver();
         } else {
             this.view.updateView(this.currentState);
+//
         }
     }
 
@@ -117,4 +129,5 @@ public class ObserverController implements ActionListener, IObserver {
             System.out.println("Failed to write to file" + path);
         }
     }
+
 }

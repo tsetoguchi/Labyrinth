@@ -5,6 +5,7 @@ import game.model.Tile;
 import game.model.projections.PublicPlayerProjection;
 import game.model.projections.ReadOnlyBoardProjection;
 
+import java.lang.reflect.Parameter;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
@@ -33,17 +34,12 @@ public class OldBoardView extends JPanel {
 
         this.tileGrid = new OldTileView[this.height][this.width];
         this.setBackground(Color.DARK_GRAY);
-        //this.setBorder(BorderFactory.createLineBorder(Color.black));
-    }
-
-    public void update(ReadOnlyBoardProjection board, List<PublicPlayerProjection> players) {
-        this.board = board;
-        this.players = players;
     }
 
     @Override
     public void paint(Graphics g) {
         super.paint(g);
+
     }
 
     public void populateBoard() {
@@ -86,6 +82,8 @@ public class OldBoardView extends JPanel {
             this.tileGrid[homeRow][homeCol].addHome(player.getColor());
         }
     }
+
+
 
     /**
      * Packs each tile into a panel with a border and adds it to this JPanel.

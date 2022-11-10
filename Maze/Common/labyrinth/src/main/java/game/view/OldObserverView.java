@@ -25,39 +25,46 @@ public class OldObserverView extends JFrame {
 
   public OldObserverView(ObserverGameProjection currentState) {
 
-//    getContentPane(), BoxLayout.Y_AXIS)
     this.setLayout(new GridBagLayout());
     this.currentState = currentState;
-//        this.setPreferredSize(new Dimension(1000, 800));
-    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     this.boardFrame = this.currentBoardView();
     this.addSpareTile(currentSpareTileView());
+
     this.add(this.spareTilePanel);
 
 
     this.nextButton = new JButton("Next");
     this.nextButton.setActionCommand("Next");
-//        this.nextButton.setBounds(30, 600, 100, 40);
     this.add(this.nextButton);
 
     this.saveButton = new JButton("Save");
     this.saveButton.setActionCommand("Save");
-//        this.saveButton.setBounds(160, 600, 100, 40);
     this.add(this.saveButton);
 
+    this.initialize();
     this.drawCurrentState();
   }
 
+  private void initialize() {
+    this.setLayout(new GridBagLayout());
+    this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+    this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+    this.setLocationRelativeTo(null);
+    this.pack();
+    this.setVisible(true);
+  }
+
   public void updateView(ObserverGameProjection newState) {
-    System.out.println("Updating");
+//    System.out.println("Updating");
+//
+    this.remove(this.boardFrame);
+    this.remove(this.spareTilePanel);
 
-    this.getContentPane().remove(this.boardFrame);
-    this.getContentPane().remove(this.spareTilePanel);
 
-    System.out.println("Current State: " + this.currentState.toString());
+//    System.out.println("Current State: " + this.currentState.toString());
     this.currentState = newState;
-    System.out.println("New State: " + this.currentState.toString());
+//    System.out.println("New State: " + this.currentState.toString());
 
     this.drawCurrentState();
   }
