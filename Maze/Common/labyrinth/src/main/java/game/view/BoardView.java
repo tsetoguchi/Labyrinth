@@ -36,6 +36,11 @@ public class BoardView extends JPanel {
         //this.setBorder(BorderFactory.createLineBorder(Color.black));
     }
 
+    @Override
+    public void paint(Graphics g) {
+
+    }
+
     public void populateBoard() {
         for (int row = 0; row < this.height; row++) {
             this.createRowOfTiles(row);
