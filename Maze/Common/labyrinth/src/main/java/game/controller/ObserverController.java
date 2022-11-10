@@ -2,7 +2,7 @@ package game.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import game.model.projections.ObserverGameProjection;
-import game.view.ObserverView;
+import game.view.OldObserverView;
 import protocol.serialization.MazeJsonSerializer;
 
 import java.awt.event.ActionEvent;
@@ -20,7 +20,7 @@ import java.util.Queue;
  */
 public class ObserverController implements ActionListener, IObserver {
 
-    private final ObserverView view;
+    private final OldObserverView view;
 
     private ObserverGameProjection currentState;
     private Queue<ObserverGameProjection> nextStates;
@@ -30,7 +30,7 @@ public class ObserverController implements ActionListener, IObserver {
         this.currentState = currentState;
         this.gameOver = false;
 
-        this.view = new ObserverView(currentState);
+        this.view = new OldObserverView(currentState);
         this.nextStates = new LinkedList<>();
         this.view.addActionListener(this);
     }
@@ -63,6 +63,7 @@ public class ObserverController implements ActionListener, IObserver {
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
             case "Next":
+                int i = 0;
                 this.advanceState();
                 break;
             case "Save":
