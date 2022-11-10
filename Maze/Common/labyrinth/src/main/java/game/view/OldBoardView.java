@@ -12,16 +12,16 @@ import java.util.List;
 /**
  * The JFrame component which displays a board and the objects populating it. Does not include the spare tile.
  */
-public class BoardView extends JPanel {
+public class OldBoardView extends JPanel {
     private ReadOnlyBoardProjection board;
     private List<PublicPlayerProjection> players;
-    private final TileView[][] tileGrid;
+    private final OldTileView[][] tileGrid;
     private final int width;
     private final int height;
 
     private final int cellSideLen; // in pixels
 
-    public BoardView(ReadOnlyBoardProjection board, List<PublicPlayerProjection> players, int cellSideLen) {
+    public OldBoardView(ReadOnlyBoardProjection board, List<PublicPlayerProjection> players, int cellSideLen) {
         this.board = board;
         this.width = board.getWidth();
         this.height = board.getHeight();
@@ -31,7 +31,7 @@ public class BoardView extends JPanel {
         this.players = players;
         this.cellSideLen = cellSideLen;
 
-        this.tileGrid = new TileView[this.height][this.width];
+        this.tileGrid = new OldTileView[this.height][this.width];
         this.setBackground(Color.DARK_GRAY);
         //this.setBorder(BorderFactory.createLineBorder(Color.black));
     }
@@ -59,17 +59,17 @@ public class BoardView extends JPanel {
      */
     private void createRowOfTiles(int currentRow) {
         for (int tileIndex = 0; tileIndex < this.width; tileIndex++) {
-            TileView tileView = this.createTile(new Position(currentRow, tileIndex));
-            this.tileGrid[currentRow][tileIndex] = tileView;
+            OldTileView oldTileView = this.createTile(new Position(currentRow, tileIndex));
+            this.tileGrid[currentRow][tileIndex] = oldTileView;
         }
     }
 
-    private TileView createTile(Position position) {
+    private OldTileView createTile(Position position) {
         JPanel panel = new JPanel();
         panel.setSize(this.cellSideLen, this.cellSideLen);
 
         Tile tile = this.board.getTileAt(position);
-        return new TileView(tile, this.cellSideLen);
+        return new OldTileView(tile, this.cellSideLen);
     }
 
     /**

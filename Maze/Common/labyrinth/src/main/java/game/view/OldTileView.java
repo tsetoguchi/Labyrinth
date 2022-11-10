@@ -18,7 +18,7 @@ import static game.model.Direction.*;
 /**
  * The JComponent which displays a single Tile.
  */
-class TileView extends JPanel {
+class OldTileView extends JPanel {
 
   private final Tile tile;
   private final int cellSideLen;
@@ -26,7 +26,7 @@ class TileView extends JPanel {
   private final Set<Color> avatars;
   private final Set<Color> homes;
 
-  public TileView(Tile tile, int cellSideLen) {
+  public OldTileView(Tile tile, int cellSideLen) {
     this.setLayout(null);
     this.setBounds(this.getX(), this.getY(), cellSideLen, cellSideLen);
     this.tile = tile;

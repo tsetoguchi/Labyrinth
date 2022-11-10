@@ -11,11 +11,11 @@ import java.util.Optional;
 /**
  * Renders the board and the interactive panels for the observer, and detects mouse input.
  */
-public class ObserverView extends JFrame {
+public class OldObserverView extends JFrame {
 
   private ObserverGameProjection currentState;
 
-  private BoardView boardFrame;
+  private OldBoardView boardFrame;
   private JPanel spareTilePanel;
 
   private JButton nextButton;
@@ -23,7 +23,7 @@ public class ObserverView extends JFrame {
 
   private static final int CELL_SIDE_LEN = 80;
 
-  public ObserverView(ObserverGameProjection currentState) {
+  public OldObserverView(ObserverGameProjection currentState) {
 
 //    getContentPane(), BoxLayout.Y_AXIS)
     this.setLayout(new GridBagLayout());
@@ -106,16 +106,16 @@ public class ObserverView extends JFrame {
     System.out.println("");
   }
 
-  private TileView currentSpareTileView() {
-    return new TileView(this.currentState.getBoard().getSpareTile(), CELL_SIDE_LEN);
+  private OldTileView currentSpareTileView() {
+    return new OldTileView(this.currentState.getBoard().getSpareTile(), CELL_SIDE_LEN);
   }
 
-  private BoardView currentBoardView() {
-    return new BoardView(this.currentState.getBoard(), this.currentState.getPlayers(),
+  private OldBoardView currentBoardView() {
+    return new OldBoardView(this.currentState.getBoard(), this.currentState.getPlayers(),
         CELL_SIDE_LEN);
   }
 
-  private void addSpareTile(TileView tile) {
+  private void addSpareTile(OldTileView tile) {
     JPanel panel = new JPanel();
     panel.setBounds(this.getBounds().height + 300, 700, CELL_SIDE_LEN, CELL_SIDE_LEN);
     panel.setSize(CELL_SIDE_LEN, CELL_SIDE_LEN);
