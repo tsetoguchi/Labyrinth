@@ -9,5 +9,8 @@
         <module name="labyrinth" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="labyrinth" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>

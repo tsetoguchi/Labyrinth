@@ -55,7 +55,7 @@ class OldTileView extends JPanel {
   public void paintComponent(Graphics g) {
     //Set background color?
     this.drawPathways(g);
-    //this.drawGems(g);
+    this.drawGems(g);
     this.drawAvatars(g);
     this.drawHomes(g);
   }

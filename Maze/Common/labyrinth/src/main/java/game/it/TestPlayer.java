@@ -22,6 +22,21 @@ public class TestPlayer implements Player {
     }
 
     @Override
+    public TurnPlan takeTurn(Game state) {
+        return null;
+    }
+
+    @Override
+    public Object win(boolean w) {
+        return null;
+    }
+
+    @Override
+    public Object setup(Optional<PlayerGameProjection> state, Position goal) {
+        return 0;
+    }
+
+    @Override
     public Board proposeBoard() {
         Tile[][] tileGrid = this.generateRandomTileGrid();
         Tile spareTile = this.generateRandomTile(Gem.hackmanite, Gem.hackmanite);
