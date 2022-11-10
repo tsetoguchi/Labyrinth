@@ -19,11 +19,16 @@ public class TestRunner {
             case "strategy":
                 StrategyIntegrationTest.executeTest();
                 break;
+                // 6
             case "referee":
                 GameRefereeIntegrationTest.executeTest(false);
                 break;
+                //6
             case "referee-obs":
                 GameRefereeIntegrationTest.executeTest(true);
+                break;
+                // 7
+            case "referee-xbad":
                 break;
             default:
                 throw new IllegalArgumentException("test set not recognized");

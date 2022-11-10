@@ -22,8 +22,8 @@ public class TestPlayer implements Player {
     }
 
     @Override
-    public TurnPlan takeTurn(Game state) {
-        return null;
+    public TurnPlan takeTurn(PlayerGameProjection state) {
+        return this.takeTurn(state);
     }
 
     @Override

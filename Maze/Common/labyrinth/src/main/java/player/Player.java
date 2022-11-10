@@ -1,7 +1,6 @@
 package player;
 
 import game.model.Board;
-import game.model.Game;
 import game.model.Position;
 import game.model.projections.PlayerGameProjection;
 
@@ -12,7 +11,7 @@ import java.util.Optional;
  */
 public interface Player {
 
-    TurnPlan takeTurn(Game state);
+    TurnPlan takeTurn(PlayerGameProjection state);
 
     Object win(boolean w);
 

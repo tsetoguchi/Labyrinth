@@ -1,7 +1,6 @@
 package game.it;
 
 import game.model.Board;
-import game.model.Game;
 import game.model.Position;
 import game.model.projections.PlayerGameProjection;
 import java.util.Optional;
@@ -9,7 +8,7 @@ import player.Player;
 import player.Strategy;
 import player.TurnPlan;
 
-public class BadTestPlayer implements Player {
+public class  BadTestPlayer implements Player {
 
   private final Strategy strategy;
   private final String name;
@@ -23,7 +22,7 @@ public class BadTestPlayer implements Player {
 
 
   @Override
-  public TurnPlan takeTurn(Game state) throws ArithmeticException {
+  public TurnPlan takeTurn(PlayerGameProjection state) throws ArithmeticException {
 
     if (this.badFM.equals(BadFM.TAKETURN)) {
       int i = 1 / 0;

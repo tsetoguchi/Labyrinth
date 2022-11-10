@@ -264,11 +264,10 @@ public class Referee implements IReferee {
     }
   }
 
-  private Map<PlayerAvatar, PlayerHandler> mapPlayerAvatarsToPlayerHandlers() {
-      Map<PlayerAvatar, PlayerHandler> playersToHandlers = new HashMap<>();
-
-
-  }
+//  private Map<PlayerAvatar, PlayerHandler> mapPlayerAvatarsToPlayerHandlers() {
+//      Map<PlayerAvatar, PlayerHandler> playersToHandlers = new HashMap<>();
+//
+//  }
   /**
    * Removes the player with the specified color from the playerToClientMap and game
    */
@@ -304,7 +303,7 @@ public class Referee implements IReferee {
       });
     }
 
-    public Optional<TurnPlan> takeTurn(Game game) {
+    public Optional<TurnPlan> takeTurn(PlayerGameProjection game) {
       return this.exceptionHandler(() -> {
         TurnPlan turnPlan = this.player.takeTurn(game);
         return turnPlan;
