@@ -123,6 +123,18 @@ public class Game {
     }
 
     /**
+     * Kicks the player with the specified color from the game
+     */
+    public void kickPlayer(Color color) {
+        for (PlayerAvatar player : this.playerList) {
+            if (player.getColor().equals(color)) {
+                this.playerList.remove(player);
+                break;
+            }
+        }
+    }
+
+    /**
      * Skips the current player's turn.
      */
     public void skipTurn() {
