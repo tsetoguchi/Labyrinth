@@ -92,9 +92,15 @@ public class Referee implements IReferee {
     PlayerAvatar activePlayer = this.game.getActivePlayer();
     Optional<TurnPlan> turnPlan = this.getPlanFromPlayer(activePlayer);
     if (isValidTurnPlan(turnPlan)) {
+
+      // Pass
       if (turnPlan.isEmpty()) {
         this.game.skipTurn();
-      } else {
+      }
+
+      // Perform Turn
+      else {
+
         Direction slideDirection = turnPlan.get().getSlideDirection();
         int slideIndex = turnPlan.get().getSlideIndex();
         int rotations = turnPlan.get().getSpareTileRotations();
@@ -106,7 +112,10 @@ public class Referee implements IReferee {
         this.informObserverOfState();
       }
     } else {
-      this.playerAvatarToClient.remove(this.game.getActivePlayer());
+
+      PlayerAvatar toBeKickedPlayer = this.game.getActivePlayer();
+      this.dropouts.add(this.playerAvatarToClient.get(toBeKickedPlayer));
+      this.playerAvatarToClient.remove(toBeKickedPlayer);
       this.game.kickActivePlayer();
     }
   }
@@ -272,6 +281,7 @@ public class Referee implements IReferee {
 //      Map<PlayerAvatar, PlayerHandler> playersToHandlers = new HashMap<>();
 //
 //  }
+
   /**
    * Removes the player with the specified color from the playerToClientMap and game
    */
@@ -315,10 +325,10 @@ public class Referee implements IReferee {
     }
 
     public Object setup(Optional<PlayerGameProjection> state, Position goal) {
-        return this.exceptionHandler(() -> {
-            this.player.setup(state, goal);
-            return Optional.empty();
-        });
+      return this.exceptionHandler(() -> {
+        this.player.setup(state, goal);
+        return Optional.empty();
+      });
     }
 
   }
