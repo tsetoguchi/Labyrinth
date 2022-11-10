@@ -5,7 +5,6 @@ import game.model.*;
 import game.model.projections.ObserverGameProjection;
 import game.model.projections.PlayerGameProjection;
 import java.awt.Color;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -31,7 +30,8 @@ public class Referee implements IReferee {
   /**
    * Stores which client should be used to talk to each Player.
    **/
-  private Map<PlayerAvatar, PlayerClient> playerToClientMap;
+  private Map<PlayerAvatar, PlayerClient> playerAvatarToClient;
+  private Map<PlayerAvatar, PlayerHandler> playerAvatarToHandler;
   private final List<PlayerAvatar> playersReachedGoalList;
   private final List<IObserver> observers;
 
@@ -45,7 +45,7 @@ public class Referee implements IReferee {
    */
   public Referee(Game game, List<PlayerClient> playerClients, List<IObserver> observers) {
     this.game = game;
-    this.playerToClientMap = this.mapPlayerAvatarsToPlayerClients(game, playerClients);
+    this.playerAvatarToClient = this.mapPlayerAvatarsToPlayerClients(game, playerClients);
     this.playersReachedGoalList = new ArrayList<>();
     this.observers = observers;
   }
@@ -71,7 +71,7 @@ public class Referee implements IReferee {
   }
 
   public void resume(Game game, List<PlayerClient> playerClients) {
-    this.playerToClientMap = mapPlayerAvatarsToPlayerClients(game, playerClients);
+    this.playerAvatarToClient = mapPlayerAvatarsToPlayerClients(game, playerClients);
     this.game = game;
     this.runGame();
   }
@@ -102,13 +102,13 @@ public class Referee implements IReferee {
         this.informObserverOfState();
       }
     } else {
-      this.playerToClientMap.remove(this.game.getActivePlayer());
+      this.playerAvatarToClient.remove(this.game.getActivePlayer());
       this.game.kickActivePlayer();
     }
   }
 
   private Optional<TurnPlan> getPlanFromPlayer(PlayerAvatar player) {
-    PlayerClient playerClient = this.playerToClientMap.get(player);
+    PlayerClient playerClient = this.playerAvatarToClient.get(player);
     return playerClient.takeTurn(
         new PlayerGameProjection(this.game, player, this.game.getPreviousSlideAndInsert()));
   }
@@ -138,7 +138,7 @@ public class Referee implements IReferee {
 
     for (PlayerAvatar player : this.game.getPlayerList()) {
       PlayerResult resultForPlayer = playerResults.get(player);
-      this.playerToClientMap.get(player).informGameEnd(gameStatus, resultForPlayer);
+      this.playerAvatarToClient.get(player).informGameEnd(gameStatus, resultForPlayer);
     }
   }
 
@@ -236,7 +236,7 @@ public class Referee implements IReferee {
   private void remindPlayersReturnHome() {
     for (PlayerAvatar player : this.game.getPlayerList()) {
       if (player.hasReachedGoal() && !this.playersReachedGoalList.contains(player)) {
-        this.playerToClientMap.get(player).returnHome(player.getHomePosition());
+        this.playerAvatarToClient.get(player).returnHome(player.getHomePosition());
         this.playersReachedGoalList.add(player);
       }
     }
@@ -256,18 +256,23 @@ public class Referee implements IReferee {
   }
 
   private void kickPlayer(Color color) {
-    for (PlayerAvatar player : this.playerToClientMap.keySet()) {
+    for (PlayerAvatar player : this.playerAvatarToClient.keySet()) {
       if (player.getColor().equals(color)) {
-        this.playerToClientMap.remove(player);
+        this.playerAvatarToClient.remove(player);
         break;
       }
     }
   }
 
-    /**
-     * Removes the player with the specified color from the playerToClientMap and game
-     */
-  private void kickPlayerInGameAndMap(Color color) {
+  private Map<PlayerAvatar, PlayerHandler> mapPlayerAvatarsToPlayerHandlers() {
+      Map<PlayerAvatar, PlayerHandler> playersToHandlers = new HashMap<>();
+
+
+  }
+  /**
+   * Removes the player with the specified color from the playerToClientMap and game
+   */
+  private void kickPlayerInGameAndRef(Color color) {
     this.kickPlayer(color);
     this.game.kickPlayer(color);
   }
@@ -282,14 +287,35 @@ public class Referee implements IReferee {
       this.player = player;
     }
 
-    public <T> Optional<T> takeTurn(Supplier<T> function) {
+    private <T> Optional<T> exceptionHandler(Supplier<T> function) {
       try {
         ExecutorService service = Executors.newCachedThreadPool();
         return Optional.of(service.submit(function::get).get(TIMEOUT, TimeUnit.SECONDS));
       } catch (Exception e) {
-        kickPlayerInGameAndMap(this.color);
+        kickPlayerInGameAndRef(this.color);
         return Optional.empty();
       }
+    }
+
+    public void win(boolean w) {
+      this.exceptionHandler(() -> {
+        this.player.win(w);
+        return Optional.empty();
+      });
+    }
+
+    public Optional<TurnPlan> takeTurn(Game game) {
+      return this.exceptionHandler(() -> {
+        TurnPlan turnPlan = this.player.takeTurn(game);
+        return turnPlan;
+      });
+    }
+
+    public Object setup(Optional<PlayerGameProjection> state, Position goal) {
+        return this.exceptionHandler(() -> {
+            this.player.setup(state, goal);
+            return Optional.empty();
+        });
     }
 
   }
