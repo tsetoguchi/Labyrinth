@@ -1,8 +1,11 @@
 package game.it.processing;
 
+import game.it.IntegrationPlayerClient;
 import game.model.*;
 
 import java.util.*;
+import player.Player;
+import referee.clients.PlayerClient;
 
 import static game.model.Direction.*;
 

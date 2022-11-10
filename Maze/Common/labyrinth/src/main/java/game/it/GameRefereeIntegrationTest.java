@@ -38,7 +38,7 @@ public class GameRefereeIntegrationTest {
                 intClients.add(client);
             }
 
-            Referee referee;
+            Referee referee = null;
             if (includeObserver) {
                 ObserverController observer = new ObserverController(new ObserverGameProjection(game)); //todo change
                 referee = new Referee(game, clients, List.of(observer));

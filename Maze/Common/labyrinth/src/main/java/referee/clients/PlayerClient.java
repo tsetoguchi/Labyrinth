@@ -15,6 +15,8 @@ import java.util.Optional;
  */
 public interface PlayerClient {
 
+
+
     Optional<TurnPlan> takeTurn(PlayerGameProjection game);
 
     void returnHome(Position homeTile);

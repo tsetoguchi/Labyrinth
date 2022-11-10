@@ -35,6 +35,9 @@ public class Referee implements IReferee {
   private final List<PlayerAvatar> playersReachedGoalList;
   private final List<IObserver> observers;
 
+  // the eliminated players so far, including cheaters
+  private List<PlayerClient> dropouts;
+
   private static final int TIMEOUT = 15;
 
   /**
@@ -48,6 +51,7 @@ public class Referee implements IReferee {
     this.playerAvatarToClient = this.mapPlayerAvatarsToPlayerClients(game, playerClients);
     this.playersReachedGoalList = new ArrayList<>();
     this.observers = observers;
+    this.dropouts = new ArrayList<>();
   }
 
   public Referee(Game game, List<PlayerClient> playerClients) {
@@ -279,7 +283,7 @@ public class Referee implements IReferee {
   public class PlayerHandler {
 
     private final Color color;
-    private final Player player;
+    private final PlayerClient player;
 
     public PlayerHandler(Color color, Player player) {
       this.color = color;
