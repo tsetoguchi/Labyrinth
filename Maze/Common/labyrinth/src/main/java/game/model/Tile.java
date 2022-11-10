@@ -146,4 +146,14 @@ public class Tile {
     public String toSymbol() {
         return Tile.directionToSymbol.get(this.pathwayConnections);
     }
+
+    public Tile deepCopy() {
+        Set<Direction> newDirections = new HashSet<>();
+        if (this.pathwayConnections.contains(Direction.UP)) {newDirections.add(Direction.UP);}
+        if (this.pathwayConnections.contains(Direction.DOWN)) {newDirections.add(Direction.DOWN);}
+        if (this.pathwayConnections.contains(Direction.LEFT)) {newDirections.add(Direction.LEFT);}
+        if (this.pathwayConnections.contains(Direction.RIGHT)) {newDirections.add(Direction.RIGHT);}
+
+        return new Tile(newDirections, this.treasure);
+    }
 }

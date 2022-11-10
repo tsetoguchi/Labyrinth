@@ -49,4 +49,6 @@ public interface Board {
      * Print the board as a grid of symbols representing the Tile pathways (no gems).
      */
     String toSymbolGrid();
+
+    Board deepCopy();
 }

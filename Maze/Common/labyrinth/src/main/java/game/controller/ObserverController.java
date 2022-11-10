@@ -43,7 +43,7 @@ public class ObserverController implements IObserver, ActionListener {
         this.gameOver = false;
 
 
-//        this.view.addActionListener(this);
+        this.view.addActionListener(this);
     }
 
     /**
@@ -74,6 +74,7 @@ public class ObserverController implements IObserver, ActionListener {
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
             case "Next":
+                System.out.println("HELLO");
                 int i = 0;
                 this.advanceState();
                 break;

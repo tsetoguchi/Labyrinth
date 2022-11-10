@@ -21,10 +21,10 @@ public class ObserverGameProjection {
     private int activePlayer;
 
     public ObserverGameProjection(Game game) {
-        this.board = new ReadOnlyBoardProjection(game.getBoard());
+        this.board = new ReadOnlyBoardProjection(game.getBoard().deepCopy());
         List<PublicPlayerProjection> playerViews = new ArrayList<>();
         for (PlayerAvatar player : game.getPlayerList()) {
-            playerViews.add(new PublicPlayerProjection(player));
+            playerViews.add(new PublicPlayerProjection(player.deepCopy()));
         }
         this.players = playerViews;
         this.previousSlide = game.getPreviousSlideAndInsert();

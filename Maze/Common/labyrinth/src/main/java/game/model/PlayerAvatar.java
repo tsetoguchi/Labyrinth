@@ -13,15 +13,22 @@ public class PlayerAvatar {
     private boolean hasReachedGoal;
 
     /**
-     * Creates a new Player with the given goal Treasure and Position for their home tile, and sets
-     * the player's initial Position to the home tile's Position.
+     * Creates a new Player with all the given properties. Used for running games.
      */
-    public PlayerAvatar(Color color, Position goalPosition, Position homePosition) {
+    public PlayerAvatar(Color color, Position goalPosition, Position homePosition, Position currentPosition, boolean hasReachedGoal) {
         this.color = color;
         this.goalPosition = goalPosition;
         this.homePosition = homePosition;
-        this.currentPosition = homePosition;
-        this.hasReachedGoal = false;
+        this.currentPosition = currentPosition;
+        this.hasReachedGoal = hasReachedGoal;
+    }
+
+    /**
+     * Creates a new Player with the given goal Treasure and Position for their home tile, and sets
+     * the player's initial Position to the home tile's Position. Used for new games.
+     */
+    public PlayerAvatar(Color color, Position goalPosition, Position homePosition) {
+        this(color, goalPosition, homePosition, homePosition, false);
     }
 
     public Position getGoalPosition() {
@@ -50,6 +57,12 @@ public class PlayerAvatar {
 
     public void setHasReachedGoal(boolean hasReachedGoal) {
         this.hasReachedGoal = hasReachedGoal;
+    }
+
+    public PlayerAvatar deepCopy() {
+        Position newPosition = new Position(this.currentPosition.getRow(), this.currentPosition.getColumn());
+
+        return new PlayerAvatar(this.color, this.goalPosition, this.homePosition, newPosition, this.hasReachedGoal);
     }
 
     @Override

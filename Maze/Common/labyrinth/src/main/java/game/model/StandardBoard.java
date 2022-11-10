@@ -161,6 +161,18 @@ public class StandardBoard implements Board {
         return builder.toString();
     }
 
+    @Override
+    public Board deepCopy() {
+        Tile[][] newGrid = new Tile[this.getHeight()][this.getWidth()];
+
+        for (int row = 0; row < newGrid.length; row++) {
+            for (int col = 0; col < newGrid[row].length; col++) {
+                newGrid[row][col] = (this.getTileAt(new Position(row, col)).deepCopy());
+            }
+        }
+        return new StandardBoard(newGrid, this.spareTile.deepCopy());
+    }
+
     /**
      * Slides the row (for left or right slides) or column (for up or down slides) at the given index in the specified
      * Direction and returns the Tile that was shifted off the board.
