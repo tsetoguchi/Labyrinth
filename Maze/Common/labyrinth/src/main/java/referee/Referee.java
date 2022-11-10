@@ -290,6 +290,9 @@ public class Referee implements IReferee {
     this.game.kickPlayer(color);
   }
 
+  /**
+   * Wrapper for the PlayerClient class, adding exception and timeout handling for any PlayerClient calls.
+   */
   public class PlayerHandler {
 
     private final Color color;
