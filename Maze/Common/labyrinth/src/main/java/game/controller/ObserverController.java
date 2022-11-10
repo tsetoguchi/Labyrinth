@@ -2,37 +2,40 @@ package game.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import game.model.projections.ObserverGameProjection;
-import game.view.ObserverView;
+import game.view.AlternativeViewImplementations.ObserverView;
+import java.util.List;
 import protocol.serialization.MazeJsonSerializer;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.LinkedList;
-import java.util.Optional;
 import java.util.Queue;
 
 /**
  * The controller which accepts updates from the referee and draws the board state, using interactive buttons
  * to switch between states shown.
  */
-public class ObserverController implements ActionListener, IObserver {
+public class ObserverController implements IObserver {
 
-    private final ObserverView view;
+    private Queue<ObserverGameProjection> nextStates;
 
     private ObserverGameProjection currentState;
-    private Queue<ObserverGameProjection> nextStates;
+
     private boolean gameOver;
+    private final ObserverView view;
+
+
+
+
 
     public ObserverController(ObserverGameProjection currentState) {
         this.currentState = currentState;
-        this.gameOver = false;
-
-        this.view = new ObserverView(currentState);
         this.nextStates = new LinkedList<>();
-        this.view.addActionListener(this);
+        this.gameOver = false;
+        this.view = new ObserverView(List.of(currentState));
+
+//        this.view.addActionListener(this);
     }
 
     /**
@@ -41,7 +44,7 @@ public class ObserverController implements ActionListener, IObserver {
     @Override
     public void update(ObserverGameProjection newState) {
         this.nextStates.add(newState);
-        this.view.enableNextButton(true);
+//        this.view.enableNextButton(true);
     }
 
 
@@ -59,21 +62,21 @@ public class ObserverController implements ActionListener, IObserver {
 //        this.view.setVisible(true);
 //    }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        switch (e.getActionCommand()) {
-            case "Next":
-                this.advanceState();
-                break;
-            case "Save":
-                String encodedState = this.encodeState();
-                Optional<String> selectedFilePath = this.view.selectFile();
-                if (selectedFilePath.isPresent()) {
-                    this.saveToFile(selectedFilePath.get(), encodedState);
-                }
-                break;
-        }
-    }
+//    @Override
+//    public void actionPerformed(ActionEvent e) {
+//        switch (e.getActionCommand()) {
+//            case "Next":
+//                this.advanceState();
+//                break;
+//            case "Save":
+//                String encodedState = this.encodeState();
+//                Optional<String> selectedFilePath = this.view.of(selectFile());
+//                if (selectedFilePath.isPresent()) {
+//                    this.saveToFile(selectedFilePath.get(), encodedState);
+//                }
+//                break;
+//        }
+//    }
 
     /**
      * Advance the current state view to the next state in the queue.
@@ -91,6 +94,7 @@ public class ObserverController implements ActionListener, IObserver {
 //            this.view.displayGameOver();
         } else {
             this.view.updateView(this.currentState);
+//
         }
     }
 
