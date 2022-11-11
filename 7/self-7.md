@@ -7,12 +7,10 @@ Indicate below each bullet which file/unit takes care of each task:
 The require revision calls for
 
     - the relaxation of the constraints on the board size
-    
 https://github.khoury.northeastern.edu/CS4500-F22/plucky-bees/blob/f99feb6318be0fa2d73b54d6ea7e36206b456693/Maze/Common/labyrinth/src/main/java/game/model/Board.java#L15-L23
 This is the method that enforces the validation of whether a row or column is slidable. These interface methods are designed such that they do not enforce a specific Board size. However, we currently do not have a Board class that allows for a generic Board of any size to be constructed.
     
     - a suitability check for the board size vs player number 
-    
 https://github.khoury.northeastern.edu/CS4500-F22/plucky-bees/blob/f99feb6318be0fa2d73b54d6ea7e36206b456693/Maze/Common/labyrinth/src/main/java/game/model/Game.java#L234-L236
 Although this code fragment does not directly enforce the suitability check for Player count and Board size, it does enforce unique homes for the Players in the Game. Therefore, the suitability check is implicit because if there are too many Players for the Board, there will not be enough Tiles for all of the Players to have their own unique home. Currently, the exception is commented out because this suitability check was undesired for this week's integration tests.
 
