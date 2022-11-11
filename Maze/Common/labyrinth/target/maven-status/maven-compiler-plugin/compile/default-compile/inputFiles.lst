@@ -14,6 +14,7 @@ C:\Users\tao\Dropbox\Fall 2022\CS4500\plucky-bees\Maze\Common\labyrinth\src\main
 C:\Users\tao\Dropbox\Fall 2022\CS4500\plucky-bees\Maze\Common\labyrinth\src\main\java\game\model\SlideAndInsertRecord.java
 C:\Users\tao\Dropbox\Fall 2022\CS4500\plucky-bees\Maze\Common\labyrinth\src\main\java\referee\PlayerResult.java
 C:\Users\tao\Dropbox\Fall 2022\CS4500\plucky-bees\Maze\Common\labyrinth\src\main\java\referee\IReferee.java
+C:\Users\tao\Dropbox\Fall 2022\CS4500\plucky-bees\Maze\Common\labyrinth\src\main\java\game\it\BadTestPlayer.java
 C:\Users\tao\Dropbox\Fall 2022\CS4500\plucky-bees\Maze\Common\labyrinth\src\main\java\game\model\ExperimentationBoard.java
 C:\Users\tao\Dropbox\Fall 2022\CS4500\plucky-bees\Maze\Common\labyrinth\src\main\java\game\model\Position.java
 C:\Users\tao\Dropbox\Fall 2022\CS4500\plucky-bees\Maze\Common\labyrinth\src\main\java\protocol\serialization\MazeJsonSerializer.java
@@ -25,6 +26,7 @@ C:\Users\tao\Dropbox\Fall 2022\CS4500\plucky-bees\Maze\Common\labyrinth\src\main
 C:\Users\tao\Dropbox\Fall 2022\CS4500\plucky-bees\Maze\Common\labyrinth\src\main\java\game\model\GameStatus.java
 C:\Users\tao\Dropbox\Fall 2022\CS4500\plucky-bees\Maze\Common\labyrinth\src\main\java\game\it\GameStateIntegrationTest.java
 C:\Users\tao\Dropbox\Fall 2022\CS4500\plucky-bees\Maze\Common\labyrinth\src\main\java\game\view\AlternativeViewImplementations\ObserverView.java
+C:\Users\tao\Dropbox\Fall 2022\CS4500\plucky-bees\Maze\Common\labyrinth\src\main\java\player\TurnWrapper.java
 C:\Users\tao\Dropbox\Fall 2022\CS4500\plucky-bees\Maze\Common\labyrinth\src\main\java\protocol\serialization\model\ObserverGameProjectionSerializer.java
 C:\Users\tao\Dropbox\Fall 2022\CS4500\plucky-bees\Maze\Common\labyrinth\src\main\java\game\model\projections\ReadOnlyBoardProjection.java
 C:\Users\tao\Dropbox\Fall 2022\CS4500\plucky-bees\Maze\Common\labyrinth\src\main\java\game\it\TestRunner.java
@@ -34,6 +36,7 @@ C:\Users\tao\Dropbox\Fall 2022\CS4500\plucky-bees\Maze\Common\labyrinth\src\main
 C:\Users\tao\Dropbox\Fall 2022\CS4500\plucky-bees\Maze\Common\labyrinth\src\main\java\game\it\IntegrationPlayerClient.java
 C:\Users\tao\Dropbox\Fall 2022\CS4500\plucky-bees\Maze\Common\labyrinth\src\main\java\player\RiemannStrategy.java
 C:\Users\tao\Dropbox\Fall 2022\CS4500\plucky-bees\Maze\Common\labyrinth\src\main\java\protocol\serialization\MazeJsonParser.java
+C:\Users\tao\Dropbox\Fall 2022\CS4500\plucky-bees\Maze\Common\labyrinth\src\main\java\game\it\GameRefereeIntegrationExceptionsTest.java
 C:\Users\tao\Dropbox\Fall 2022\CS4500\plucky-bees\Maze\Common\labyrinth\src\main\java\game\it\BadFM.java
 C:\Users\tao\Dropbox\Fall 2022\CS4500\plucky-bees\Maze\Common\labyrinth\src\main\java\referee\Referee.java
 C:\Users\tao\Dropbox\Fall 2022\CS4500\plucky-bees\Maze\Common\labyrinth\src\main\java\player\SimpleCandidateStrategy.java

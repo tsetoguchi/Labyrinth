@@ -24,7 +24,7 @@
 	"plmt" :
 		[
 			{"color": "FFFFFF", "current": {"row#": 1, "column#": 1}, "home": {"row#": 1, "column#": 1}, "goto": {"row#": 1, "column#": 5}},
-			{"color": "ABCEDG", "current": {"row#": 2, "column#": 5}, "home": {"row#": 1, "column#": 3}, "goto": {"row#": 3, "column#": 3}},
+			{"color": "ABCEDE", "current": {"row#": 2, "column#": 5}, "home": {"row#": 1, "column#": 3}, "goto": {"row#": 3, "column#": 3}},
 			{"color": "716412", "current": {"row#": 5, "column#": 3}, "home": {"row#": 3, "column#": 3}, "goto": {"row#": 5, "column#": 5}}
 		],
 	"last": [0, "LEFT"]
