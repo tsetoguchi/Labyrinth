@@ -3,7 +3,6 @@ package game.it;
 import game.it.processing.IntegrationTestUtils;
 import game.model.*;
 import game.model.projections.PlayerGameProjection;
-import game.model.projections.SelfPlayerProjection;
 import player.Player;
 import player.Strategy;
 import player.TurnPlan;
@@ -23,13 +22,13 @@ public class TestPlayer implements Player {
     }
 
     @Override
-    public Object win(boolean w) {
-        return null;
+    public boolean win(boolean w) {
+        return true;
     }
 
     @Override
-    public Object setup(Optional<PlayerGameProjection> state, Position goal) {
-        return 0;
+    public boolean setup(PlayerGameProjection state, Position goal) {
+        return true;
     }
 
     @Override

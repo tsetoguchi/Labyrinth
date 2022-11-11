@@ -45,6 +45,16 @@ public class TestPlayer implements Player {
         return true;
     }
 
+    @Override
+    public boolean win(boolean w) {
+        return null;
+    }
+
+    @Override
+    public boolean setup(PlayerGameProjection state, Position goal) {
+        return null;
+    }
+
     private Tile[][] generateRandomTileGrid() {
         Tile[][] tileGrid = new Tile[7][7];
         List<Gem> randomGems = Arrays.asList(Gem.values());

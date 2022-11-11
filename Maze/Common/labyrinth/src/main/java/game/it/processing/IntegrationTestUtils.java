@@ -14,6 +14,7 @@ import static game.model.Direction.*;
 public class IntegrationTestUtils {
     static Map<String, Set<Direction>> symbolToDirection = new HashMap<>();
     static Map<Set<Direction>, String> directionToSymbol = new HashMap<>();
+    
 
     static {
         symbolToDirection.put("│", Set.of(UP, DOWN));

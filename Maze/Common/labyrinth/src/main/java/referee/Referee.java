@@ -21,10 +21,8 @@ import static game.model.GameStatus.*;
 import static referee.PlayerResult.*;
 
 /**
- * The referee handles: A player asking to perform an illegal slide (TODO) A player asking to move
- * to an inaccessible position (TODO) A player sending an incomplete set of moves, such as sliding
- * and inserting but not providing a move (TODO) Leaving for the remote communication layer: A
- * player not responding for a long period of time (TODO)
+ * Manages a game by running it to completion, kicking any players that misbehave, fail to respond, or throw an error, and
+ * returns the result of the game to the remaining players.
  */
 public class Referee implements IReferee {
 
@@ -32,8 +30,8 @@ public class Referee implements IReferee {
     /**
      * Stores which client should be used to talk to each Player.
      **/
-    private Map<PlayerAvatar, PlayerClient> playerAvatarToClient;
-    private final Map<PlayerAvatar, PlayerHandler> playerAvatarToHandler;
+    //private Map<PlayerAvatar, PlayerClient> playerAvatarToClient;
+    private Map<PlayerAvatar, PlayerHandler> playerAvatarToHandler;
     private final List<PlayerAvatar> playersCollectedTreasures;
     private final List<IObserver> observers;
 
@@ -50,7 +48,7 @@ public class Referee implements IReferee {
      */
     public Referee(Game game, List<PlayerClient> playerClients, List<IObserver> observers) {
         this.game = game;
-        this.playerAvatarToClient = this.mapPlayerAvatarsToPlayerClients(game, playerClients);
+        //this.playerAvatarToClient = this.mapPlayerAvatarsToPlayerClients(game, playerClients);
         this.playerAvatarToHandler = this.mapPlayerAvatarsToPlayerHandlers(game, playerClients);
         this.playersCollectedTreasures = new ArrayList<>();
         this.observers = observers;
@@ -67,6 +65,7 @@ public class Referee implements IReferee {
      */
     public void runGame() {
         this.informObserverOfState();
+        this.setupPlayers();
 
         GameStatus gameStatus = this.game.getGameStatus();
         while (gameStatus == IN_PROGRESS) {
@@ -78,7 +77,7 @@ public class Referee implements IReferee {
     }
 
     public void resume(Game game, List<PlayerClient> playerClients) {
-        this.playerAvatarToClient = mapPlayerAvatarsToPlayerClients(game, playerClients);
+        this.playerAvatarToHandler = this.mapPlayerAvatarsToPlayerHandlers(game, playerClients);
         this.game = game;
         this.runGame();
     }
@@ -95,6 +94,7 @@ public class Referee implements IReferee {
         PlayerAvatar activePlayer = this.game.getActivePlayer();
         TurnWrapper turnWrapper = this.getPlanFromPlayer(activePlayer);
         if (turnWrapper.isException()) { // Player raised an exception when asked for a turn
+            this.kickPlayerInGameAndRef(activePlayer.getColor());
             return;
         }
         Optional<TurnPlan> turnPlan = turnWrapper.getTurnPlan();
@@ -120,7 +120,6 @@ public class Referee implements IReferee {
             }
         } else {
 
-            // TODO: Clean this up
             PlayerAvatar toBeKickedPlayer = this.game.getActivePlayer();
             this.eliminated.add(this.playerAvatarToHandler.get(toBeKickedPlayer).getPlayerClient());
             this.playerAvatarToHandler.remove(toBeKickedPlayer);
@@ -168,8 +167,13 @@ public class Referee implements IReferee {
         for (PlayerAvatar player : this.game.getPlayerList()) {
             PlayerResult resultForPlayer = playerResults.get(player);
             this.playerAvatarToHandler.get(player).informGameEnd(gameStatus, resultForPlayer);
+            if (resultForPlayer.equals(PlayerResult.WINNER)) {
+                this.playerAvatarToHandler.get(player).win(true);
+            }
+            else {
+                this.playerAvatarToHandler.get(player).win(false);
+            }
 
-//            this.playerAvatarToClient.get(player).informGameEnd(gameStatus, resultForPlayer);
         }
     }
 
@@ -283,9 +287,23 @@ public class Referee implements IReferee {
     }
 
     private void setupPlayers() {
+        List<Color> playersToBeKicked = new ArrayList<>();
         for (PlayerAvatar player : this.game.getPlayerList()) {
+            PlayerHandler playerHandler = this.playerAvatarToHandler.get(player);
+            Optional<Boolean> outcome = playerHandler.setup(new PlayerGameProjection(this.game, player, this.game.getPreviousSlideAndInsert()),
+                                player.getGoalPosition());
 
+            if (outcome.isEmpty()) {
+                playersToBeKicked.add(player.getColor());
+            }
         }
+        for (Color color : playersToBeKicked) {
+            this.kickPlayerInGameAndRef(color);
+        }
+    }
+
+    private void removeEliminatedPlayersFromGame() {
+
     }
 
     private void informObserverOfState() {
@@ -317,16 +335,9 @@ public class Referee implements IReferee {
     }
 
     /**
-     * Removes the player with the specified color from the playerToClientMap and game
+     * Removes the player with the specified color from the Game and Referee
      */
     private void kickPlayerInGameAndRef(Color color) {
-
-        Optional<PlayerAvatar> playerAvatar = this.game.getPlayer(color);
-
-        if (playerAvatar.isPresent()) {
-            this.eliminated.add(this.playerAvatarToHandler.get(playerAvatar.get()).getPlayerClient());
-        }
-
         this.kickPlayer(color);
         this.game.kickPlayer(color);
     }
@@ -359,7 +370,8 @@ public class Referee implements IReferee {
                 ExecutorService service = Executors.newCachedThreadPool();
                 return Optional.of(service.submit(function::get).get(TIMEOUT, TimeUnit.SECONDS));
             } catch (Throwable exception) {
-                kickPlayerInGameAndRef(this.color);
+//                kickPlayerInGameAndRef(this.color);
+                eliminated.add(this.player);
                 return Optional.empty();
             }
         }
@@ -400,7 +412,12 @@ public class Referee implements IReferee {
             });
         }
 
-        void
+//        void setup(PlayerGameProjection game, Position goal) {
+//            this.exceptionHandler(() -> {
+//                this.player.setup(game, goal);
+//                return Optional.empty();
+//            });
+//        }
 
         public Optional<String> getPlayerName() {
             return this.exceptionHandler(() -> {

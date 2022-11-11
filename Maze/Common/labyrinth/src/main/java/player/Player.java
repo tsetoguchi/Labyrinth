@@ -11,9 +11,9 @@ import java.util.Optional;
  */
 public interface Player {
 
-    Object win(boolean w);
+    boolean win(boolean w);
 
-    Object setup(Optional<PlayerGameProjection> state, Position goal);
+    boolean setup(PlayerGameProjection state, Position goal);
 
     /** Propose a board layout for the game. **/
     Board proposeBoard();

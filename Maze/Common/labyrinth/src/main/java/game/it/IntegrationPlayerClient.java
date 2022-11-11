@@ -32,6 +32,12 @@ public class IntegrationPlayerClient implements PlayerClient {
     @Override
     public void informGameEnd(GameStatus status, PlayerResult result) {
         this.result = result;
+//        if (result.equals(PlayerResult.WINNER)) {
+//            this.player.win(true);
+//        }
+//        else {
+//            this.player.win(false);
+//        }
     }
 
     @Override
@@ -50,7 +56,7 @@ public class IntegrationPlayerClient implements PlayerClient {
 
     @Override
     public boolean setup(PlayerGameProjection game, Position goal) {
-        return false;
+        return this.player.setup(game, goal);
     }
 
     @Override

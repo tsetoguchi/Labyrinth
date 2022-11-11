@@ -37,24 +37,23 @@ public class BadTestPlayer implements Player {
 //  }
 
     @Override
-    public Object win(boolean w) throws ArithmeticException {
+    public boolean win(boolean w) throws ArithmeticException {
 
         if (this.badFM.equals(BadFM.WIN)) {
-            int i = 1 / 0;
+            if (1 / 0 == 1);
         }
 
-        return null;
+        return true;
     }
 
     @Override
-    public Object setup(Optional<PlayerGameProjection> state, Position goal)
+    public boolean setup(PlayerGameProjection state, Position goal)
             throws ArithmeticException {
-
         if (this.badFM.equals(BadFM.SETUP)) {
-            int i = 1 / 0;
+            if (1 / 0 == 1);
         }
 
-        return null;
+        return true;
     }
 
     /**
@@ -75,7 +74,7 @@ public class BadTestPlayer implements Player {
     public Optional<TurnPlan> takeTurn(PlayerGameProjection game) throws ArithmeticException {
 
         if (this.badFM.equals(BadFM.TAKETURN)) {
-            int error = 1 / 0;
+            if (1 / 0 == 1);
         }
 
         return this.strategy.createTurnPlan(game.getBoard(), game.getSelf(),
@@ -84,7 +83,7 @@ public class BadTestPlayer implements Player {
 
     @Override
     public String getName() {
-        return null;
+        return this.name;
     }
 
     /**
