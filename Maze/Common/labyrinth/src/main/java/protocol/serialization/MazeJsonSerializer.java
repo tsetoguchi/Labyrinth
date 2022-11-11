@@ -2,17 +2,13 @@ package protocol.serialization;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import game.model.PlayerAvatar;
 import game.model.Position;
 import game.model.projections.ObserverGameProjection;
 import player.TurnPlan;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Serialization methods for Labyrinth models.
@@ -44,11 +40,11 @@ public class MazeJsonSerializer {
         return this.mapper.writeValueAsString(resultArray);
     }
 
-    public String winnersToJson(List<String> winners) throws IOException {
-        String[] sortedWinners = winners.stream()
+    public String namesToJson(List<String> names) throws IOException {
+        String[] sortedNames = names.stream()
                 .sorted()
                 .toArray(String[]::new);
-        return this.mapper.writeValueAsString(sortedWinners);
+        return this.mapper.writeValueAsString(sortedNames);
     }
 
     public String observerGameToJson(ObserverGameProjection game) throws JsonProcessingException {

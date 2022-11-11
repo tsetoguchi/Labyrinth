@@ -4,6 +4,8 @@ import game.it.IntegrationPlayerClient;
 import game.model.*;
 
 import java.util.*;
+
+import game.model.projections.SelfPlayerProjection;
 import player.Player;
 import referee.clients.PlayerClient;
 
@@ -12,6 +14,7 @@ import static game.model.Direction.*;
 public class IntegrationTestUtils {
     static Map<String, Set<Direction>> symbolToDirection = new HashMap<>();
     static Map<Set<Direction>, String> directionToSymbol = new HashMap<>();
+
     static {
         symbolToDirection.put("│", Set.of(UP, DOWN));
         symbolToDirection.put("─", Set.of(RIGHT, LEFT));
@@ -37,8 +40,7 @@ public class IntegrationTestUtils {
         if (symbolToDirection.containsKey(pathShape)) {
             Set<Direction> pathwayConnections = symbolToDirection.get(pathShape);
             return new Tile(pathwayConnections, treasure);
-        }
-        else {
+        } else {
             throw new IllegalArgumentException("Invalid path shape given.");
         }
     }
@@ -83,5 +85,37 @@ public class IntegrationTestUtils {
     public static Treasure createTreasure(Gem gem1, Gem gem2) {
         List<Gem> gems = List.of(gem1, gem2);
         return new Treasure(gems);
+    }
+
+    public static Position getCurrentGoal(SelfPlayerProjection playerInformation) {
+        if (playerInformation.hasReachedGoal()) {
+            return playerInformation.getHomePosition();
+        }
+        return playerInformation.getGoalPosition();
+    }
+
+    public static Tile[][] generateRandomTileGrid() {
+        Tile[][] tileGrid = new Tile[7][7];
+        List<Gem> randomGems = Arrays.asList(Gem.values());
+        randomGems.remove(Gem.hackmanite); // we will use this for the spare tile
+        Collections.shuffle(randomGems);
+
+        for (int row = 0; row < 7; row++) {
+            for (int col = 0; col < 7; col++) {
+                tileGrid[row][col] = generateRandomTile(randomGems.get(row), randomGems.get(col));
+            }
+        }
+        return tileGrid;
+    }
+
+    public static Tile generateRandomTile(Gem firstGem, Gem secondGem) {
+        Random rand = new Random();
+        Set<Direction> directions = new HashSet<>();
+        for (Direction direction : Direction.values()) {
+            if (rand.nextBoolean()) {
+                directions.add(direction);
+            }
+        }
+        return new Tile(directions, new Treasure(List.of(firstGem, secondGem)));
     }
 }

@@ -11,8 +11,6 @@ import java.util.Optional;
  */
 public interface Player {
 
-    TurnPlan takeTurn(PlayerGameProjection state);
-
     Object win(boolean w);
 
     Object setup(Optional<PlayerGameProjection> state, Position goal);
@@ -22,7 +20,7 @@ public interface Player {
     /**
      * Given a view of the current game and a target tile to try to reach first, create a plan for the turn.
      **/
-    Optional<TurnPlan> createTurnPlan(PlayerGameProjection game);
+    Optional<TurnPlan> takeTurn(PlayerGameProjection game);
 
     String getName();
 

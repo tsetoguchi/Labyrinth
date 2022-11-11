@@ -30,7 +30,7 @@ public class TestPlayer implements Player {
     }
 
     @Override
-    public Optional<TurnPlan> createTurnPlan(PlayerGameProjection game) {
+    public Optional<TurnPlan> takeTurn(PlayerGameProjection game) {
         return this.strategy.createTurnPlan(game.getBoard(), game.getSelf(), game.getPreviousSlideAndInsert(),
                 this.getCurrentGoal(game.getBoard(), game.getSelf()));
     }

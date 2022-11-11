@@ -1,5 +1,6 @@
 package game.it;
 
+import game.it.processing.IntegrationTestUtils;
 import game.model.*;
 import game.model.projections.PlayerGameProjection;
 import game.model.projections.SelfPlayerProjection;
@@ -22,11 +23,6 @@ public class TestPlayer implements Player {
     }
 
     @Override
-    public TurnPlan takeTurn(PlayerGameProjection state) {
-        return this.takeTurn(state);
-    }
-
-    @Override
     public Object win(boolean w) {
         return null;
     }
@@ -38,15 +34,15 @@ public class TestPlayer implements Player {
 
     @Override
     public Board proposeBoard() {
-        Tile[][] tileGrid = this.generateRandomTileGrid();
-        Tile spareTile = this.generateRandomTile(Gem.hackmanite, Gem.hackmanite);
+        Tile[][] tileGrid = IntegrationTestUtils.generateRandomTileGrid();
+        Tile spareTile = IntegrationTestUtils.generateRandomTile(Gem.hackmanite, Gem.hackmanite);
         return new StandardBoard(tileGrid, spareTile);
     }
 
     @Override
-    public Optional<TurnPlan> createTurnPlan(PlayerGameProjection game) {
+    public Optional<TurnPlan> takeTurn(PlayerGameProjection game) {
         return this.strategy.createTurnPlan(game.getBoard(), game.getSelf(),
-                game.getPreviousSlideAndInsert(), this.getCurrentGoal(game.getSelf()));
+                game.getPreviousSlideAndInsert(), IntegrationTestUtils.getCurrentGoal(game.getSelf()));
     }
 
     @Override
@@ -59,35 +55,7 @@ public class TestPlayer implements Player {
         return true;
     }
 
-    private Tile[][] generateRandomTileGrid() {
-        Tile[][] tileGrid = new Tile[7][7];
-        List<Gem> randomGems = Arrays.asList(Gem.values());
-        randomGems.remove(Gem.hackmanite); // we will use this for the spare tile
-        Collections.shuffle(randomGems);
 
-        for (int row = 0; row < 7; row++) {
-            for (int col = 0; col < 7; col++) {
-                tileGrid[row][col] = this.generateRandomTile(randomGems.get(row), randomGems.get(col));
-            }
-        }
-        return tileGrid;
-    }
 
-    private Tile generateRandomTile(Gem firstGem, Gem secondGem) {
-        Random rand = new Random();
-        Set<Direction> directions = new HashSet<>();
-        for (Direction direction : Direction.values()) {
-            if (rand.nextBoolean()) {
-                directions.add(direction);
-            }
-        }
-        return new Tile(directions, new Treasure(List.of(firstGem, secondGem)));
-    }
 
-    private Position getCurrentGoal(SelfPlayerProjection playerInformation) {
-        if (playerInformation.hasReachedGoal()) {
-            return playerInformation.getHomePosition();
-        }
-        return playerInformation.getGoalPosition();
-    }
 }

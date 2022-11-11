@@ -12,7 +12,6 @@ import referee.clients.PlayerClient;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static referee.PlayerResult.WINNER;
@@ -49,11 +48,11 @@ public class GameRefereeIntegrationTest {
             referee.runGame();
 
             List<String> winnerNames = intClients.stream()
-                    .filter((IntegrationPlayerClient client) -> WINNER.equals(client.result))
+                    .filter((IntegrationPlayerClient client) -> WINNER.equals(client.getResult()))
                     .map(IntegrationPlayerClient::getPlayerName)
                     .collect(Collectors.toList());
 
-            System.out.println(mazeSerializer.winnersToJson(winnerNames));
+            System.out.println(mazeSerializer.namesToJson(winnerNames));
 
         } catch (IOException e) {
             throw new RuntimeException(e);

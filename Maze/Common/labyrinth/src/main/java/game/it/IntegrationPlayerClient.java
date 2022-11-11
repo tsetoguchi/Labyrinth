@@ -11,8 +11,8 @@ import referee.clients.PlayerClient;
 import java.util.Optional;
 
 public class IntegrationPlayerClient implements PlayerClient {
-    Player player;
-    PlayerResult result;
+    private Player player;
+    private PlayerResult result;
 
     public IntegrationPlayerClient(Player player) {
         this.player = player;
@@ -21,7 +21,7 @@ public class IntegrationPlayerClient implements PlayerClient {
 
     @Override
     public Optional<TurnPlan> takeTurn(PlayerGameProjection game) {
-        return player.createTurnPlan(game);
+        return player.takeTurn(game);
     }
 
     @Override
@@ -42,5 +42,19 @@ public class IntegrationPlayerClient implements PlayerClient {
     @Override
     public boolean updateGoal(Position goal) {
         return this.player.updateGoal(goal);
+    }
+
+    public PlayerResult getResult() {
+        return this.result;
+    }
+
+    @Override
+    public boolean setup(PlayerGameProjection game, Position goal) {
+        return false;
+    }
+
+    @Override
+    public boolean win(boolean playerWon) {
+        return false;
     }
 }

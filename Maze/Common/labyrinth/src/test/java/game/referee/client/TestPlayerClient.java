@@ -2,8 +2,12 @@ package game.referee.client;
 
 import game.model.GameStatus;
 import game.model.Position;
+import game.model.projections.PlayerGameProjection;
+import player.TurnPlan;
 import referee.PlayerResult;
 import referee.clients.PlayerClient;
+
+import java.util.Optional;
 
 /**
  * A mock player client for testing which keeps track of the messages it receives for comparison.
@@ -30,6 +34,16 @@ public abstract class TestPlayerClient implements PlayerClient {
     public void informGameEnd(GameStatus status, PlayerResult result) {
         this.finalGameResult = status;
         this.finalPlayerResult = result;
+    }
+
+    @Override
+    public boolean win(boolean playerWon) {
+        return true;
+    }
+
+    @Override
+    public boolean setup(PlayerGameProjection game, Position goal) {
+        return true;
     }
 
     @Override

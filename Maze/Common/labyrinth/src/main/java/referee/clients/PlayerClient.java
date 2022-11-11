@@ -18,11 +18,18 @@ public interface PlayerClient {
 
     Optional<TurnPlan> takeTurn(PlayerGameProjection game);
 
+    boolean setup(PlayerGameProjection game, Position goal);
+
+    boolean win(boolean playerWon);
+
     void returnHome(Position homeTile);
 
     void informGameEnd(GameStatus status, PlayerResult result);
 
     String getPlayerName();
+
+
+
 
     /**
      * Accepts the current game state and the current goal and updates accordingly. returning True if the player

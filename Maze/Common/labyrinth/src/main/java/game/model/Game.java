@@ -1,7 +1,9 @@
 package game.model;
 
 import game.exceptions.IllegalGameActionException;
+import player.Player;
 
+import javax.swing.text.html.Option;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -126,11 +128,23 @@ public class Game {
      * Kicks the player with the specified color from the game
      */
     public void kickPlayer(Color color) {
+        if (this.playerList.size() == 0) {
+            throw new IllegalGameActionException("Tried to kick the active player when there were no" +
+                    "players in the game.");
+        }
+
         for (PlayerAvatar player : this.playerList) {
             if (player.getColor().equals(color)) {
                 this.playerList.remove(player);
                 break;
             }
+        }
+
+        if (this.playerList.size() == 0) {
+            this.status = NO_REMAINING_PLAYERS;
+        }
+        else if (this.haveSkipped.containsAll(this.playerList)) {
+            this.status = ALL_SKIPPED;
         }
     }
 
@@ -188,6 +202,15 @@ public class Game {
     }
 
     public Optional<SlideAndInsertRecord> getPreviousSlideAndInsert() { return this.previousSlideAndInsert; }
+
+    public Optional<PlayerAvatar> getPlayer(Color color) {
+        for (PlayerAvatar player : this.playerList) {
+            if (player.getColor().equals(color)) {
+                return Optional.of(player);
+            }
+        }
+        return Optional.empty();
+    }
 
     /**
      * Verifies that all fields are non-null and enforces all game constraints
