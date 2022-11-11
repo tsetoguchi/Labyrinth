@@ -1,8 +1,5 @@
 # TODO:
 
-7. Add getSlidable to the Board interface to better facilitate different board sizes
-8. Add a check to enforce the distinctness of home tiles
-
 # Completed
 
 1. [Create Observer interface](https://github.khoury.northeastern.edu/CS4500-F22/plucky-bees/commit/602946b14bdbd7eecabda19dc4778ea4e4c74509#diff-2f7651fc581a46024b4dfa77723c9cc8174a11c08b079acee0c2ffe8b9f3c85e)
@@ -11,3 +8,5 @@
 4. [Update the Observer so it displays Gem images](https://github.khoury.northeastern.edu/CS4500-F22/plucky-bees/commit/6caa4fd9d51517f2d37257499a764d8666eb18b4) - Might not be the exact fix that changed it, but we had fixed the path issue for the image file in TileView 
 5. [Add missing elements Logical Interactions to the Player and PlayerClient interfaces so that it's up to spec](https://github.khoury.northeastern.edu/CS4500-F22/plucky-bees/commit/277d870632a9aed56786ad7110b68fddf9330039) - At this point the PlayerClient and Player interfaces contain the full Logical interfaces. This was changed over a lot of commits but should be done at this point.
 6. [Add missing documentation for PlayerClient](https://github.khoury.northeastern.edu/CS4500-F22/plucky-bees/commit/277d870632a9aed56786ad7110b68fddf9330039) Done by this point, but was a running process.
+7. Add getSlidable to the Board interface to better facilitate different board sizes - We decided against this design decision. isValidSlideAndInsert() and the use of the generic interface should be enough to facilitate this change.
+8. [Add a check to enforce the distinctness of home tiles](https://github.khoury.northeastern.edu/CS4500-F22/plucky-bees/commit/7ec5dbf980397024aad35cef71aa004954774279#diff-86f6668ffbc34bab97149e2a33126bf49f31ae37c9c235c1a80c4131e83c309b)
