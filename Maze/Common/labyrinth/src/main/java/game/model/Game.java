@@ -218,6 +218,7 @@ public class Game {
     private void validateGameConstruction() {
 
         Set<Color> existingPlayerColors = new HashSet<>();
+        Set<Position> existingHomePositions = new HashSet<>();
         for (PlayerAvatar player : this.playerList) {
             Position goalPosition = player.getGoalPosition();
             Position homePosition = player.getHomePosition();
@@ -228,6 +229,13 @@ public class Game {
             }
             if (homePosition.getRow() % 2 == 0 || homePosition.getColumn() % 2 == 0) {
                 throw new IllegalArgumentException("Home tile is not on an immovable Tile.");
+            }
+
+            if (existingHomePositions.contains(homePosition)) {
+                // throw new IllegalArgumentException("Home tiles must be distinct.");
+            }
+            else {
+                existingHomePositions.add(homePosition);
             }
 
             if (existingPlayerColors.contains(player.getColor())) {

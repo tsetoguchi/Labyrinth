@@ -1,9 +1,5 @@
 # TODO:
 
-3. Handle timeouts for Player moves and Observer within Referee
-4. Update the Observer so it displays Gem images
-5. Add missing elements Logical Interactions to the Player and PlayerClient interfaces so that it's up to spec
-6. Add missing documentation for PlayerClient
 7. Add getSlidable to the Board interface to better facilitate different board sizes
 8. Add a check to enforce the distinctness of home tiles
 
@@ -11,3 +7,7 @@
 
 1. [Create Observer interface](https://github.khoury.northeastern.edu/CS4500-F22/plucky-bees/commit/602946b14bdbd7eecabda19dc4778ea4e4c74509#diff-2f7651fc581a46024b4dfa77723c9cc8174a11c08b079acee0c2ffe8b9f3c85e)
 2. [Fix the Observer so that it updates the state in the GUI](https://github.khoury.northeastern.edu/CS4500-F22/plucky-bees/commit/6caa4fd9d51517f2d37257499a764d8666eb18b4) - The fix was implementing a deepcopy for each state that was passed from the referee to the observer. Some minor changes were made to the ObserverView as well.
+3. [Handle timeouts for Player moves and Observer within Referee](https://github.khoury.northeastern.edu/CS4500-F22/plucky-bees/commit/46caf55033ab65ef1082a2910b70bb50f23c46e9#diff-4a3a37586b54772ac64511e51268a7e85cc6be9e291308b84bdb3f7caf41b99b) - Mostly handled at the bottom of Referee. Look for the PlayerHandler class within Referee.
+4. [Update the Observer so it displays Gem images](https://github.khoury.northeastern.edu/CS4500-F22/plucky-bees/commit/6caa4fd9d51517f2d37257499a764d8666eb18b4) - Might not be the exact fix that changed it, but we had fixed the path issue for the image file in TileView 
+5. [Add missing elements Logical Interactions to the Player and PlayerClient interfaces so that it's up to spec](https://github.khoury.northeastern.edu/CS4500-F22/plucky-bees/commit/277d870632a9aed56786ad7110b68fddf9330039) - At this point the PlayerClient and Player interfaces contain the full Logical interfaces. This was changed over a lot of commits but should be done at this point.
+6. [Add missing documentation for PlayerClient](https://github.khoury.northeastern.edu/CS4500-F22/plucky-bees/commit/277d870632a9aed56786ad7110b68fddf9330039) Done by this point, but was a running process.

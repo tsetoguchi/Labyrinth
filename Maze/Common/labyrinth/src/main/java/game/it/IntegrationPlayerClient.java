@@ -61,6 +61,6 @@ public class IntegrationPlayerClient implements PlayerClient {
 
     @Override
     public boolean win(boolean playerWon) {
-        return false;
+        return this.player.win(playerWon);
     }
 }

@@ -39,16 +39,12 @@ public class GameRefereeIntegrationExceptionsTest {
                 clients.add(client);
                 intClients.add(client);
             }
-            int i = 0;
             Referee referee = new Referee(game, clients);
-            i = 0;
             referee.runGame();
-            i = 0;
             List<String> winnerNames = intClients.stream()
                     .filter((IntegrationPlayerClient client) -> WINNER.equals(client.getResult()))
                     .map(IntegrationPlayerClient::getPlayerName)
                     .collect(Collectors.toList());
-            i = 0;
             Collections.sort(winnerNames);
 
             List<String> eliminatedNames = referee.getEliminated();
