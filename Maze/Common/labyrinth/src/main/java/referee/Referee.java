@@ -167,13 +167,19 @@ public class Referee implements IReferee {
         for (PlayerAvatar player : this.game.getPlayerList()) {
             PlayerResult resultForPlayer = playerResults.get(player);
             this.playerAvatarToHandler.get(player).informGameEnd(gameStatus, resultForPlayer);
+
             if (resultForPlayer.equals(PlayerResult.WINNER)) {
-                this.playerAvatarToHandler.get(player).win(true);
+                Optional<Boolean> timeout = (this.playerAvatarToHandler.get(player).win(true));
+                if (timeout.isEmpty()) {
+                    this.kickPlayerInGameAndRef(player.getColor());
+                }
             }
             else {
-                this.playerAvatarToHandler.get(player).win(false);
+                Optional<Boolean> timeout = this.playerAvatarToHandler.get(player).win(false);
+                if (timeout.isEmpty()) {
+                    this.kickPlayerInGameAndRef(player.getColor());
+                }
             }
-
         }
     }
 
@@ -232,6 +238,7 @@ public class Referee implements IReferee {
         for (PlayerClient player : this.eliminated) {
             names.add(player.getPlayerName());
         }
+
         Collections.sort(names);
         return names;
     }
@@ -302,10 +309,6 @@ public class Referee implements IReferee {
         }
     }
 
-    private void removeEliminatedPlayersFromGame() {
-
-    }
-
     private void informObserverOfState() {
         for (IObserver observer : this.observers) {
             observer.update(new ObserverGameProjection(this.game));
@@ -370,16 +373,14 @@ public class Referee implements IReferee {
                 ExecutorService service = Executors.newCachedThreadPool();
                 return Optional.of(service.submit(function::get).get(TIMEOUT, TimeUnit.SECONDS));
             } catch (Throwable exception) {
-//                kickPlayerInGameAndRef(this.color);
                 eliminated.add(this.player);
                 return Optional.empty();
             }
         }
 
-        public void win(boolean w) {
-            this.exceptionHandler(() -> {
-                this.player.win(w);
-                return Optional.empty();
+        public Optional<Boolean> win(boolean w) {
+            return this.exceptionHandler(() -> {
+                return this.player.win(w);
             });
         }
 
