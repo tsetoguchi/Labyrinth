@@ -31,13 +31,12 @@ public abstract class AbstractBoard implements Board {
     this.width = width;
     this.height = height;
     if (tileGrid.length != height) {
-      throw new IllegalArgumentException("Tried to create a board that had fewer than 7 rows.");
+      throw new IllegalArgumentException("Tried to create a board with an invalid number of rows.");
     }
     for (Tile[] tiles : tileGrid) {
       if (tiles.length != width) {
         throw new IllegalArgumentException(
-            "Tried to create a board where a row did not have exactly " +
-                "7 elements.");
+            "Invalid number of columns.");
       }
     }
     this.tileGrid = tileGrid;
