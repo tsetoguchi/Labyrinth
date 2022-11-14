@@ -1,6 +1,7 @@
 package game.it;
 
 import game.it.processing.IntegrationTestUtils;
+import game.model.PrivateGameState;
 import protocol.serialization.MazeJsonParser;
 import protocol.serialization.MazeJsonSerializer;
 import game.model.Direction;
@@ -20,7 +21,7 @@ public class GameStateIntegrationTest {
             MazeJsonSerializer mazeSerializer = new MazeJsonSerializer();
 
             mazeParser.readNext();
-            Game game = mazeParser.getGame();
+            PrivateGameState game = mazeParser.getGame();
             mazeParser.readNext();
             int index = mazeParser.getInt();
             mazeParser.readNext();

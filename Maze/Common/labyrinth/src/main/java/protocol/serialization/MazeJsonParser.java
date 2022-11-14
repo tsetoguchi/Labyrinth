@@ -74,7 +74,7 @@ public class MazeJsonParser {
    * Read a game state from the current parser. Json players do not include goal tiles, so they are
    * arbitrarily assigned.
    */
-  public Game getGame() throws IOException {
+  public PrivateGameState getGame() throws IOException {
     return this.getGameFromState(false);
   }
 
@@ -84,7 +84,7 @@ public class MazeJsonParser {
    * @return
    * @throws IOException
    */
-  public Game getGameWithGoals() throws IOException {
+  public PrivateGameState getGameWithGoals() throws IOException {
     return this.getGameFromState(true);
   }
 
@@ -233,7 +233,7 @@ public class MazeJsonParser {
    * Read a Game from the current parser. Players will be parsed according to whether or not they
    * include goal tiles.
    */
-  private Game getGameFromState(boolean playersIncludeGoals) throws IOException {
+  private PrivateGameState getGameFromState(boolean playersIncludeGoals) throws IOException {
     // we use null here to hold the variables right before assigning them, there will never persist a null value
     // as we check if any remain null afterwards
     Tile[][] tileGrid = null;

@@ -55,7 +55,7 @@ public class Referee implements IReferee {
     this.eliminated = new ArrayList<>();
   }
 
-  public Referee(Game game, List<PlayerClient> playerClients) {
+  public Referee(PrivateGameState game, List<PlayerClient> playerClients) {
     this(game, playerClients, List.of());
   }
 
@@ -77,7 +77,7 @@ public class Referee implements IReferee {
     this.informObserversOfGameEnd();
   }
 
-  public void resume(Game game, List<PlayerClient> playerClients) {
+  public void resume(PrivateGameState game, List<PlayerClient> playerClients) {
     this.playerAvatarToHandler = this.mapPlayerAvatarsToPlayerHandlers(game, playerClients);
     this.game = game;
     this.runGame();

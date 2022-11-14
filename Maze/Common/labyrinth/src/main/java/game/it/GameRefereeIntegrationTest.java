@@ -1,6 +1,7 @@
 package game.it;
 
 import game.controller.ObserverController;
+import game.model.PrivateGameState;
 import game.model.projections.ObserverGameProjection;
 import protocol.serialization.MazeJsonParser;
 import protocol.serialization.MazeJsonSerializer;
@@ -27,7 +28,7 @@ public class GameRefereeIntegrationTest {
             mazeParser.readNext();
             List<Player> players = mazeParser.getPlayers();
             mazeParser.readNext();
-            Game game = mazeParser.getGameWithGoals();
+            PrivateGameState game = mazeParser.getGameWithGoals();
 
             List<IntegrationPlayerClient> intClients = new ArrayList<>();
             List<PlayerClient> clients = new ArrayList<>();

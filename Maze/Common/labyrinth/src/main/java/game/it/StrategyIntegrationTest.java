@@ -1,5 +1,6 @@
 package game.it;
 
+import game.model.PrivateGameState;
 import protocol.serialization.MazeJsonParser;
 import protocol.serialization.MazeJsonSerializer;
 import game.model.Game;
@@ -22,7 +23,7 @@ public class StrategyIntegrationTest {
             mazeParser.readNext();
             IStrategy strategy = mazeParser.getStrategy();
             mazeParser.readNext();
-            Game game = mazeParser.getGame();
+            PrivateGameState game = mazeParser.getGame();
             mazeParser.readNext();
             Position goal = mazeParser.getCoordinate();
 

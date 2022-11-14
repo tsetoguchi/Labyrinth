@@ -3,6 +3,7 @@ package game.it;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import game.model.Game;
 
+import game.model.PrivateGameState;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -29,7 +30,7 @@ public class GameRefereeIntegrationExceptionsTest {
       List<Player> badPlayerSpec = mazeParser.getPSAndBadPS();
 
       mazeParser.readNext();
-      Game game = mazeParser.getGameWithGoals();
+      PrivateGameState game = mazeParser.getGameWithGoals();
 
       List<IntegrationPlayerClient> intClients = new ArrayList<>();
       List<PlayerClient> clients = new ArrayList<>();
