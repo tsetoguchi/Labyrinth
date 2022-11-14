@@ -1,9 +1,12 @@
 package game.model;
 
-import java.util.*;
-import java.util.function.Predicate;
+import static game.model.Direction.DOWN;
+import static game.model.Direction.LEFT;
+import static game.model.Direction.RIGHT;
+import static game.model.Direction.UP;
 
-import static game.model.Direction.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * An ExperimentationBoard for StandardBoard.
@@ -13,11 +16,11 @@ public class StandardExperimentationBoard extends StandardBoard implements Exper
     /**
      * Creates a StandardExperimentationBoard with a deep copy of the given StandardBoard's state.
      */
-    public StandardExperimentationBoard(StandardBoard board) {
+    public StandardExperimentationBoard(Board board) {
         super(copyGrid(board), copyTile(board.getSpareTile()));
     }
 
-    static Tile[][] copyGrid(StandardBoard board) {
+    static Tile[][] copyGrid(Board board) {
         Tile[][] newGrid = new Tile[board.getHeight()][board.getWidth()];
 
         for (int row = 0; row < newGrid.length; row++) {
@@ -45,7 +48,7 @@ public class StandardExperimentationBoard extends StandardBoard implements Exper
     @Override
     public Set<Position> findReachableTilePositionsAfterSlideAndInsert(Direction direction, int index, int rotations, Position position) {
         this.slideAndInsert(direction, index, rotations);
-        Position avatarAfterSliding = getAvatarPositionAfterSliding(position,
+        Position avatarAfterSliding = this.getAvatarPositionAfterSliding(position,
                 this.getWidth(), this.getHeight(), direction, index);
         Set<Position> reachablePositions = this.getReachablePositions(avatarAfterSliding);
 

@@ -15,14 +15,14 @@ public class SlideAndInsertRecord {
     }
 
     public Direction getDirection() {
-        return direction;
+        return this.direction;
     }
 
     public int getIndex() {
-        return index;
+        return this.index;
     }
 
     public int getRotations() {
-        return rotations;
+        return this.rotations;
     }
 }

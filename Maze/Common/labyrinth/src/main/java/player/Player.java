@@ -7,25 +7,30 @@ import game.model.projections.PlayerGameProjection;
 import java.util.Optional;
 
 /**
- * A single player in the game of Labyrinth. Represents the controls of an actual player to interact with any Referee.
+ * A single player in the game of Labyrinth. Represents the controls of an actual player to interact
+ * with any Referee.
  */
 public interface Player {
 
-    boolean win(boolean w);
+  boolean win(boolean w);
 
-    boolean setup(PlayerGameProjection state, Position goal);
+  boolean setup(PlayerGameProjection state, Position goal);
 
-    /** Propose a board layout for the game. **/
-    Board proposeBoard();
-    /**
-     * Given a view of the current game and a target tile to try to reach first, create a plan for the turn.
-     **/
-    Optional<TurnPlan> takeTurn(PlayerGameProjection game);
+  /**
+   * Propose a board layout for the game.
+   **/
+  Board proposeBoard();
 
-    String getName();
+  /**
+   * Given a view of the current game and a target tile to try to reach first, create a plan for the
+   * turn.
+   **/
+  Optional<TurnPlan> takeTurn(PlayerGameProjection game);
 
-    /**
-     * Accept a new goal from the referee. Returns true if update was successful and false otherwise.
-     */
-    boolean updateGoal(Position goal);
+  String getName();
+
+  /**
+   * Accept a new goal from the referee. Returns true if update was successful and false otherwise.
+   */
+  boolean updateGoal(Position goal);
 }

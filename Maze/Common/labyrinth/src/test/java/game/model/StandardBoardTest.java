@@ -87,12 +87,12 @@ public class StandardBoardTest {
     @Test
     public void testInsertRotation() {
         StandardBoard board = TestUtils.createUniformBoard(false, false, true, true);
-        assertTrue(board.isValidSlideAndInsert(RIGHT, 0,0));
+        assertTrue(board.getRules().isValidSlideAndInsert(RIGHT, 0,0));
         board.slideAndInsert(RIGHT, 0, 0);
         Tile insertedTile = board.getTileAt(new Position(0,0));
         TestUtils.assertTileShapeMatches(insertedTile, false, false, true, true);
 
-        assertTrue(board.isValidSlideAndInsert(RIGHT, 0,1));
+        assertTrue(board.getRules().isValidSlideAndInsert(RIGHT, 0,1));
         board.slideAndInsert(RIGHT, 0, 1);
         Tile insertedTile2 = board.getTileAt(new Position(0,0));
         TestUtils.assertTileShapeMatches(insertedTile2, true, true, false, false);
@@ -101,7 +101,7 @@ public class StandardBoardTest {
     @Test
     public void testSlideRowLeft() {
         StandardBoard board = TestUtils.createNonUniformBoard();
-        assertTrue(board.isValidSlideAndInsert(LEFT, 0,0));
+        assertTrue(board.getRules().isValidSlideAndInsert(LEFT, 0,0));
         board.slideAndInsert(LEFT, 0, 0);
         Tile tileAtIndex0 = board.getTileAt(new Position(0, 0));
         Tile tileAtIndex1 = board.getTileAt(new Position(0, 1));
@@ -123,7 +123,7 @@ public class StandardBoardTest {
     @Test
     public void testSlideRowRight() {
         StandardBoard board = TestUtils.createNonUniformBoard();
-        assertTrue(board.isValidSlideAndInsert(RIGHT, 0,7));
+        assertTrue(board.getRules().isValidSlideAndInsert(RIGHT, 0,7));
         board.slideAndInsert(RIGHT, 0, 7);
         Tile tileAtIndex0 = board.getTileAt(new Position(0, 0));
         Tile tileAtIndex1 = board.getTileAt(new Position(0, 1));
@@ -147,7 +147,7 @@ public class StandardBoardTest {
     @Test
     public void testSlideColumnDown() {
         StandardBoard board = TestUtils.createNonUniformBoard();
-        assertTrue(board.isValidSlideAndInsert(DOWN, 0,0));
+        assertTrue(board.getRules().isValidSlideAndInsert(DOWN, 0,0));
         board.slideAndInsert(DOWN, 0, 0);
 
         Tile tileAtIndex0 = board.getTileAt(new Position(0, 0));
@@ -161,9 +161,9 @@ public class StandardBoardTest {
     @Test
     public void testSlideColumnUp() {
         StandardBoard board = TestUtils.createNonUniformBoard();
-        assertTrue(board.isValidSlideAndInsert(UP, 0,0));
+        assertTrue(board.getRules().isValidSlideAndInsert(UP, 0,0));
         board.slideAndInsert(UP, 0, 0);
-        assertTrue(board.isValidSlideAndInsert(UP, 0,0));
+        assertTrue(board.getRules().isValidSlideAndInsert(UP, 0,0));
         board.slideAndInsert(UP, 0, 0);
 
         Tile tileAtIndex00 = board.getTileAt(new Position(0, 0));
@@ -174,7 +174,7 @@ public class StandardBoardTest {
         assertEquals(tileAtIndex50, TestUtils.NON_UNIFORM_BOARD.getSpareTile());
         assertEquals(tileAtIndex60, TestUtils.NON_UNIFORM_BOARD.getTileAt(new Position(0, 0)));
 
-        assertTrue(board.isValidSlideAndInsert(UP, 2,3));
+        assertTrue(board.getRules().isValidSlideAndInsert(UP, 2,3));
         board.slideAndInsert(UP, 2, 3);
 
         Tile tileAtIndex02 = board.getTileAt(new Position(0, 2));
@@ -188,15 +188,15 @@ public class StandardBoardTest {
     @Test
     public void testInvalidSlideAndInsert() {
         StandardBoard board = TestUtils.createNonUniformBoard();
-        assertFalse(board.isValidSlideAndInsert(UP, -1,0));
+        assertFalse(board.getRules().isValidSlideAndInsert(UP, -1,0));
         assertThrows(IllegalGameActionException.class, () -> board.slideAndInsert(UP, -1,0));
-        assertFalse(board.isValidSlideAndInsert(RIGHT, -10,0));
+        assertFalse(board.getRules().isValidSlideAndInsert(RIGHT, -10,0));
         assertThrows(IllegalGameActionException.class, () -> board.slideAndInsert(RIGHT, -10,0));
-        assertFalse(board.isValidSlideAndInsert(LEFT, 0,-1));
+        assertFalse(board.getRules().isValidSlideAndInsert(LEFT, 0,-1));
         assertThrows(IllegalGameActionException.class, () -> board.slideAndInsert(LEFT, 0,-1));
-        assertFalse(board.isValidSlideAndInsert(UP, 1,0));
+        assertFalse(board.getRules().isValidSlideAndInsert(UP, 1,0));
         assertThrows(IllegalGameActionException.class, () -> board.slideAndInsert(UP, 1,0));
-        assertFalse(board.isValidSlideAndInsert(DOWN, 1,12));
+        assertFalse(board.getRules().isValidSlideAndInsert(DOWN, 1,12));
         assertThrows(IllegalGameActionException.class, () -> board.slideAndInsert(DOWN, 1,12));
     }
 }

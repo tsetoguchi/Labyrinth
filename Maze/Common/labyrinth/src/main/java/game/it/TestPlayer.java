@@ -4,7 +4,7 @@ import game.it.processing.IntegrationTestUtils;
 import game.model.*;
 import game.model.projections.PlayerGameProjection;
 import player.Player;
-import player.Strategy;
+import player.IStrategy;
 import player.TurnPlan;
 
 import java.util.*;
@@ -13,10 +13,10 @@ import java.util.*;
  * A simple Player implementation for testing, which proposes a completely random (but valid) board.
  */
 public class TestPlayer implements Player {
-    private final Strategy strategy;
+    private final IStrategy strategy;
     private final String name;
 
-    public TestPlayer(String name, Strategy strategy) {
+    public TestPlayer(String name, IStrategy strategy) {
         this.name = name;
         this.strategy = strategy;
     }

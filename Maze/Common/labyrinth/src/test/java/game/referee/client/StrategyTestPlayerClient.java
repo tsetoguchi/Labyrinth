@@ -3,7 +3,7 @@ package game.referee.client;
 import game.model.Position;
 import game.model.projections.PlayerGameProjection;
 import game.model.projections.SelfPlayerProjection;
-import player.Strategy;
+import player.IStrategy;
 import player.TurnPlan;
 
 import java.util.Optional;
@@ -12,9 +12,9 @@ import java.util.Optional;
  * A test player client which simulates a player which uses a given strategy.
  */
 public class StrategyTestPlayerClient extends TestPlayerClient{
-    private final Strategy strategy;
+    private final IStrategy strategy;
 
-    public StrategyTestPlayerClient(Strategy strategy) {
+    public StrategyTestPlayerClient(IStrategy strategy) {
         this.strategy = strategy;
     }
 

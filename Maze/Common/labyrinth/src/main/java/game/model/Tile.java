@@ -64,12 +64,12 @@ public class Tile {
             throw new IllegalArgumentException("Tried to rotate a tile a negative number of times.");
         }
         for (int i = 0; i < rotations; i++) {
-            rotateOnce();
+            this.rotateOnce();
         }
     }
 
     public Treasure getTreasure() {
-        return treasure;
+        return this.treasure;
     }
 
     /**
@@ -79,9 +79,9 @@ public class Tile {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || this.getClass() != o.getClass()) return false;
         Tile otherTile = (Tile) o;
-        return treasure.equals(otherTile.treasure);
+        return this.treasure.equals(otherTile.treasure);
     }
 
     /**
@@ -89,14 +89,14 @@ public class Tile {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(treasure);
+        return Objects.hash(this.treasure);
     }
 
     @Override
     public String toString() {
         return "Tile{" +
-                "pathwayConnections=" + pathwayConnections +
-                ", treasure=" + treasure +
+                "pathwayConnections=" + this.pathwayConnections +
+                ", treasure=" + this.treasure +
                 '}';
     }
 
@@ -127,7 +127,7 @@ public class Tile {
         this.pathwayConnections = nextPathwayConnections;
     }
 
-    private static Map<Set<Direction>, String> directionToSymbol = new HashMap<>();
+    private static final Map<Set<Direction>, String> directionToSymbol = new HashMap<>();
 
     static {
         directionToSymbol.put(Set.of(UP, DOWN), "│");

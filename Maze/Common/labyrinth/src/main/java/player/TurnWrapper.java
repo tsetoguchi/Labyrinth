@@ -1,6 +1,5 @@
 package player;
 
-import javax.swing.text.html.Option;
 import java.util.Optional;
 
 /**
@@ -9,7 +8,7 @@ import java.util.Optional;
 public class TurnWrapper {
 
     private final Optional<TurnPlan> turnPlan;
-    private boolean exception;
+    private final boolean exception;
 
     public TurnWrapper(Optional<TurnPlan> turnPlan, boolean exception) {
         this.turnPlan = turnPlan;

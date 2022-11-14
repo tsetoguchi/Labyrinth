@@ -2,14 +2,11 @@ package game.view.AlternativeViewImplementations;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import game.model.projections.ObserverGameProjection;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -20,14 +17,14 @@ public class Controls extends JPanel {
 
   List<ObserverGameProjection> states;
   private int currentState;
-  private JButton nextButton;
-  private JButton saveButton;
+  private final JButton nextButton;
+  private final JButton saveButton;
 
   public Controls(List<ObserverGameProjection> states) {
     this.states = states;
     this.currentState = 0;
-    this.nextButton = initializeNextButton();
-    this.saveButton = initializeSaveButton();
+    this.nextButton = this.initializeNextButton();
+    this.saveButton = this.initializeSaveButton();
 
   }
 

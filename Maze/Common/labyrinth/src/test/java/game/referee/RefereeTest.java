@@ -93,7 +93,7 @@ public class RefereeTest {
         List<PlayerAvatar> avatars = new ArrayList<>();
 
         for (int i = 0; i < 500; i++) {
-            TestPlayerClient client = new NaughtyTestPlayerClient();
+            TestPlayerClient client = new BadTestPlayerClient();
             testClients.add(client);
             clients.add(client);
             avatars.add(new PlayerAvatar(this.getDifferentColor(i),
@@ -178,7 +178,7 @@ public class RefereeTest {
         int numGoodPlayers = 5;
 
         for (int i = 0; i < 5; i++) {
-            TestPlayerClient client = new NaughtyTestPlayerClient();
+            TestPlayerClient client = new BadTestPlayerClient();
             badClients.add(client);
             clients.add(client);
             avatars.add(new PlayerAvatar(this.getDifferentColor(i),

@@ -28,13 +28,13 @@ public class Treasure {
     }
 
     public List<Gem> getGems() {
-        return gems;
+        return this.gems;
     }
 
     @Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        if (other == null || getClass() != other.getClass()) return false;
+        if (other == null || this.getClass() != other.getClass()) return false;
         Treasure otherTreasure = (Treasure) other;
         if (otherTreasure.getGems().size() != this.gems.size()) {
             return false;

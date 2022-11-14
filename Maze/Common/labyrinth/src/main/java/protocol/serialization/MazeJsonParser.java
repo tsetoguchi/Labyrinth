@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
-import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import game.it.BadFM;
 import game.it.BadTestPlayer;
@@ -14,7 +13,7 @@ import game.model.*;
 import player.EuclideanStrategy;
 import player.Player;
 import player.RiemannStrategy;
-import player.Strategy;
+import player.IStrategy;
 
 import java.awt.*;
 import java.io.IOException;
@@ -128,7 +127,7 @@ public class MazeJsonParser {
   /**
    * Read a Strategy from the current parser.
    */
-  public Strategy getStrategy() throws IOException {
+  public IStrategy getStrategy() throws IOException {
     switch (this.parser.getValueAsString()) {
       case "Euclid":
         return new EuclideanStrategy();
@@ -182,7 +181,7 @@ public class MazeJsonParser {
       while (this.parser.nextToken() != JsonToken.END_ARRAY) {
         String name = this.parser.getText();
         this.readNext();
-        Strategy strategy = this.getStrategy();
+        IStrategy strategy = this.getStrategy();
         Player player = new TestPlayer(name, strategy);
         players.add(player);
       }
@@ -198,7 +197,7 @@ public class MazeJsonParser {
         String name = this.parser.getText();
         //System.out.println(name);
         this.readNext();
-        Strategy strategy = this.getStrategy();
+        IStrategy strategy = this.getStrategy();
 
         Player player = null;
         if (this.parser.nextToken() == JsonToken.END_ARRAY)  {

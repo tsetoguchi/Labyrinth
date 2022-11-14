@@ -17,12 +17,6 @@ public interface Board {
     int getWidth();
 
     /**
-     * Validate that sliding a row or column at the given index in the specified direction and inserting the spare tile
-     * does not violate game rules or pass invalid arguments.
-     */
-    boolean isValidSlideAndInsert(Direction direction, int index, int rotations);
-
-    /**
      * Slides the row (for left or right slides) or column (for up or down slides) at the given index in the specified
      * direction, then inserts the spare tile after rotating it the given number of times.
      *
@@ -49,6 +43,8 @@ public interface Board {
      * Print the board as a grid of symbols representing the Tile pathways (no gems).
      */
     String toSymbolGrid();
+
+    IRules getRules();
 
     Board deepCopy();
 }

@@ -21,7 +21,7 @@ public class ExperimentationBoardProjection extends ReadOnlyBoardProjection {
     }
 
     public boolean isValidSlideAndInsert(Direction direction, int index, int rotations) {
-        return experimentationBoard.isValidSlideAndInsert(direction, index, rotations);
+        return experimentationBoard.getRules().isValidSlideAndInsert(direction, index, rotations);
     }
 
     public Set<Position> findReachableTilePositionsAfterSlideAndInsert(

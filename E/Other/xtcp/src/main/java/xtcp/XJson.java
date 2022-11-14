@@ -11,87 +11,87 @@ import java.util.Scanner;
 
 /**
  * Hello world!
- *
  */
-public class XJson
-{
-    public static void main(String[] args) {
-        String input = readInput();
-        System.out.println(getJsonFromInput(input));
-    }
-    public static String getJsonFromInput(String input)
-    {
+public class XJson {
 
-        List<String> objects = getJsonObjects(input);
-        List<String> characters = new ArrayList<String>();
+  public static void main(String[] args) {
+    String input = readInput();
+    System.out.println(getJsonFromInput(input));
+  }
 
-        if (objects == null) {
-            System.out.println("Invalid input");
-            System.exit(1);
-        }
+  public static String getJsonFromInput(String input) {
 
-        for (String object : objects) {
-            String character = getChar(object);
-            if (character == null) {
-                System.out.println("Invalid input");
-                System.exit(1);
-            }
-            characters.add(character);
-        }
-        ObjectMapper mapper = new ObjectMapper();
-        String result = null;
-        try {
-            result = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(characters);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        return result;
+    List<String> objects = getJsonObjects(input);
+    List<String> characters = new ArrayList<String>();
+
+    if (objects == null) {
+      System.out.println("Invalid input");
+      System.exit(1);
     }
 
-    private static String getChar(String json) {
-
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode actualObj = mapper.readTree(json);
-            String vertical = actualObj.get("vertical").asText();
-            String horizontal = actualObj.get("horizontal").asText();
-            if (vertical.equals("DOWN") && horizontal.equals("LEFT")) {
-                return "┐";
-            }
-            if (vertical.equals("DOWN") && horizontal.equals("RIGHT")) {
-                return "┌";
-            }
-            if (vertical.equals("UP") && horizontal.equals("LEFT")) {
-                return "┘";
-            }
-            if (vertical.equals("UP") && horizontal.equals("RIGHT")) {
-                return "└";
-            }
-        } catch (IOException e) {
-            return null; // JSON incorrectly formed
-        }
-        return null; // JSON incorrectly formed
+    for (String object : objects) {
+      String character = getChar(object);
+      if (character == null) {
+        System.out.println("Invalid input");
+        System.exit(1);
+      }
+      characters.add(character);
     }
-
-    private static String readInput() {
-        StringBuilder input = new StringBuilder();
-        Scanner inputScanner = new Scanner(System.in);
-        while (inputScanner.hasNext()) {
-            input.append(inputScanner.next());
-        }
-        return input.toString();
+    ObjectMapper mapper = new ObjectMapper();
+    String result = null;
+    try {
+      result = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(characters);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
     }
+    return result;
+  }
 
-    private static List<String> getJsonObjects(String input) {
-        List<String> objects = new ArrayList<>();
-        String remainingInput = "" + input;
-        while (remainingInput.length() > 0) {
-            if (!remainingInput.contains("{") || !remainingInput.contains("}")) {
-                return null;
-            }
-            objects.add(remainingInput.substring(remainingInput.indexOf("{"), remainingInput.indexOf("}")+1));
-            remainingInput = remainingInput.substring(remainingInput.indexOf("}")+1);
-        }
-        return objects;
+  private static String getChar(String json) {
+
+    try {
+      ObjectMapper mapper = new ObjectMapper();
+      JsonNode actualObj = mapper.readTree(json);
+      String vertical = actualObj.get("vertical").asText();
+      String horizontal = actualObj.get("horizontal").asText();
+      if (vertical.equals("DOWN") && horizontal.equals("LEFT")) {
+        return "┐";
+      }
+      if (vertical.equals("DOWN") && horizontal.equals("RIGHT")) {
+        return "┌";
+      }
+      if (vertical.equals("UP") && horizontal.equals("LEFT")) {
+        return "┘";
+      }
+      if (vertical.equals("UP") && horizontal.equals("RIGHT")) {
+        return "└";
+      }
+    } catch (IOException e) {
+      return null; // JSON incorrectly formed
     }
+    return null; // JSON incorrectly formed
+  }
+
+  private static String readInput() {
+    StringBuilder input = new StringBuilder();
+    Scanner inputScanner = new Scanner(System.in);
+    while (inputScanner.hasNext()) {
+      input.append(inputScanner.next());
+    }
+    return input.toString();
+  }
+
+  private static List<String> getJsonObjects(String input) {
+    List<String> objects = new ArrayList<>();
+    String remainingInput = "" + input;
+    while (remainingInput.length() > 0) {
+      if (!remainingInput.contains("{") || !remainingInput.contains("}")) {
+        return null;
+      }
+      objects.add(
+          remainingInput.substring(remainingInput.indexOf("{"), remainingInput.indexOf("}") + 1));
+      remainingInput = remainingInput.substring(remainingInput.indexOf("}") + 1);
+    }
+    return objects;
+  }
 }

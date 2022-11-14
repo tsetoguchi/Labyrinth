@@ -2,6 +2,7 @@ package game.model.projections;
 
 import game.model.Game;
 import game.model.PlayerAvatar;
+import game.model.PrivateGameState;
 import game.model.SlideAndInsertRecord;
 
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ public class PlayerGameProjection {
     private final SelfPlayerProjection self;
     private final Optional<SlideAndInsertRecord> previousSlideAndInsert;
 
-    public PlayerGameProjection(Game game, PlayerAvatar viewer, Optional<SlideAndInsertRecord> previousSlideAndInsert) {
+    public PlayerGameProjection(PrivateGameState game, PlayerAvatar viewer, Optional<SlideAndInsertRecord> previousSlideAndInsert) {
         this.board = new ExperimentationBoardProjection(game.getBoard().getExperimentationBoard());
         List<PublicPlayerProjection> playerViews = new ArrayList<>();
         for (PlayerAvatar player : game.getPlayerList()) {

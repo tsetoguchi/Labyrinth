@@ -8,16 +8,16 @@ import game.model.projections.PlayerGameProjection;
 import java.util.Optional;
 
 import player.Player;
-import player.Strategy;
+import player.IStrategy;
 import player.TurnPlan;
 
 public class BadTestPlayer implements Player {
 
-    private final Strategy strategy;
+    private final IStrategy strategy;
     private final String name;
     private final BadFM badFM;
 
-    public BadTestPlayer(String name, Strategy strategy, BadFM badFM) {
+    public BadTestPlayer(String name, IStrategy strategy, BadFM badFM) {
         this.strategy = strategy;
         this.name = name;
         this.badFM = badFM;
