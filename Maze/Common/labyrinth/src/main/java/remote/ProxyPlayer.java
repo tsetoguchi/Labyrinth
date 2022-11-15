@@ -20,6 +20,7 @@ import java.util.Optional;
 public class ProxyPlayer implements RefereePlayerInterface {
 
     private final Socket socket;
+    private String playerName;
 
     public ProxyPlayer(int portNumber) {
         this.socket = new Socket();
