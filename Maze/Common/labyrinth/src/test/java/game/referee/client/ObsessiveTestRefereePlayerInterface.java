@@ -8,10 +8,10 @@ import java.util.Optional;
 /**
  * A test player client which always tries to take the same action.
  */
-public class ObsessiveTestPlayerClient extends TestPlayerClient {
+public class ObsessiveTestRefereePlayerInterface extends TestRefereePlayerInterface {
     private final TurnPlan plan;
 
-    public ObsessiveTestPlayerClient(TurnPlan plan) {
+    public ObsessiveTestRefereePlayerInterface(TurnPlan plan) {
         this.plan = plan;
     }
 

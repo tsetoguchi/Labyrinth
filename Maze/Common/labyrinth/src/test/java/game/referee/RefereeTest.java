@@ -9,7 +9,7 @@ import player.RiemannStrategy;
 import player.TurnPlan;
 import referee.PlayerResult;
 import referee.Referee;
-import referee.clients.PlayerClient;
+import referee.clients.RefereePlayerInterface;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -21,9 +21,9 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 public class RefereeTest {
     @Test
     public void testGameWithOnlyBoringPlayersEndsAfterOneRound() {
-        BoredTestPlayerClient bored1 = new BoredTestPlayerClient();
-        BoredTestPlayerClient bored2 = new BoredTestPlayerClient();
-        BoredTestPlayerClient bored3 = new BoredTestPlayerClient();
+        BoredTestRefereePlayerInterface bored1 = new BoredTestRefereePlayerInterface();
+        BoredTestRefereePlayerInterface bored2 = new BoredTestRefereePlayerInterface();
+        BoredTestRefereePlayerInterface bored3 = new BoredTestRefereePlayerInterface();
 
 
         PlayerAvatar avatar1 = new PlayerAvatar(Color.BLUE, new Position(5, 5),
@@ -33,7 +33,7 @@ public class RefereeTest {
         PlayerAvatar avatar3 = new PlayerAvatar(Color.RED, new Position(5, 5),
                 new Position(1, 3));
 
-        List<PlayerClient> clients = List.of(bored1, bored2, bored3);
+        List<RefereePlayerInterface> clients = List.of(bored1, bored2, bored3);
         List<PlayerAvatar> avatars = List.of(avatar1, avatar2, avatar3);
 
         Game game = new Game(
@@ -56,8 +56,8 @@ public class RefereeTest {
 
     @Test
     public void testGameWithObsessivePlayersWhoLoopEndsAfter1000Rounds() {
-        ObsessiveTestPlayerClient ob1 = new ObsessiveTestPlayerClient(new TurnPlan(Direction.DOWN, 0, 0, new Position(0, 0)));
-        ObsessiveTestPlayerClient ob2 = new ObsessiveTestPlayerClient(new TurnPlan(Direction.DOWN, 2, 0, new Position(0, 2)));
+        ObsessiveTestRefereePlayerInterface ob1 = new ObsessiveTestRefereePlayerInterface(new TurnPlan(Direction.DOWN, 0, 0, new Position(0, 0)));
+        ObsessiveTestRefereePlayerInterface ob2 = new ObsessiveTestRefereePlayerInterface(new TurnPlan(Direction.DOWN, 2, 0, new Position(0, 2)));
 
         PlayerAvatar avatar1 = new PlayerAvatar(Color.BLUE, new Position(5, 5),
                 new Position(1, 1));
@@ -67,7 +67,7 @@ public class RefereeTest {
         avatar2.setCurrentPosition(new Position(0, 2));
 
 
-        List<PlayerClient> clients = List.of(ob1, ob2);
+        List<RefereePlayerInterface> clients = List.of(ob1, ob2);
         List<PlayerAvatar> avatars = List.of(avatar1, avatar2);
 
         Game game = new Game(
@@ -88,12 +88,12 @@ public class RefereeTest {
 
     @Test
     public void testGameWithOnlyCheatersResultsInNoRemainingPlayersGameOver() {
-        List<TestPlayerClient> testClients = new ArrayList<>();
-        List<PlayerClient> clients = new ArrayList<>();
+        List<TestRefereePlayerInterface> testClients = new ArrayList<>();
+        List<RefereePlayerInterface> clients = new ArrayList<>();
         List<PlayerAvatar> avatars = new ArrayList<>();
 
         for (int i = 0; i < 500; i++) {
-            TestPlayerClient client = new BadTestPlayerClient();
+            TestRefereePlayerInterface client = new BadTestRefereePlayerInterface();
             testClients.add(client);
             clients.add(client);
             avatars.add(new PlayerAvatar(this.getDifferentColor(i),
@@ -109,7 +109,7 @@ public class RefereeTest {
 
         referee.runGame();
 
-        for (TestPlayerClient client : testClients) {
+        for (TestRefereePlayerInterface client : testClients) {
             assertNull(client.finalGameResult);
         }
 
@@ -122,27 +122,27 @@ public class RefereeTest {
 
     @Test
     public void testGameWithManyPlayersAndFullMobilityResultsInFirstPlayerWinning() {
-        StrategyTestPlayerClient ob1 = new StrategyTestPlayerClient(new EuclideanStrategy());
+        StrategyTestRefereePlayerInterface ob1 = new StrategyTestRefereePlayerInterface(new EuclideanStrategy());
 
         PlayerAvatar avatar1 = new PlayerAvatar(Color.BLUE, new Position(5, 5),
                 new Position(1, 1));
 
-        List<TestPlayerClient> testClients = new ArrayList<>();
-        List<PlayerClient> clients = new ArrayList<>();
+        List<TestRefereePlayerInterface> testClients = new ArrayList<>();
+        List<RefereePlayerInterface> clients = new ArrayList<>();
         testClients.add(ob1);
         clients.add(ob1);
         List<PlayerAvatar> avatars = new ArrayList<>();
         avatars.add(avatar1);
 
         for (int i = 0; i < 500; i++) {
-            TestPlayerClient client = new StrategyTestPlayerClient(new EuclideanStrategy());
+            TestRefereePlayerInterface client = new StrategyTestRefereePlayerInterface(new EuclideanStrategy());
             testClients.add(client);
             clients.add(client);
             avatars.add(new PlayerAvatar(this.getDifferentColor(i),
                     new Position(5, 5), new Position(1, 1)));
         }
         for (int i = 500; i < 1000; i++) {
-            TestPlayerClient client = new StrategyTestPlayerClient(new RiemannStrategy());
+            TestRefereePlayerInterface client = new StrategyTestRefereePlayerInterface(new RiemannStrategy());
             testClients.add(client);
             clients.add(client);
             avatars.add(new PlayerAvatar(this.getDifferentColor(i),
@@ -158,7 +158,7 @@ public class RefereeTest {
 
         referee.runGame();
 
-        for (TestPlayerClient client : testClients) {
+        for (TestRefereePlayerInterface client : testClients) {
             assertEquals(GameStatus.TREASURE_RETURNED, client.finalGameResult);
         }
 
@@ -170,22 +170,22 @@ public class RefereeTest {
 
     @Test
     public void testGameWithMixOfBoredPlayersAndNaughtyPlayersResultsInOnlyBoredPlayersAtEnd() {
-        List<TestPlayerClient> goodClients = new ArrayList<>();
-        List<TestPlayerClient> badClients = new ArrayList<>();
-        List<PlayerClient> clients = new ArrayList<>();
+        List<TestRefereePlayerInterface> goodClients = new ArrayList<>();
+        List<TestRefereePlayerInterface> badClients = new ArrayList<>();
+        List<RefereePlayerInterface> clients = new ArrayList<>();
         List<PlayerAvatar> avatars = new ArrayList<>();
 
         int numGoodPlayers = 5;
 
         for (int i = 0; i < 5; i++) {
-            TestPlayerClient client = new BadTestPlayerClient();
+            TestRefereePlayerInterface client = new BadTestRefereePlayerInterface();
             badClients.add(client);
             clients.add(client);
             avatars.add(new PlayerAvatar(this.getDifferentColor(i),
                     new Position(5, 5), new Position(1, 1)));
         }
         for (int i = 5; i < 5 + numGoodPlayers; i++) {
-            TestPlayerClient client = new BoredTestPlayerClient();
+            TestRefereePlayerInterface client = new BoredTestRefereePlayerInterface();
             goodClients.add(client);
             clients.add(client);
             avatars.add(new PlayerAvatar(this.getDifferentColor(i),
@@ -201,17 +201,17 @@ public class RefereeTest {
 
         referee.runGame();
 
-        for (TestPlayerClient client : goodClients) {
+        for (TestRefereePlayerInterface client : goodClients) {
             assertEquals(GameStatus.ALL_SKIPPED, client.finalGameResult);
         }
-        for (TestPlayerClient client : badClients) {
+        for (TestRefereePlayerInterface client : badClients) {
             assertNull(client.finalGameResult);
         }
 
-        for (TestPlayerClient client : goodClients) {
+        for (TestRefereePlayerInterface client : goodClients) {
             assertEquals(PlayerResult.WINNER, client.finalPlayerResult);
         }
-        for (TestPlayerClient client : badClients) {
+        for (TestRefereePlayerInterface client : badClients) {
             assertNull(client.finalPlayerResult);
         }
     }

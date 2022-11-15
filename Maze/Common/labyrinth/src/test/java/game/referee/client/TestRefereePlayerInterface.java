@@ -3,21 +3,18 @@ package game.referee.client;
 import game.model.GameStatus;
 import game.model.Position;
 import game.model.projections.PlayerGameProjection;
-import player.TurnPlan;
 import referee.PlayerResult;
-import referee.clients.PlayerClient;
-
-import java.util.Optional;
+import referee.clients.RefereePlayerInterface;
 
 /**
  * A mock player client for testing which keeps track of the messages it receives for comparison.
  */
-public abstract class TestPlayerClient implements PlayerClient {
+public abstract class TestRefereePlayerInterface implements RefereePlayerInterface {
     public boolean informedOfGoalReached;
     public GameStatus finalGameResult;
     public PlayerResult finalPlayerResult;
 
-    public TestPlayerClient() {
+    public TestRefereePlayerInterface() {
         this.informedOfGoalReached = false;
         this.finalGameResult = null; // these are null for testing purposes
         this.finalPlayerResult = null;

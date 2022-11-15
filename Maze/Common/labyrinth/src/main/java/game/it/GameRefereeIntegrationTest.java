@@ -5,10 +5,9 @@ import game.model.PrivateGameState;
 import game.model.projections.ObserverGameProjection;
 import protocol.serialization.MazeJsonParser;
 import protocol.serialization.MazeJsonSerializer;
-import game.model.Game;
 import player.Player;
 import referee.Referee;
-import referee.clients.PlayerClient;
+import referee.clients.RefereePlayerInterface;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,10 +29,10 @@ public class GameRefereeIntegrationTest {
             mazeParser.readNext();
             PrivateGameState game = mazeParser.getGameWithGoals();
 
-            List<IntegrationPlayerClient> intClients = new ArrayList<>();
-            List<PlayerClient> clients = new ArrayList<>();
+            List<IntegrationRefereePlayerInterface> intClients = new ArrayList<>();
+            List<RefereePlayerInterface> clients = new ArrayList<>();
             for (Player player : players) {
-                IntegrationPlayerClient client = new IntegrationPlayerClient(player);
+                IntegrationRefereePlayerInterface client = new IntegrationRefereePlayerInterface(player);
                 clients.add(client);
                 intClients.add(client);
             }
@@ -49,8 +48,8 @@ public class GameRefereeIntegrationTest {
             referee.runGame();
 
             List<String> winnerNames = intClients.stream()
-                    .filter((IntegrationPlayerClient client) -> WINNER.equals(client.getResult()))
-                    .map(IntegrationPlayerClient::getPlayerName)
+                    .filter((IntegrationRefereePlayerInterface client) -> WINNER.equals(client.getResult()))
+                    .map(IntegrationRefereePlayerInterface::getPlayerName)
                     .collect(Collectors.toList());
 
             System.out.println(mazeSerializer.namesToJson(winnerNames));

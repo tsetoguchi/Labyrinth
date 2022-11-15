@@ -13,7 +13,7 @@ import java.util.Optional;
 /**
  * A remote proxy for the player
  */
-public interface PlayerClient {
+public interface RefereePlayerInterface {
 
 
   Optional<TurnPlan> takeTurn(PlayerGameProjection game);

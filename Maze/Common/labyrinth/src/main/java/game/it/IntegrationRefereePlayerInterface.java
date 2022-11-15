@@ -6,15 +6,15 @@ import game.model.projections.PlayerGameProjection;
 import player.Player;
 import player.TurnPlan;
 import referee.PlayerResult;
-import referee.clients.PlayerClient;
+import referee.clients.RefereePlayerInterface;
 
 import java.util.Optional;
 
-public class IntegrationPlayerClient implements PlayerClient {
+public class IntegrationRefereePlayerInterface implements RefereePlayerInterface {
     private Player player;
     private PlayerResult result;
 
-    public IntegrationPlayerClient(Player player) {
+    public IntegrationRefereePlayerInterface(Player player) {
         this.player = player;
         this.result = null; // null for testing
     }

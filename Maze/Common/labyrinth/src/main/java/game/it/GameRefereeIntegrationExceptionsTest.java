@@ -1,7 +1,6 @@
 package game.it;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import game.model.Game;
 
 import game.model.PrivateGameState;
 import java.util.ArrayList;
@@ -11,9 +10,8 @@ import java.util.stream.Collectors;
 
 import player.Player;
 import protocol.serialization.MazeJsonParser;
-import protocol.serialization.MazeJsonSerializer;
 import referee.Referee;
-import referee.clients.PlayerClient;
+import referee.clients.RefereePlayerInterface;
 
 import static referee.PlayerResult.WINNER;
 
@@ -32,18 +30,18 @@ public class GameRefereeIntegrationExceptionsTest {
       mazeParser.readNext();
       PrivateGameState game = mazeParser.getGameWithGoals();
 
-      List<IntegrationPlayerClient> intClients = new ArrayList<>();
-      List<PlayerClient> clients = new ArrayList<>();
+      List<IntegrationRefereePlayerInterface> intClients = new ArrayList<>();
+      List<RefereePlayerInterface> clients = new ArrayList<>();
       for (Player player : badPlayerSpec) {
-        IntegrationPlayerClient client = new IntegrationPlayerClient(player);
+        IntegrationRefereePlayerInterface client = new IntegrationRefereePlayerInterface(player);
         clients.add(client);
         intClients.add(client);
       }
       Referee referee = new Referee(game, clients);
       referee.runGame();
       List<String> winnerNames = intClients.stream()
-          .filter((IntegrationPlayerClient client) -> WINNER.equals(client.getResult()))
-          .map(IntegrationPlayerClient::getPlayerName)
+          .filter((IntegrationRefereePlayerInterface client) -> WINNER.equals(client.getResult()))
+          .map(IntegrationRefereePlayerInterface::getPlayerName)
           .collect(Collectors.toList());
       Collections.sort(winnerNames);
 

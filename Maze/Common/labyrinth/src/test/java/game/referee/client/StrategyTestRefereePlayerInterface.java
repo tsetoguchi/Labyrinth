@@ -11,10 +11,10 @@ import java.util.Optional;
 /**
  * A test player client which simulates a player which uses a given strategy.
  */
-public class StrategyTestPlayerClient extends TestPlayerClient{
+public class StrategyTestRefereePlayerInterface extends TestRefereePlayerInterface {
     private final IStrategy strategy;
 
-    public StrategyTestPlayerClient(IStrategy strategy) {
+    public StrategyTestRefereePlayerInterface(IStrategy strategy) {
         this.strategy = strategy;
     }
 
