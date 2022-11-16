@@ -22,15 +22,19 @@ public class ProxyPlayer implements RefereePlayerInterface {
 
   private final Socket client;
   private String playerName;
+  private final MazeJsonSerializer serializer;
 
-  public ProxyPlayer(Socket client) {
+
+
+
+  public ProxyPlayer(Socket client, String playerName) {
     this.client = client;
+    this.playerName = playerName;
+    this.serializer = new MazeJsonSerializer();
   }
 
   @Override
   public Optional<TurnPlan> takeTurn(PlayerGameProjection game) {
-
-    String gameJson = new MazeJsonSerializer(game);
 
     return Optional.empty();
   }
