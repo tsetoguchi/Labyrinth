@@ -24,11 +24,13 @@ public class Client {
 
 //    Scanner input = new Scanner(System.in);
 
-
+    Scanner response = new Scanner(socket.getInputStream());
 //    String keyboard = keyInput.readLine();
 
     while (true) {
-      System.out.println(stdIn.readLine());
+//      System.out.println(stdIn.readLine());
+
+      System.out.println(input.readLine());
 
       out.println(stdIn);
       if (stdIn.equals("quit")) {

@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -92,7 +93,7 @@ public class Server {
       player = service.submit(awaitSignUp(ss)).get(2, TimeUnit.SECONDS);
     } catch (Exception throwable) {
       System.out.println(throwable.getMessage());
-      System.out.println("A Player failed to sign up in time.");
+//      System.out.println("A Player failed to sign up in time.");
       return Optional.empty();
     }
 
@@ -146,22 +147,27 @@ public class Server {
 
   private static Callable<ProxyPlayer> awaitSignUp(ServerSocket ss) throws IOException {
     System.out.println("awaitSignUp()");
-    Socket client = ss.accept();
+    Socket client = null;
+
+    try {
+      client = ss.accept();
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+    }
+
     System.out.println("Client connected");
-    messageClient(client, "Please choose a name: ");
-
     PrintWriter out = new PrintWriter(client.getOutputStream(), true);
+    messageClient(client, "Please choose a name: ", out);
 
-    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(client.getInputStream()));
-    String clientName = bufferedReader.toString();
-//    System.out.println(clientName);
+    BufferedReader input = new BufferedReader(new InputStreamReader(client.getInputStream()));
+    String clientName = "";
+    System.out.println(input.readLine());
 
 
     ProxyPlayer proxyPlayer = new ProxyPlayer(client, clientName);
     Callable<ProxyPlayer> callableProxyPlayer = () -> {
       return proxyPlayer;
     };
-    ss.close();
 
     return callableProxyPlayer;
   }
@@ -176,9 +182,9 @@ public class Server {
     }
   }
 
-  private static void messageClient(Socket client, String message) {
+  private static void messageClient(Socket client, String message, PrintWriter out) {
     try {
-      client.getOutputStream().write(message.getBytes());
+      out.println(message);
     } catch (Throwable throwable) {
       System.out.println("Failed to message client.");
     }
