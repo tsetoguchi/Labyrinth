@@ -32,7 +32,7 @@ public class Client {
 
       System.out.println(input.readLine());
 
-      out.println(stdIn);
+      out.println(stdIn.readLine());
       if (stdIn.equals("quit")) {
         break;
       }

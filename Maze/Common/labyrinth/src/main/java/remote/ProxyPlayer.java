@@ -28,6 +28,7 @@ public class ProxyPlayer implements RefereePlayerInterface {
 
 
   public ProxyPlayer(Socket client, String playerName) {
+    System.out.println("Proxy player: " + playerName);
     this.client = client;
     this.playerName = playerName;
     this.serializer = new MazeJsonSerializer();

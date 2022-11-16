@@ -93,7 +93,7 @@ public class Server {
       player = service.submit(awaitSignUp(ss)).get(2, TimeUnit.SECONDS);
     } catch (Exception throwable) {
       System.out.println(throwable.getMessage());
-//      System.out.println("A Player failed to sign up in time.");
+      System.out.println("A Player failed to sign up in time.");
       return Optional.empty();
     }
 
@@ -147,21 +147,14 @@ public class Server {
 
   private static Callable<ProxyPlayer> awaitSignUp(ServerSocket ss) throws IOException {
     System.out.println("awaitSignUp()");
-    Socket client = null;
-
-    try {
-      client = ss.accept();
-    } catch (Exception e) {
-      System.out.println(e.getMessage());
-    }
+    Socket client = ss.accept();
 
     System.out.println("Client connected");
     PrintWriter out = new PrintWriter(client.getOutputStream(), true);
     messageClient(client, "Please choose a name: ", out);
 
     BufferedReader input = new BufferedReader(new InputStreamReader(client.getInputStream()));
-    String clientName = "";
-    System.out.println(input.readLine());
+    String clientName = input.readLine();
 
 
     ProxyPlayer proxyPlayer = new ProxyPlayer(client, clientName);
