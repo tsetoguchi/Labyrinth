@@ -11,6 +11,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import referee.Referee;
 
 public class Server {
 
@@ -28,42 +29,14 @@ public class Server {
     service = Executors.newCachedThreadPool();
 
     try (ServerSocket ss = new ServerSocket(NetUtil.defaultPort)) {
-
-//      Future<List<ProxyPlayer>> proxyPlayers = service.submit(beginSignUp(ss));
-//      proxyPlayers.get(40, TimeUnit.SECONDS);
-
       beginSignUp(ss);
+
+      new Referee(proxyPlayers).runGame();
 
     } catch (Exception e) {
 
     }
   }
-
-
-  private static Optional<ProxyPlayer> signUpClient(ServerSocket ss, long timeOut)
-      throws IOException {
-
-    Future<ProxyPlayer> signUpTimeOut = service.submit(awaitSignUp(ss));
-
-    ProxyPlayer player = null;
-    try {
-      player = signUpTimeOut.get(timeOut, TimeUnit.MILLISECONDS);
-    } catch (Throwable throwable) {
-      return Optional.empty();
-    }
-
-    Future<String> nameTimeOut = service.submit(awaitName(player));
-
-    try {
-      nameTimeOut.get(2, TimeUnit.SECONDS);
-    } catch (Throwable throwable) {
-      player.getSocket().close();
-      return Optional.empty();
-    }
-
-    return Optional.of(player);
-  }
-
 
   private static void beginSignUp(ServerSocket ss) throws IOException {
 
@@ -81,17 +54,39 @@ public class Server {
       if (System.currentTimeMillis() > endTime && signUpCounter > 2) {
         break;
       }
-
       // 6 players signed up
       if (signUpCounter >= 6) {
         break;
       }
 
-      Optional<ProxyPlayer> proxyPlayer = signUpClient(ss, endTime - System.currentTimeMillis());
-      if (proxyPlayer.isPresent()) {
-        proxyPlayers.add(proxyPlayer.get());
-      }
+      addPlayerIfPresent(signUpClient(ss, endTime - System.currentTimeMillis()));
     }
+  }
+
+
+  private static Optional<ProxyPlayer> signUpClient(ServerSocket ss, long timeOut)
+      throws IOException {
+
+    Future<ProxyPlayer> signUpTimeOut = service.submit(awaitSignUp(ss));
+
+    ProxyPlayer player = null;
+    try {
+      player = signUpTimeOut.get(timeOut, TimeUnit.MILLISECONDS);
+    } catch (Throwable throwable) {
+      System.out.println("Player did not sign up in time");
+      return Optional.empty();
+    }
+
+    Future<String> nameTimeOut = service.submit(awaitName(player));
+
+    try {
+      nameTimeOut.get(2, TimeUnit.SECONDS);
+    } catch (Throwable throwable) {
+      player.getSocket().close();
+      return Optional.empty();
+    }
+
+    return Optional.of(player);
   }
 
 
@@ -106,8 +101,14 @@ public class Server {
       if (signUpCounter >= 6) {
         break;
       }
-      ProxyPlayer pp = signUpClient(ss, );
-      proxyPlayers.add(pp);
+
+      addPlayerIfPresent(signUpClient(ss, endTime - System.currentTimeMillis()));
+    }
+  }
+
+  private static void addPlayerIfPresent(Optional<ProxyPlayer> proxyPlayer) {
+    if (proxyPlayer.isPresent()) {
+      proxyPlayers.add(proxyPlayer.get());
     }
   }
 

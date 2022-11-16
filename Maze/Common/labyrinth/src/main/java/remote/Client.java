@@ -11,6 +11,7 @@ public class Client {
   public static void main(String[] args) throws IOException {
 
     Socket socket = new Socket("remote client", NetUtil.defaultPort);
+
     BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
     BufferedReader keyInput = new BufferedReader(new InputStreamReader(System.in));
     PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
