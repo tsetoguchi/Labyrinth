@@ -63,6 +63,10 @@ public class MazeJsonParser {
     }
   }
 
+  public MazeJsonParser(InputStream in) {
+
+  }
+
   /**
    * Move the parser to the next object to read.
    */

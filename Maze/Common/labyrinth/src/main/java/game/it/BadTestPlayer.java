@@ -13,9 +13,9 @@ import player.TurnPlan;
 
 public class BadTestPlayer implements Player {
 
-    private final IStrategy strategy;
+    protected final IStrategy strategy;
     private final String name;
-    private final BadFM badFM;
+    protected final BadFM badFM;
 
     public BadTestPlayer(String name, IStrategy strategy, BadFM badFM) {
         this.strategy = strategy;
