@@ -35,6 +35,8 @@ public class MazeJsonParser {
 
   private static final Map<String, Color> colors;
 
+  private final Map<String, Object> JSONmap;
+
   static {
     colors = new HashMap<>();
     colors.put("purple", new Color(218, 112, 214));
@@ -51,8 +53,9 @@ public class MazeJsonParser {
   /**
    * Creates a new parser from the given input for a board of the specified dimensions.
    */
-  public MazeJsonParser(InputStream in) {
+  public MazeJsonParser(InputStream in) throws IOException {
     JsonFactory jsonFactory = new JsonFactory();
+    this.JSONmap = new ObjectMapper().readValue(in, HashMap.class);
     this.mapper = new ObjectMapper();
     try {
       this.parser = jsonFactory.createParser(in);
