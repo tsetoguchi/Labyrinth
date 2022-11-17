@@ -32,7 +32,7 @@ public class TestRunner {
                 GameRefereeIntegrationExceptionsTest.executeTest();
                 break;
             case "referee-xbad2":
-
+                XBad2.executeTest();
             default:
                 throw new IllegalArgumentException("test set not recognized");
         }

@@ -1,8 +1,14 @@
 package remote;
 
+import game.exceptions.IllegalGameActionException;
+import game.exceptions.IllegalPlayerActionException;
 import game.model.GameStatus;
 import game.model.Position;
 import game.model.projections.PlayerGameProjection;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import player.TurnPlan;
 import protocol.serialization.MazeJsonParser;
 import protocol.serialization.MazeJsonSerializer;
@@ -24,19 +30,52 @@ public class ProxyPlayer implements RefereePlayerInterface {
   private String playerName;
   private final MazeJsonSerializer serializer;
 
+  private final PrintWriter out;
+
+  private final BufferedReader input;
 
 
 
-  public ProxyPlayer(Socket client, String playerName) {
+
+
+
+  public ProxyPlayer(Socket client, String playerName) throws IOException {
     System.out.println("Proxy player: " + playerName);
     this.client = client;
     this.playerName = playerName;
     this.serializer = new MazeJsonSerializer();
+
+    this.out = new PrintWriter(client.getOutputStream(), true);
+    this.input = new BufferedReader(new InputStreamReader(client.getInputStream()));
   }
 
   @Override
-  public Optional<TurnPlan> takeTurn(PlayerGameProjection game) {
+  public Optional<TurnPlan> takeTurn(PlayerGameProjection game) throws IllegalPlayerActionException {
 
+    while (true) {
+
+      try {
+        // JSON from Proxy Ref
+
+        // if JSON is not valid, then throw error
+
+        this.input.readLine();
+
+        // turn JSON into TurnPlan
+
+        // break
+
+
+
+      } catch (Exception e) {
+        this.out.println("takeTurn threw IOException");
+      }
+
+
+
+    }
+
+    // return to send back to real Ref in Optional
     return Optional.empty();
   }
 

@@ -13,11 +13,10 @@ import java.util.List;
 import java.util.Set;
 
 public class GameStateIntegrationTest {
-    private static final int BOARD_SIZE = 7;
 
     public static void executeTest() {
         try {
-            MazeJsonParser mazeParser = new MazeJsonParser(System.in, BOARD_SIZE, BOARD_SIZE);
+            MazeJsonParser mazeParser = new MazeJsonParser(System.in);
             MazeJsonSerializer mazeSerializer = new MazeJsonSerializer();
 
             mazeParser.readNext();

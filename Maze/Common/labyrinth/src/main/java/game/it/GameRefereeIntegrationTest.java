@@ -17,11 +17,10 @@ import java.util.stream.Collectors;
 import static referee.PlayerResult.WINNER;
 
 public class GameRefereeIntegrationTest {
-    private static final int BOARD_SIZE = 7;
 
     public static void executeTest(boolean includeObserver) {
         try {
-            MazeJsonParser mazeParser = new MazeJsonParser(System.in, BOARD_SIZE, BOARD_SIZE);
+            MazeJsonParser mazeParser = new MazeJsonParser(System.in);
             MazeJsonSerializer mazeSerializer = new MazeJsonSerializer();
 
             mazeParser.readNext();

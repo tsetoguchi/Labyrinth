@@ -8,6 +8,16 @@ import java.net.Socket;
 
 public class MockClient {
 
+    private final String name;
+
+    public MockClient(String name) {
+        this.name = name;
+    }
+
+    public void run(int wait) {
+
+    }
+
     public static void main(String[] args) throws IOException {
 
         Socket socket = new Socket("localhost", NetUtil.defaultPort);

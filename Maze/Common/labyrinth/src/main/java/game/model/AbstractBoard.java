@@ -19,9 +19,9 @@ public abstract class AbstractBoard implements Board {
 
   protected Tile spareTile;
 
-  private final int width;
+  protected final int width;
 
-  private final int height;
+  protected final int height;
 
   protected final IRules rules;
 

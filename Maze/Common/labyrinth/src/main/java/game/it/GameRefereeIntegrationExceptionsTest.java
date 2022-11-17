@@ -17,12 +17,11 @@ import static referee.PlayerResult.WINNER;
 
 public class GameRefereeIntegrationExceptionsTest {
 
-  private static final int BOARD_SIZE = 7;
 
   public static void executeTest() {
 
     try {
-      MazeJsonParser mazeParser = new MazeJsonParser(System.in, BOARD_SIZE, BOARD_SIZE);
+      MazeJsonParser mazeParser = new MazeJsonParser(System.in);
 
       mazeParser.readNext();
       List<Player> badPlayerSpec = mazeParser.getPSAndBadPS();

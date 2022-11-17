@@ -7,6 +7,7 @@ import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import game.it.BadFM;
 import game.it.BadTestPlayer;
+import game.it.BadTestPlayer2;
 import game.it.TestPlayer;
 import game.it.processing.IntegrationTestUtils;
 import game.model.*;
@@ -14,6 +15,7 @@ import player.EuclideanStrategy;
 import player.Player;
 import player.RiemannStrategy;
 import player.IStrategy;
+
 
 import java.awt.*;
 import java.io.IOException;
@@ -28,8 +30,6 @@ import java.util.stream.Collectors;
  */
 public class MazeJsonParser {
 
-  private final int boardWidth;
-  private final int boardHeight;
   private final JsonParser parser;
   private final ObjectMapper mapper;
 
@@ -51,9 +51,7 @@ public class MazeJsonParser {
   /**
    * Creates a new parser from the given input for a board of the specified dimensions.
    */
-  public MazeJsonParser(InputStream in, int boardHeight, int boardWidth) {
-    this.boardHeight = boardHeight;
-    this.boardWidth = boardWidth;
+  public MazeJsonParser(InputStream in) {
     JsonFactory jsonFactory = new JsonFactory();
     this.mapper = new ObjectMapper();
     try {
@@ -61,10 +59,6 @@ public class MazeJsonParser {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
-  }
-
-  public MazeJsonParser(InputStream in) {
-
   }
 
   /**
@@ -204,14 +198,48 @@ public class MazeJsonParser {
         IStrategy strategy = this.getStrategy();
 
         Player player = null;
-        if (this.parser.nextToken() == JsonToken.END_ARRAY)  {
+
+        if (this.parser.nextToken() == JsonToken.END_ARRAY) {
+          player = new TestPlayer(name, strategy);
+          players.add(player);
+          break;
+        } else {
+          BadFM badFM = this.getBadFM();
+          player = new BadTestPlayer(name, strategy, badFM);
+        }
+
+        players.add(player);
+      }
+    }
+    return players;
+  }
+
+  public List<Player> getPSBadPSAndBadPS2() throws IOException {
+    List<Player> players = new ArrayList<>();
+    while (this.parser.nextToken() != JsonToken.END_ARRAY) {
+
+      // read PS
+      while (this.parser.nextToken() != JsonToken.END_ARRAY) {
+        String name = this.parser.getText();
+        //System.out.println(name);
+        this.readNext();
+        IStrategy strategy = this.getStrategy();
+        Player player = null;
+
+        if (this.parser.nextToken() == JsonToken.END_ARRAY) {
           player = new TestPlayer(name, strategy);
           players.add(player);
           break;
         }
-        else {
-          BadFM badFM = this.getBadFM();
+        BadFM badFM = this.getBadFM();
+        if (this.parser.nextToken() == JsonToken.END_ARRAY) {
+
           player = new BadTestPlayer(name, strategy, badFM);
+          players.add(player);
+          break;
+        } else {
+          int count = this.getCount();
+          player = new BadTestPlayer2(name, strategy, badFM, count);
         }
 
         players.add(player);
@@ -231,6 +259,10 @@ public class MazeJsonParser {
       default:
         throw new MazeJsonProcessingException("Strategy was not a valid Strategy Designation.");
     }
+  }
+
+  private int getCount() throws IOException {
+    return this.parser.getValueAsInt();
   }
 
   /**
@@ -273,7 +305,9 @@ public class MazeJsonParser {
         || previousSlideAndInsert == null) {
       throw new MazeJsonProcessingException("Did not find all four expected values for State.");
     }
-    StandardBoard board = new StandardBoard(tileGrid, spareTile);
+    int boardHeight = tileGrid.length;
+    int boardWidth = tileGrid[0].length;
+    Board board = new FlexibleBoard(tileGrid, spareTile, boardWidth, boardHeight);
     if (!playersIncludeGoals) {
       // assign arbitrary goals
       List<PlayerAvatar> finalPlayerList = playerList.stream().map(
@@ -323,9 +357,11 @@ public class MazeJsonParser {
    */
   private Tile[][] getBoardGrid(List<List<String>> rawBoard, List<List<List<String>>> rawTreasures)
       throws JsonProcessingException {
-    Tile[][] grid = new Tile[this.boardHeight][this.boardWidth];
-    for (int row = 0; row < this.boardHeight; row++) {
-      for (int col = 0; col < this.boardWidth; col++) {
+    int height = rawBoard.size();
+    int width = rawBoard.get(0).size();
+    Tile[][] grid = new Tile[height][width];
+    for (int row = 0; row < height; row++) {
+      for (int col = 0; col < width; col++) {
         String shape = rawBoard.get(row).get(col);
         Tile tile = IntegrationTestUtils.createTileFromShape(shape,
             this.createTreasureFromRaw(rawTreasures.get(row).get(col)));
