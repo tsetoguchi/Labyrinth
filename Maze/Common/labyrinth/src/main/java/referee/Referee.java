@@ -62,8 +62,10 @@ public class Referee implements IReferee {
   /**
    * Runs the game this referee is moderating to completion by interacting with the players via
    * clients.
+   *
+   * @return
    */
-  public void runGame() {
+  public GameResults runGame() {
     this.informObserverOfState();
     this.setupPlayers();
 
