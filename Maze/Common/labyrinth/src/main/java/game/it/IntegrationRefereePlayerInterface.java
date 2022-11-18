@@ -1,5 +1,6 @@
 package game.it;
 
+import game.model.Board;
 import game.model.GameStatus;
 import game.model.Position;
 import game.model.projections.PlayerGameProjection;
@@ -62,5 +63,10 @@ public class IntegrationRefereePlayerInterface implements RefereePlayerInterface
     @Override
     public boolean win(boolean playerWon) {
         return this.player.win(playerWon);
+    }
+
+    @Override
+    public Board proposeBoard(int rows, int columns) {
+        return null;
     }
 }

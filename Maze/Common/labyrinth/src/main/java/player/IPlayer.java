@@ -14,7 +14,7 @@ public interface IPlayer {
 
   boolean win(boolean w);
 
-  boolean setup(PlayerGameProjection state, Position goal);
+  boolean setup(Optional<PlayerGameProjection> state, Position goal);
 
   /**
    * Propose a board layout for the game.

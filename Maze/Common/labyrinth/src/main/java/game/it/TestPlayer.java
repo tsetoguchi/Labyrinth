@@ -27,7 +27,7 @@ public class TestPlayer implements IPlayer {
     }
 
     @Override
-    public boolean setup(PlayerGameProjection state, Position goal) {
+    public boolean setup(Optional<PlayerGameProjection> state, Position goal) {
         return true;
     }
 

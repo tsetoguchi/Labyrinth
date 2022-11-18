@@ -51,7 +51,7 @@ public class BadTestPlayer2 extends BadTestPlayer {
   }
 
   @Override
-  public boolean setup(PlayerGameProjection state, Position goal)
+  public boolean setup(Optional<PlayerGameProjection> state, Position goal)
       throws ArithmeticException {
     this.setupCount++;
 

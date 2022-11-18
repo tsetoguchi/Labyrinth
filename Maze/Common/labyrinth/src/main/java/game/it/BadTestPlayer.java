@@ -47,7 +47,7 @@ public class BadTestPlayer implements IPlayer {
     }
 
     @Override
-    public boolean setup(PlayerGameProjection state, Position goal)
+    public boolean setup(Optional<PlayerGameProjection> state, Position goal)
             throws ArithmeticException {
         if (this.badFM.equals(BadFM.SETUP)) {
             if (1 / 0 == 1);
