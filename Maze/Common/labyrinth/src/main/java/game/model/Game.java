@@ -122,7 +122,7 @@ public class Game implements PrivateGameState {
    * was the last Player in the list then the active Player is set to the first Player in the list.
    */
   public void kickActivePlayer() {
-    this.assertGameIsNotOver();
+    //this.assertGameIsNotOver();
     if (this.playerList.size() == 0) {
       throw new IllegalGameActionException("Tried to kick the active player when there were no" +
           "players in the game.");
