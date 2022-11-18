@@ -30,8 +30,6 @@ public class Server {
 
         service = Executors.newCachedThreadPool();
 
-        StringBuilder result = new StringBuilder();
-
         try {
             ServerSocket ss = new ServerSocket(port);
             System.out.println("Created server socket");
@@ -46,13 +44,12 @@ public class Server {
 
             IReferee referee = new Referee(proxyPlayers);
             // start game
-
-            System.out.println(referee.runGame().resultsJson());;
+            GameResults result = referee.runGame();
+            System.out.println(result.resultsJson());;
         }
         else {
-            result.append("[ [], [] ]");
             // return empty arrays
-            System.out.println(result.toString());
+            System.out.println("[ [], [] ]");
         }
 
     }

@@ -55,7 +55,7 @@ public class IntegrationRefereePlayerInterface implements RefereePlayerInterface
     }
 
     @Override
-    public boolean setup(PlayerGameProjection game, Position goal) {
+    public boolean setup(Optional<PlayerGameProjection> game, Position goal) {
         return this.player.setup(game, goal);
     }
 

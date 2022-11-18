@@ -19,7 +19,7 @@ public interface RefereePlayerInterface {
 
   Optional<TurnPlan> takeTurn(PlayerGameProjection game);
 
-  boolean setup(PlayerGameProjection game, Position goal);
+  boolean setup(Optional<PlayerGameProjection> game, Position goal);
 
   boolean win(boolean playerWon);
 

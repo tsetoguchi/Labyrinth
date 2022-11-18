@@ -6,6 +6,8 @@ import game.model.projections.PlayerGameProjection;
 import referee.PlayerResult;
 import referee.clients.RefereePlayerInterface;
 
+import java.util.Optional;
+
 /**
  * A mock player client for testing which keeps track of the messages it receives for comparison.
  */
@@ -39,7 +41,7 @@ public abstract class TestRefereePlayerInterface implements RefereePlayerInterfa
     }
 
     @Override
-    public boolean setup(PlayerGameProjection game, Position goal) {
+    public boolean setup(Optional<PlayerGameProjection> game, Position goal) {
         return true;
     }
 

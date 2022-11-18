@@ -8,6 +8,9 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
+/**
+ * Simple Client that can be given a name, and connects to a server sending it the name
+ */
 public class Client {
 
     public static void main(String[] args) throws IOException {

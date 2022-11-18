@@ -44,7 +44,7 @@ public class GameRefereeIntegrationExceptionsTest {
           .collect(Collectors.toList());
       Collections.sort(winnerNames);
 
-      List<String> eliminatedNames = referee.getNamesFromAvatars();
+      List<String> eliminatedNames = referee.getEliminatedNames();
 
       Object[] output = new Object[]{
           winnerNames,

@@ -38,7 +38,7 @@ public class XBad2 {
           .collect(Collectors.toList());
       Collections.sort(winnerNames);
 
-      List<String> eliminatedNames = referee.getNamesFromAvatars();
+      List<String> eliminatedNames = referee.getEliminatedNames();
 
       Object[] output = new Object[]{
           winnerNames,
@@ -48,7 +48,7 @@ public class XBad2 {
 
 
     } catch (Throwable e) {
-
+      System.out.println("Error in integration test");
     }
   }
 }

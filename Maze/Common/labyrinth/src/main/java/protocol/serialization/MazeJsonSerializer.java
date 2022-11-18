@@ -3,6 +3,7 @@ package protocol.serialization;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import game.model.Position;
+import game.model.SlideAndInsertRecord;
 import game.model.projections.ObserverGameProjection;
 import player.TurnPlan;
 
@@ -39,6 +40,7 @@ public class MazeJsonSerializer {
 
         return this.mapper.writeValueAsString(resultArray);
     }
+
 
     public String namesToJson(List<String> names) throws IOException {
         String[] sortedNames = names.stream()

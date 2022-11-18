@@ -1,6 +1,5 @@
 package remote;
 
-import game.exceptions.IllegalGameActionException;
 import game.exceptions.IllegalPlayerActionException;
 import game.model.*;
 import game.model.projections.PlayerGameProjection;
@@ -9,7 +8,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import player.TurnPlan;
-import protocol.serialization.MazeJsonParser;
 import protocol.serialization.MazeJsonSerializer;
 import referee.PlayerResult;
 import referee.clients.RefereePlayerInterface;
@@ -37,12 +35,8 @@ public class ProxyPlayer implements RefereePlayerInterface {
   private final BufferedReader input;
 
 
-
-
-
-
   public ProxyPlayer(Socket client, String playerName) throws IOException {
-    System.out.println("Proxy player: " + playerName);
+    //System.out.println("Proxy player: " + playerName);
     this.client = client;
     this.playerName = playerName;
     this.mazeSerializer = new MazeJsonSerializer();
@@ -83,8 +77,8 @@ public class ProxyPlayer implements RefereePlayerInterface {
   }
 
   @Override
-  public boolean setup(PlayerGameProjection game, Position goal) {
-    return false;
+  public boolean setup(Optional<PlayerGameProjection> game, Position goal) {
+    return true;
   }
 
   @Override

@@ -1,15 +1,13 @@
 package remote.json;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import game.model.Board;
-import game.model.Gem;
 import game.model.Position;
+import game.model.SlideAndInsertRecord;
 import game.model.Tile;
-import game.model.projections.ExperimentationBoardProjection;
 import game.model.projections.PlayerGameProjection;
+import game.model.projections.PublicPlayerProjection;
 
-import java.util.List;
+import java.util.Optional;
 
 public class MethodJsonSerializer {
 
@@ -20,7 +18,7 @@ public class MethodJsonSerializer {
     }
 
     public String generateWinJson(boolean win) {
-        Boolean[] argument = new Boolean[] {
+        Boolean[] argument = new Boolean[]{
                 win
         };
 
@@ -28,35 +26,83 @@ public class MethodJsonSerializer {
                 "win",
                 argument
         };
-
-        try {
-            return mapper.writeValueAsString(output);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        return this.mapperExceptionHandler(output);
     }
 
     public String generateTakeTurnJson(PlayerGameProjection game) {
 
-        ExperimentationBoardProjection board = game.getBoard();
-        String[][] connectors = new String[board.getHeight()][board.getWidth()];
-        String[][][] treasures = new String[board.getHeight()][board.getWidth()][2];
-        for (int row = 0; row < board.getHeight(); row++) {
-            for (int col = 0; col < board.getWidth(); col++) {
-                Tile tile = board.getTileAt(new Position(row, col));
-                connectors[row][col] = tile.toSymbol();
-                treasures[row][col] = tile.getTreasure().toStringArray();
-            }
-        }
-        JsonBoard jsonBoard = new JsonBoard(connectors, treasures);
-        Tile spare = game.getBoard().getSpareTile();
-        JsonTile jsonTile = new JsonTile(spare.toSymbol(),
-                spare.getTreasure().getGems().get(0).withDashes(), spare.getTreasure().getGems().get(1).withDashes());
-
+        JsonState jsonState = getJsonState(game);
 
         Object[] output = new Object[]{
                 "take-turn",
-                argument
+                jsonState
         };
+        return this.mapperExceptionHandler(output);
+    }
+
+    public String generateSetupJson(Optional<PlayerGameProjection> game, Position goal) {
+
+        PlayerGameProjection gameState = null;
+
+        if (game.isPresent()) {
+            gameState = game.get();
+            JsonState jsonState = getJsonState(gameState);
+            Object[] output = new Object[]{
+                    "setup",
+                    jsonState,
+                    goal
+            };
+            return this.mapperExceptionHandler(output);
+
+        } else {
+            Object[] output = new Object[]{
+                    "setup",
+                    false,
+                    goal
+            };
+            return this.mapperExceptionHandler(output);
+        }
+    }
+
+    private static JsonPlayer[] getPlmtFromGame(PlayerGameProjection game) {
+        JsonPlayer[] plmt = new JsonPlayer[game.getPlayers().size()];
+        for (int i = 0; i < game.getPlayers().size(); i++) {
+            PublicPlayerProjection player = game.getPlayers().get(i);
+            plmt[i] = new JsonPlayer(player.getAvatarPosition(), player.getHomePosition(), player.getColor());
+        }
+        return plmt;
+    }
+
+    private static JsonTile getSpareTile(PlayerGameProjection game) {
+        Tile spare = game.getBoard().getSpareTile();
+        JsonTile jsonSpareTile = new JsonTile(spare.toSymbol(),
+                spare.getTreasure().getGems().get(0).withDashes(), spare.getTreasure().getGems().get(1).withDashes());
+        return jsonSpareTile;
+    }
+
+    private static JsonState getJsonState(PlayerGameProjection game) {
+
+        JsonBoard board = new JsonBoard(game.getBoard());
+        JsonTile jsonSpareTile = getSpareTile(game);
+
+
+        JsonPlayer[] plmt = getPlmtFromGame(game);
+        Optional<SlideAndInsertRecord> lastMove = game.getPreviousSlideAndInsert();
+
+        JsonSlideAndInsertRecord lastAction = null;
+        if (lastMove.isPresent()) {
+            SlideAndInsertRecord lastMoveThing = lastMove.get();
+            lastAction = new JsonSlideAndInsertRecord(lastMoveThing.getIndex(), lastMoveThing.getDirection());
+        }
+        return new JsonState(board, jsonSpareTile, plmt, lastAction);
+    }
+
+
+    public String mapperExceptionHandler(Object[] output) {
+        try {
+            return this.mapper.writeValueAsString(output);
+        } catch (Throwable throwable) {
+            return throwable.getMessage();
+        }
     }
 }

@@ -1,18 +1,23 @@
 package remote.json;
 
-public JsonPlayer(
-@JsonProperty("current") JsonCoordinate current,
-@JsonProperty("home") JsonCoordinate home,
-@JsonProperty("color") String color
-        ) {
-        // Treasure position is not accessed within this class, thus
-        // an invalid position is used on purpose to instantiate the superclass.
+import com.fasterxml.jackson.annotation.JsonProperty;
+import game.model.Position;
 
-        super(JsonUtil.stringToColor(color), home, new Position(-10, -10));
-        this.setPosition(current);
-        }
+import java.awt.*;
 
-protected JsonPlayer(Color color, Position home, Position treasure,
-        Position current, boolean visitedTreasure) {
-        super(color, home, treasure, current, visitedTreasure);
-        }
+public class JsonPlayer {
+
+    private final Position current;
+    private final Position home;
+    private final Color color;
+
+    public JsonPlayer(
+            @JsonProperty("current") Position current,
+            @JsonProperty("home") Position home,
+            @JsonProperty("color") Color color) {
+        this.current = current;
+        this.home = home;
+        this.color = color;
+    }
+
+}

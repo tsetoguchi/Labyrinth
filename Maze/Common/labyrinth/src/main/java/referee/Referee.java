@@ -160,19 +160,9 @@ public class Referee implements IReferee {
         return playerHandlers;
     }
 
-    private List<PlayerAvatar> interfacesToAvatars(List<RefereePlayerInterface> playerInterfaces, Board board) {
-        List<PlayerAvatar> playerAvatars = new ArrayList<>();
-        for (RefereePlayerInterface playerInterface : playerInterfaces) {
-            playerAvatars.add(new PlayerAvatar())
-        }
-    }
-
-
     /**
      * Runs the game this referee is moderating to completion by interacting with the players via
      * clients.
-     *
-     * @return
      */
     public GameResults runGame() {
         this.informObserverOfState();
@@ -357,6 +347,15 @@ public class Referee implements IReferee {
         return names;
     }
 
+    public List<String> getEliminatedNames() {
+        List<String> names = new ArrayList<>();
+        for (RefereePlayerInterface playerInterface : this.eliminated) {
+            names.add(playerInterface.getPlayerName());
+        }
+        Collections.sort(names);
+        return names;
+    }
+
     private List<String> getNamesFromRefereePlayerInterfaces(List<RefereePlayerInterface> playerInterfaces) {
         List<String> names = new ArrayList<>();
         for (RefereePlayerInterface playerInterface : playerInterfaces) {
@@ -420,8 +419,8 @@ public class Referee implements IReferee {
         List<Color> playersToBeKicked = new ArrayList<>();
         for (PlayerAvatar player : this.game.getPlayerList()) {
             PlayerHandler playerHandler = this.playerAvatarToHandler.get(player);
-            Optional<Boolean> outcome = playerHandler.setup(
-                    new PlayerGameProjection(this.game, player, this.game.getPreviousSlideAndInsert()),
+            Optional<Boolean> outcome = playerHandler.setup(Optional.of(
+                    new PlayerGameProjection(this.game, player, this.game.getPreviousSlideAndInsert())),
                     player.getGoalPosition());
 
             if (outcome.isEmpty()) {
@@ -443,14 +442,6 @@ public class Referee implements IReferee {
 
         for (IObserver observer : this.observers) {
             observer.gameOver();
-        }
-    }
-
-    private Map<RefereePlayerInterface, PlayerHandler> mapRefereePlayerInterfacesToPlayerHandlers(List<RefereePlayerInterface> refereePlayerInterfaces) {
-        Map<RefereePlayerInterface, PlayerHandler> map = new HashMap<>();
-        for (RefereePlayerInterface playerInterface : refereePlayerInterfaces) {
-            Color color =
-            map.put(playerInterface, new PlayerHandler())
         }
     }
 
@@ -526,7 +517,7 @@ public class Referee implements IReferee {
             });
         }
 
-        public Optional<Boolean> setup(PlayerGameProjection state, Position goal) {
+        public Optional<Boolean> setup(Optional<PlayerGameProjection> state, Position goal) {
             return this.timeoutExceptionHandler(() -> {
                 return this.player.setup(state, goal);
             });
