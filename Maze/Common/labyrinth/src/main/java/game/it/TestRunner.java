@@ -27,12 +27,12 @@ public class TestRunner {
             case "referee-obs":
                 GameRefereeIntegrationTest.executeTest(true);
                 break;
-                // 7
-            case "referee-xbad":
+            case "referee-xbad": // 7
                 GameRefereeIntegrationExceptionsTest.executeTest();
                 break;
-            case "referee-xbad2":
+            case "referee-xbaddy": // 8
                 XBad2.executeTest();
+                break;
             default:
                 throw new IllegalArgumentException("test set not recognized");
         }

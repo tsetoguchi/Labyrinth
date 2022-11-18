@@ -2,8 +2,11 @@ package game.it;
 
 import static referee.PlayerResult.WINNER;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import game.model.PrivateGameState;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -45,11 +48,14 @@ public class XBad2 {
           eliminatedNames
       };
       System.out.println(new ObjectMapper().writeValueAsString(output));
+      System.exit(0);
 
-
-    } catch (Throwable e) {
-      System.out.println("Error in integration test");
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
     }
+
   }
 }
 

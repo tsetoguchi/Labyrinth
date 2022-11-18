@@ -110,56 +110,6 @@ public class Referee implements IReferee {
         this.eliminated = new ArrayList<>();
     }
 
-    private List<Position> immovablePositionsForBoard(Board board) {
-        List<Integer> immovableRowIndices = new ArrayList<>();
-        List<Integer> immovableColIndices = new ArrayList<>();
-        // Iterate through immovable rows
-        for (int i = 0; i < board.getHeight(); i++) {
-            if (!board.getRules().isValidSlideAndInsert(Direction.RIGHT, i, 0)) {
-                immovableRowIndices.add(i);
-            }
-        }
-        for (int i = 0; i < board.getWidth(); i++) {
-            if (!board.getRules().isValidSlideAndInsert(Direction.DOWN, i, 0)) {
-                immovableColIndices.add(i);
-            }
-        }
-
-        List<Position> immovablePositions = new ArrayList<>();
-        for (int row = 0; row < immovableRowIndices.size(); row++) {
-            for (int col = 0; col < immovableColIndices.size(); col++) {
-                immovablePositions.add(new Position(row, col));
-            }
-        }
-
-        return immovablePositions;
-    }
-
-
-
-    private List<Color> generateUniqueColors(int numberOfColors) {
-        Set<Color> colors = new HashSet<>();
-        Random random = new Random();
-        while (colors.size() < numberOfColors) {
-            colors.add(new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256)));
-        }
-
-        return new ArrayList<>(colors);
-    }
-
-    private List<PlayerHandler> interfaceToHandlers(List<RefereePlayerInterface> playerInterfaces, List<Color> colors) {
-
-        if (playerInterfaces.size() != colors.size()) {
-            throw new IllegalArgumentException("Amount of players do not match amount of colors.");
-        }
-
-        List<PlayerHandler> playerHandlers = new ArrayList<>();
-        for (int i = 0; i < playerInterfaces.size(); i++) {
-            playerHandlers.add(new PlayerHandler(colors.get(i), playerInterfaces.get(i)));
-        }
-        return playerHandlers;
-    }
-
     /**
      * Runs the game this referee is moderating to completion by interacting with the players via
      * clients.
@@ -410,6 +360,7 @@ public class Referee implements IReferee {
         for (PlayerAvatar player : this.game.getPlayerList()) {
             if (player.hasReachedGoal() && !this.playersCollectedTreasures.contains(player)) {
                 this.playerAvatarToHandler.get(player).returnHome(player.getHomePosition());
+                this.playerAvatarToHandler.get(player).setup(Optional.empty(), player.getHomePosition());
                 this.playersCollectedTreasures.add(player);
             }
         }
@@ -480,6 +431,54 @@ public class Referee implements IReferee {
         }
     }
 
+
+    private List<Position> immovablePositionsForBoard(Board board) {
+        List<Integer> immovableRowIndices = new ArrayList<>();
+        List<Integer> immovableColIndices = new ArrayList<>();
+        // Iterate through immovable rows
+        for (int i = 0; i < board.getHeight(); i++) {
+            if (!board.getRules().isValidSlideAndInsert(Direction.RIGHT, i, 0)) {
+                immovableRowIndices.add(i);
+            }
+        }
+        for (int i = 0; i < board.getWidth(); i++) {
+            if (!board.getRules().isValidSlideAndInsert(Direction.DOWN, i, 0)) {
+                immovableColIndices.add(i);
+            }
+        }
+
+        List<Position> immovablePositions = new ArrayList<>();
+        for (int row = 0; row < immovableRowIndices.size(); row++) {
+            for (int col = 0; col < immovableColIndices.size(); col++) {
+                immovablePositions.add(new Position(row, col));
+            }
+        }
+
+        return immovablePositions;
+    }
+
+    private List<Color> generateUniqueColors(int numberOfColors) {
+        Set<Color> colors = new HashSet<>();
+        Random random = new Random();
+        while (colors.size() < numberOfColors) {
+            colors.add(new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256)));
+        }
+
+        return new ArrayList<>(colors);
+    }
+
+    private List<PlayerHandler> interfaceToHandlers(List<RefereePlayerInterface> playerInterfaces, List<Color> colors) {
+
+        if (playerInterfaces.size() != colors.size()) {
+            throw new IllegalArgumentException("Amount of players do not match amount of colors.");
+        }
+
+        List<PlayerHandler> playerHandlers = new ArrayList<>();
+        for (int i = 0; i < playerInterfaces.size(); i++) {
+            playerHandlers.add(new PlayerHandler(colors.get(i), playerInterfaces.get(i)));
+        }
+        return playerHandlers;
+    }
 
     /**
      * Wrapper for the PlayerClient class, adding exception and timeout handling for any PlayerClient

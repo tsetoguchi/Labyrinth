@@ -1,3 +1,6 @@
 **.idea/
 **/target/
+Maze/Common/labyrinth/target
 **.iml
+.DS_Store
+../.DS_Store
