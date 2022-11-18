@@ -3,7 +3,7 @@ package game.it;
 import game.model.GameStatus;
 import game.model.Position;
 import game.model.projections.PlayerGameProjection;
-import player.Player;
+import player.IPlayer;
 import player.TurnPlan;
 import referee.PlayerResult;
 import referee.clients.RefereePlayerInterface;
@@ -11,10 +11,10 @@ import referee.clients.RefereePlayerInterface;
 import java.util.Optional;
 
 public class IntegrationRefereePlayerInterface implements RefereePlayerInterface {
-    private Player player;
+    private IPlayer player;
     private PlayerResult result;
 
-    public IntegrationRefereePlayerInterface(Player player) {
+    public IntegrationRefereePlayerInterface(IPlayer player) {
         this.player = player;
         this.result = null; // null for testing
     }

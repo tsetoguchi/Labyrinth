@@ -6,6 +6,9 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+/**
+ * A mock client used to test connections to the Server.
+ */
 public class MockClient {
 
     private final String name;
@@ -15,6 +18,14 @@ public class MockClient {
     }
 
     public void run(int wait) {
+
+    }
+
+    public void sendName() {
+
+    }
+
+    public void connect() {
 
     }
 

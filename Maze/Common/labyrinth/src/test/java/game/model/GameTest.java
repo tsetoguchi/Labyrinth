@@ -4,7 +4,6 @@ import game.TestUtils;
 import game.exceptions.IllegalGameActionException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import player.Player;
 
 import static org.junit.jupiter.api.Assertions.*;
 

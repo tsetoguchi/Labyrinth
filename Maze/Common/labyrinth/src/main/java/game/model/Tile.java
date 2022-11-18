@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import protocol.serialization.model.TileSerializer;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static game.model.Direction.*;
 
@@ -23,6 +24,29 @@ public class Tile {
         this.validateMinimumPathways(pathwayConnections);
         this.pathwayConnections = new HashSet<>();
         this.pathwayConnections.addAll(pathwayConnections);
+        this.treasure = treasure;
+    }
+
+    /**
+     * Generates a Tile with random directions given a treasure
+     */
+    public Tile (Treasure treasure) {
+        List<Set<Direction>> directionList = new ArrayList<>();
+        directionList.add(Set.of(UP, DOWN));
+        directionList.add(Set.of(RIGHT, LEFT));
+        directionList.add(Set.of(DOWN, LEFT));
+        directionList.add(Set.of(UP, RIGHT));
+        directionList.add(Set.of(RIGHT, DOWN));
+        directionList.add(Set.of(UP, LEFT));
+        directionList.add(Set.of(RIGHT, DOWN, LEFT));
+        directionList.add(Set.of(UP, RIGHT, DOWN));
+        directionList.add(Set.of(UP, RIGHT, LEFT));
+        directionList.add(Set.of(UP, DOWN, LEFT));
+        directionList.add(Set.of(UP, RIGHT, DOWN, LEFT));
+        int randomIndex = ThreadLocalRandom.current().nextInt(0, directionList.size());
+        Set<Direction> chosenSet = directionList.get(randomIndex);
+
+        this.pathwayConnections = chosenSet;
         this.treasure = treasure;
     }
 

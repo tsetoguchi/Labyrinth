@@ -7,11 +7,11 @@ import game.model.projections.PlayerGameProjection;
 
 import java.util.Optional;
 
-import player.Player;
+import player.IPlayer;
 import player.IStrategy;
 import player.TurnPlan;
 
-public class BadTestPlayer implements Player {
+public class BadTestPlayer implements IPlayer {
 
     protected final IStrategy strategy;
     private final String name;
@@ -60,7 +60,7 @@ public class BadTestPlayer implements Player {
      * Propose a board layout for the game.
      **/
     @Override
-    public Board proposeBoard() {
+    public Board proposeBoard(int rows, int columns) {
         return null;
     }
 

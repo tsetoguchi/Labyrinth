@@ -6,23 +6,26 @@ import java.util.List;
 
 public class GameResults {
 
-  List<PlayerAvatar> winners;
-  List<PlayerAvatar> eliminated;
+  List<String> winners;
+  List<String> eliminated;
 
-  public GameResults(List<PlayerAvatar> winners, List<PlayerAvatar> eliminated) {
+  public GameResults(List<String> winners, List<String> eliminated) {
     this.winners = winners;
     this.eliminated = eliminated;
   }
 
-  public List<PlayerAvatar> getWinner() {
+  public List<String> getWinner() {
     return this.winners;
   }
 
-  public List<PlayerAvatar> getEliminated() {
+  public List<String> getEliminated() {
     return this.eliminated;
   }
 
+
+
   public String resultsJson() throws JsonProcessingException {
+
     Object[] output = new Object[]{
         this.winners,
         this.eliminated

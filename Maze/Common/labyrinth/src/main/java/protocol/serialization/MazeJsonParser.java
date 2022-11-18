@@ -12,7 +12,7 @@ import game.it.TestPlayer;
 import game.it.processing.IntegrationTestUtils;
 import game.model.*;
 import player.EuclideanStrategy;
-import player.Player;
+import player.IPlayer;
 import player.RiemannStrategy;
 import player.IStrategy;
 
@@ -175,23 +175,23 @@ public class MazeJsonParser {
   /**
    * Read a list of players from the current parser.
    */
-  public List<Player> getPlayers() throws IOException {
-    List<Player> players = new ArrayList<>();
+  public List<IPlayer> getPlayers() throws IOException {
+    List<IPlayer> players = new ArrayList<>();
     while (this.parser.nextToken() != JsonToken.END_ARRAY) {
       // read PS
       while (this.parser.nextToken() != JsonToken.END_ARRAY) {
         String name = this.parser.getText();
         this.readNext();
         IStrategy strategy = this.getStrategy();
-        Player player = new TestPlayer(name, strategy);
+        IPlayer player = new TestPlayer(name, strategy);
         players.add(player);
       }
     }
     return players;
   }
 
-  public List<Player> getPSAndBadPS() throws IOException {
-    List<Player> players = new ArrayList<>();
+  public List<IPlayer> getPSAndBadPS() throws IOException {
+    List<IPlayer> players = new ArrayList<>();
     while (this.parser.nextToken() != JsonToken.END_ARRAY) {
       // read PS
       while (this.parser.nextToken() != JsonToken.END_ARRAY) {
@@ -200,7 +200,7 @@ public class MazeJsonParser {
         this.readNext();
         IStrategy strategy = this.getStrategy();
 
-        Player player = null;
+        IPlayer player = null;
 
         if (this.parser.nextToken() == JsonToken.END_ARRAY) {
           player = new TestPlayer(name, strategy);
@@ -217,8 +217,8 @@ public class MazeJsonParser {
     return players;
   }
 
-  public List<Player> getPSBadPSAndBadPS2() throws IOException {
-    List<Player> players = new ArrayList<>();
+  public List<IPlayer> getPSBadPSAndBadPS2() throws IOException {
+    List<IPlayer> players = new ArrayList<>();
     while (this.parser.nextToken() != JsonToken.END_ARRAY) {
 
       // read PS
@@ -227,7 +227,7 @@ public class MazeJsonParser {
         //System.out.println(name);
         this.readNext();
         IStrategy strategy = this.getStrategy();
-        Player player = null;
+        IPlayer player = null;
 
         if (this.parser.nextToken() == JsonToken.END_ARRAY) {
           player = new TestPlayer(name, strategy);

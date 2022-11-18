@@ -55,4 +55,12 @@ public class Treasure {
         builder.append(")");
         return builder.toString();
     }
+
+    public String[] toStringArray() {
+        String[] gemsStrings = new String[2];
+        gemsStrings[0] = this.gems.get(0).withDashes();
+        gemsStrings[1] = this.gems.get(1).withDashes();
+        return gemsStrings;
+    }
+
 }

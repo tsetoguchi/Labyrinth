@@ -2,6 +2,9 @@ package remote;
 
 import game.model.Game;
 import game.model.GameResults;
+import referee.IReferee;
+import referee.Referee;
+import referee.clients.RefereePlayerInterface;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,8 +19,7 @@ import java.util.concurrent.*;
 
 public class Server {
 
-    private static List<ProxyPlayer> proxyPlayers = new ArrayList<>();
-    private static int signUpCounter = 0;
+    private static List<RefereePlayerInterface> proxyPlayers = new ArrayList<>();
 
     private static ExecutorService service;
 
@@ -37,7 +39,7 @@ public class Server {
 
 
         } catch (Throwable throwable) {
-            messageClients("Game failed to start.");
+//            messageClients("Game failed to start.");
         }
 
         if (proxyPlayers.size() >= 2) {
@@ -180,15 +182,15 @@ public class Server {
         }
     }
 
-    private static void messageClients(String message) {
-        try {
-            for (ProxyPlayer player : proxyPlayers) {
-                player.getSocket().getOutputStream().write(message.getBytes());
-            }
-        } catch (Throwable throwable) {
-            System.out.println("Server failed while messaging clients.");
-        }
-    }
+//    private static void messageClients(String message) {
+//        try {
+//            for (ProxyPlayer player : proxyPlayers) {
+//                player.getSocket().getOutputStream().write(message.getBytes());
+//            }
+//        } catch (Throwable throwable) {
+//            System.out.println("Server failed while messaging clients.");
+//        }
+//    }
 
     private static void messageClient(String message, PrintWriter out) {
         try {

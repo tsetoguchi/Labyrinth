@@ -10,7 +10,7 @@ import java.util.Optional;
  * A single player in the game of Labyrinth. Represents the controls of an actual player to interact
  * with any Referee.
  */
-public interface Player {
+public interface IPlayer {
 
   boolean win(boolean w);
 
@@ -19,7 +19,7 @@ public interface Player {
   /**
    * Propose a board layout for the game.
    **/
-  Board proposeBoard();
+  Board proposeBoard(int rows, int columns);
 
   /**
    * Given a view of the current game and a target tile to try to reach first, create a plan for the

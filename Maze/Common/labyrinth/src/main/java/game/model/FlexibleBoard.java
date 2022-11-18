@@ -7,6 +7,14 @@ public class FlexibleBoard extends AbstractBoard {
     super(width, height, tileGrid, spareTile, new FlexibleDefaultRules(width, height));
   }
 
+  public FlexibleBoard(int width, int height, Tile[][] tileGrid, Tile spareTile, IRules rules) {
+    super(width, height, tileGrid, spareTile, rules);
+  }
+
+  public FlexibleBoard(int width, int height) {
+    super(width, height);
+  }
+
   @Override
   public Board deepCopy() {
     Tile[][] newGrid = new Tile[this.getHeight()][this.getWidth()];

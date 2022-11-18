@@ -51,6 +51,7 @@ public class MazeJsonSerializer {
         return this.mapper.writeValueAsString(game);
     }
 
+
     /**
      * Convert rotations to degrees. Since JSON degrees are represented in counterclockwise turns, first convert
      * rotations from clockwise to counterclockwise.

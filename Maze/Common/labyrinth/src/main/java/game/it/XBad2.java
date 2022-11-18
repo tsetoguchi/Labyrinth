@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import player.Player;
+import player.IPlayer;
 import protocol.serialization.MazeJsonParser;
 import referee.Referee;
 import referee.clients.RefereePlayerInterface;
@@ -19,13 +19,13 @@ public class XBad2 {
     try {
       MazeJsonParser mazeParser = new MazeJsonParser(System.in);
       mazeParser.readNext();
-      List<Player> badPlayerSpec2 = mazeParser.getPSBadPSAndBadPS2();
+      List<IPlayer> badPlayerSpec2 = mazeParser.getPSBadPSAndBadPS2();
       mazeParser.readNext();
       PrivateGameState game = mazeParser.getGameWithGoals();
 
       List<IntegrationRefereePlayerInterface> intClients = new ArrayList<>();
       List<RefereePlayerInterface> clients = new ArrayList<>();
-      for (Player player : badPlayerSpec2) {
+      for (IPlayer player : badPlayerSpec2) {
         IntegrationRefereePlayerInterface client = new IntegrationRefereePlayerInterface(player);
         clients.add(client);
         intClients.add(client);
@@ -38,7 +38,7 @@ public class XBad2 {
           .collect(Collectors.toList());
       Collections.sort(winnerNames);
 
-      List<String> eliminatedNames = referee.getEliminated();
+      List<String> eliminatedNames = referee.getNamesFromAvatars();
 
       Object[] output = new Object[]{
           winnerNames,

@@ -1,5 +1,6 @@
 package referee.clients;
 
+import game.model.Board;
 import game.model.GameStatus;
 import game.model.Position;
 import game.model.projections.PlayerGameProjection;
@@ -11,7 +12,7 @@ import java.util.Optional;
 //TODO: documentation and exceptions for bad players
 
 /**
- * A remote proxy for the player
+ * A remote proxy for the player. The playerName should be stored locally as a variable.
  */
 public interface RefereePlayerInterface {
 
@@ -21,6 +22,8 @@ public interface RefereePlayerInterface {
   boolean setup(PlayerGameProjection game, Position goal);
 
   boolean win(boolean playerWon);
+
+  Board proposeBoard(int rows, int columns);
 
   void returnHome(Position homeTile);
 

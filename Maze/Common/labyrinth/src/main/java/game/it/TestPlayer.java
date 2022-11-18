@@ -3,7 +3,7 @@ package game.it;
 import game.it.processing.IntegrationTestUtils;
 import game.model.*;
 import game.model.projections.PlayerGameProjection;
-import player.Player;
+import player.IPlayer;
 import player.IStrategy;
 import player.TurnPlan;
 
@@ -12,7 +12,7 @@ import java.util.*;
 /**
  * A simple Player implementation for testing, which proposes a completely random (but valid) board.
  */
-public class TestPlayer implements Player {
+public class TestPlayer implements IPlayer {
     private final IStrategy strategy;
     private final String name;
 
@@ -32,7 +32,7 @@ public class TestPlayer implements Player {
     }
 
     @Override
-    public Board proposeBoard() {
+    public Board proposeBoard(int rows, int columns) {
         Tile[][] tileGrid = IntegrationTestUtils.generateRandomTileGrid();
         Tile spareTile = IntegrationTestUtils.generateRandomTile(Gem.hackmanite, Gem.hackmanite);
         return new StandardBoard(tileGrid, spareTile);

@@ -6,11 +6,9 @@ import static game.model.Direction.RIGHT;
 import static game.model.Direction.UP;
 
 import game.exceptions.IllegalGameActionException;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Optional;
-import java.util.Queue;
-import java.util.Set;
+
+import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 
 public abstract class AbstractBoard implements Board {
@@ -42,6 +40,44 @@ public abstract class AbstractBoard implements Board {
     this.tileGrid = tileGrid;
     this.spareTile = spareTile;
     this.rules = rules;
+  }
+
+  public AbstractBoard(int width, int height) {
+    this.width = width;
+    this.height = height;
+    this.rules = new FlexibleDefaultRules(width, height);
+
+    Gem[] gemPoolArray = Gem.values();
+    List<Gem> gemPool = List.of(gemPoolArray);
+    Tile[][] tileGrid = this.generateRandomBoard(width, height, gemPool);
+    this.tileGrid = tileGrid;
+    Treasure spareTileTreasure = new Treasure(gemPool.get(0), gemPool.get(0));
+    this.spareTile = new Tile(spareTileTreasure);
+  }
+
+  private Tile[][] generateRandomBoard(int width, int height, List<Gem> gemPool) {
+    Tile[][] tileGrid = new Tile[height][width];
+
+    List<Gem> rowGems = new ArrayList<>();
+    List<Gem> colGems = new ArrayList<>();
+
+    for (int i = 0; i < height; i++) {
+      int poolIndex = ThreadLocalRandom.current().nextInt(0, gemPool.size());
+      rowGems.add(gemPool.get(poolIndex));
+      gemPool.remove(poolIndex);
+    }
+    for (int i = 0; i < width; i++) {
+      int poolIndex = ThreadLocalRandom.current().nextInt(0, gemPool.size());
+      colGems.add(gemPool.get(poolIndex));
+      gemPool.remove(poolIndex);
+    }
+    for (int row = 0; row < tileGrid.length; row++) {
+      for (int col = 0; col < tileGrid[0].length; col++) {
+        Treasure treasure = new Treasure(rowGems.get(row), colGems.get(col));
+        tileGrid[row][col] = new Tile(treasure);
+      }
+    }
+    return tileGrid;
   }
 
   @Override

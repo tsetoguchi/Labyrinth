@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import player.Player;
+import player.IPlayer;
 import protocol.serialization.MazeJsonParser;
 import referee.Referee;
 import referee.clients.RefereePlayerInterface;
@@ -24,14 +24,14 @@ public class GameRefereeIntegrationExceptionsTest {
       MazeJsonParser mazeParser = new MazeJsonParser(System.in);
 
       mazeParser.readNext();
-      List<Player> badPlayerSpec = mazeParser.getPSAndBadPS();
+      List<IPlayer> badPlayerSpec = mazeParser.getPSAndBadPS();
 
       mazeParser.readNext();
       PrivateGameState game = mazeParser.getGameWithGoals();
 
       List<IntegrationRefereePlayerInterface> intClients = new ArrayList<>();
       List<RefereePlayerInterface> clients = new ArrayList<>();
-      for (Player player : badPlayerSpec) {
+      for (IPlayer player : badPlayerSpec) {
         IntegrationRefereePlayerInterface client = new IntegrationRefereePlayerInterface(player);
         clients.add(client);
         intClients.add(client);
@@ -44,7 +44,7 @@ public class GameRefereeIntegrationExceptionsTest {
           .collect(Collectors.toList());
       Collections.sort(winnerNames);
 
-      List<String> eliminatedNames = referee.getEliminated();
+      List<String> eliminatedNames = referee.getNamesFromAvatars();
 
       Object[] output = new Object[]{
           winnerNames,
