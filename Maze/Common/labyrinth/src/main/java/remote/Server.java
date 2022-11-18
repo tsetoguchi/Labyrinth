@@ -34,8 +34,6 @@ public class Server {
             ServerSocket ss = new ServerSocket(port);
             System.out.println("Created server socket");
             beginSignUp(ss);
-
-
         } catch (Throwable throwable) {
 //            messageClients("Game failed to start.");
         }
@@ -57,7 +55,7 @@ public class Server {
     private static void beginSignUp(ServerSocket ss) {
 
 //    List<ProxyPlayer> proxyPlayers = new ArrayList<>();
-        long endTime = System.currentTimeMillis() + 20000;
+        long endTime = System.currentTimeMillis() + (NetUtil.defaultWaitPeriodSeconds * 1000);
         while (true) {
             System.out.println("beginSignUp()");
             System.out.println((endTime - System.currentTimeMillis()) / 1000);
@@ -67,7 +65,7 @@ public class Server {
             // 20 seconds passed and less than 2 players signed up
             if (System.currentTimeMillis() > endTime && proxyPlayers.size()  < 2) {
                 secondWaitPhase(ss);
-                endTime = System.currentTimeMillis() + 20000;
+                endTime = System.currentTimeMillis() + (NetUtil.defaultWaitPeriodSeconds * 1000);
                 break;
             }
 
@@ -107,7 +105,7 @@ public class Server {
 
     private static void secondWaitPhase(ServerSocket ss) {
         System.out.println("secondWaitPhase()");
-        long endTime = System.currentTimeMillis() + 20000;
+        long endTime = System.currentTimeMillis() + (NetUtil.defaultWaitPeriodSeconds * 1000);
 
         while (true) {
 
@@ -171,7 +169,7 @@ public class Server {
 
 
         try {
-            return Optional.of(service.submit(callableProxyPlayer).get(2, TimeUnit.SECONDS));
+            return Optional.of(service.submit(callableProxyPlayer).get(NetUtil.defaultPlayerSignUpSeconds, TimeUnit.SECONDS));
         } catch (Throwable throwable) {
             messageClient("close", out);
             client.close();
