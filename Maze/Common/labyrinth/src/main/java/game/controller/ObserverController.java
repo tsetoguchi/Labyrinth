@@ -1,4 +1,4 @@
-package game.controller;
+package game.Controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import game.model.projections.ObserverGameProjection;

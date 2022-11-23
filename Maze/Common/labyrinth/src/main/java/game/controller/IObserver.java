@@ -1,4 +1,4 @@
-package game.controller;
+package game.Controller;
 
 import game.model.projections.ObserverGameProjection;
 

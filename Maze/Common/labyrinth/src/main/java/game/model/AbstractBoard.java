@@ -5,7 +5,7 @@ import static game.model.Direction.LEFT;
 import static game.model.Direction.RIGHT;
 import static game.model.Direction.UP;
 
-import game.exceptions.IllegalGameActionException;
+import game.Exceptions.IllegalGameActionException;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;

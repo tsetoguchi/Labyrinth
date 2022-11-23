@@ -1,7 +1,7 @@
 package game.model;
 
 import game.TestUtils;
-import game.exceptions.IllegalGameActionException;
+import game.Exceptions.IllegalGameActionException;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;

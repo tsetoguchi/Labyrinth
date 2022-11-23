@@ -3,7 +3,7 @@ package game.model;
 import static game.model.Direction.*;
 import static game.model.GameStatus.*;
 
-import game.exceptions.IllegalGameActionException;
+import game.Exceptions.IllegalGameActionException;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashSet;

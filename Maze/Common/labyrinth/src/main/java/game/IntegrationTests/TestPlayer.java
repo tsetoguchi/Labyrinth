@@ -1,22 +1,22 @@
-package player;
+package game.IntegrationTests;
 
 import game.IntegrationTests.processing.IntegrationTestUtils;
 import game.model.*;
 import game.model.projections.PlayerGameProjection;
+import player.IPlayer;
+import player.IStrategy;
+import player.TurnPlan;
 
-import java.util.Optional;
+import java.util.*;
 
 /**
- * Contains the logic involved in a player's decision making, handling a state and returns TurnPlans.
+ * A simple Player implementation for testing, which proposes a completely random (but valid) board.
  */
-public class Player implements IPlayer {
+public class TestPlayer implements IPlayer {
+    private final IStrategy strategy;
+    private final String name;
 
-    private String name;
-    private IStrategy strategy;
-
-
-
-    public Player(String name, IStrategy strategy) {
+    public TestPlayer(String name, IStrategy strategy) {
         this.name = name;
         this.strategy = strategy;
     }
@@ -33,7 +33,9 @@ public class Player implements IPlayer {
 
     @Override
     public Board proposeBoard(int rows, int columns) {
-        return new FlexibleBoard(columns, rows);
+        Tile[][] tileGrid = IntegrationTestUtils.generateRandomTileGrid();
+        Tile spareTile = IntegrationTestUtils.generateRandomTile(Gem.hackmanite, Gem.hackmanite);
+        return new StandardBoard(tileGrid, spareTile);
     }
 
     @Override
@@ -51,6 +53,8 @@ public class Player implements IPlayer {
     public boolean updateGoal(Position goal) {
         return true;
     }
+
+
 
 
 }

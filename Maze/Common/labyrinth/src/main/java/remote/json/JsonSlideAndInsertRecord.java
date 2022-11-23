@@ -1,4 +1,4 @@
-package remote.json;
+package remote.JSON;
 
 import game.model.Direction;
 

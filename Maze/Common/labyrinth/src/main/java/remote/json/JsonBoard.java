@@ -1,11 +1,10 @@
-package remote.json;
+package remote.JSON;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import game.model.Position;
 import game.model.Tile;
 import game.model.projections.ExperimentationBoardProjection;
-import game.model.projections.PlayerGameProjection;
 
 public class JsonBoard {
 
@@ -33,6 +32,14 @@ public class JsonBoard {
         }
         this.connectors = connectors;
         this.treasures = treasures;
+    }
+
+    public String[][] getConnectors() {
+        return this.connectors;
+    }
+
+    public String[][][] getTreasures() {
+        return this.treasures;
     }
 
 }

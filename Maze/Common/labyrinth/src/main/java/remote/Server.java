@@ -1,10 +1,9 @@
 package remote;
 
-import game.model.Game;
 import game.model.GameResults;
 import referee.IReferee;
 import referee.Referee;
-import referee.clients.RefereePlayerInterface;
+import referee.clients.IPlayerInterface;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,7 +18,7 @@ import java.util.concurrent.*;
 
 public class Server {
 
-    private static List<RefereePlayerInterface> proxyPlayers = new ArrayList<>();
+    private static List<IPlayerInterface> proxyPlayers = new ArrayList<>();
 
     private static ExecutorService service;
 
@@ -85,12 +84,12 @@ public class Server {
     }
 
 
-    private static Optional<ProxyPlayer> signUpClient(ServerSocket ss, long waitTimeRemaining) {
+    private static Optional<ProxyPlayerInterface> signUpClient(ServerSocket ss, long waitTimeRemaining) {
 
         System.out.println("signUpClient()");
         System.out.println(waitTimeRemaining / 1000);
         long timer = System.currentTimeMillis();
-        Optional<ProxyPlayer> player = null;
+        Optional<ProxyPlayerInterface> player = null;
 
         // If the client failed to connect
         try {
@@ -124,20 +123,21 @@ public class Server {
         }
     }
 
-    private static void addPlayerIfPresent(Optional<ProxyPlayer> proxyPlayer) {
+    private static void addPlayerIfPresent(Optional<ProxyPlayerInterface> proxyPlayer) {
         if (proxyPlayer.isPresent()) {
             proxyPlayers.add(proxyPlayer.get());
         }
     }
 
-    private static Callable<String> awaitName(ProxyPlayer player) {
+    private static Callable<String> awaitName(ProxyPlayerInterface player) {
         Callable<String> callableString = () -> {
             return player.getPlayerName();
         };
         return callableString;
     }
 
-    private static Optional<ProxyPlayer> awaitSignUp(ServerSocket ss, long waitTimeRemaining) throws IOException {
+    private static Optional<ProxyPlayerInterface> awaitSignUp(ServerSocket ss, long waitTimeRemaining) throws IOException {
+
         System.out.println("awaitSignUp()");
         Callable<Socket> acceptTimeOut = () -> {
             Socket client = ss.accept();
@@ -161,12 +161,12 @@ public class Server {
 
 
         Socket finalClient = client;
-        Callable<ProxyPlayer> callableProxyPlayer = () -> {
+
+        Callable<ProxyPlayerInterface> callableProxyPlayer = () -> {
             String clientName = input.readLine();
-            ProxyPlayer proxyPlayer = new ProxyPlayer(finalClient, clientName);
+            ProxyPlayerInterface proxyPlayer = new ProxyPlayerInterface(finalClient, clientName);
             return proxyPlayer;
         };
-
 
         try {
             return Optional.of(service.submit(callableProxyPlayer).get(NetUtil.defaultPlayerSignUpSeconds, TimeUnit.SECONDS));

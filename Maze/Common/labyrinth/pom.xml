@@ -109,7 +109,7 @@
             <archive>
               <manifest>
                 <mainClass>
-                  game.it.TestRunner
+                  game.IntegrationTests.TestRunner
                 </mainClass>
               </manifest>
             </archive>

@@ -24,6 +24,8 @@ public class Client {
         String name = args[0];
 
         while (true) {
+            // not all json inputs will be line by line, this does not match the spec
+            // figure out how to read json no matter how long it is
             String in = input.readLine();
             System.out.println(in);
             if (in.equals("close")) {
@@ -31,11 +33,7 @@ public class Client {
                 break;
             }
             out.println(name);
-//            out.println(stdIn.readLine());
 
-            if (stdIn.equals("quit")) {
-                break;
-            }
         }
         socket.shutdownOutput();
         socket.close();
