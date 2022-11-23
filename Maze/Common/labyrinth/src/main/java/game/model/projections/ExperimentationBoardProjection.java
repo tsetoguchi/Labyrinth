@@ -21,15 +21,17 @@ public class ExperimentationBoardProjection extends ReadOnlyBoardProjection {
     }
 
     public boolean isValidSlideAndInsert(Direction direction, int index, int rotations) {
-        return experimentationBoard.getRules().isValidSlideAndInsert(direction, index, rotations);
+        return this.experimentationBoard
+            .getRules().isValidSlideAndInsert(direction, index, rotations);
     }
 
     public Set<Position> findReachableTilePositionsAfterSlideAndInsert(
             Direction direction, int index, int rotations, Position position) {
-        return experimentationBoard.findReachableTilePositionsAfterSlideAndInsert(direction, index, rotations, position);
+        return this.experimentationBoard
+            .findReachableTilePositionsAfterSlideAndInsert(direction, index, rotations, position);
     }
 
     public Optional<Position> findFirstTileMatching(Predicate<Tile> searchFunction) {
-        return experimentationBoard.getFirstTileMatching(searchFunction);
+        return this.experimentationBoard.getFirstTileMatching(searchFunction);
     }
 }

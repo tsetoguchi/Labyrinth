@@ -1,6 +1,5 @@
 package game.it;
 
-import game.controller.ObserverController;
 import game.model.PrivateGameState;
 import game.model.projections.ObserverGameProjection;
 import protocol.serialization.MazeJsonParser;
