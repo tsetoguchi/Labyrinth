@@ -11,8 +11,8 @@ import java.io.PrintWriter;
 import player.TurnPlan;
 import protocol.serialization.MazeJsonSerializer;
 import referee.PlayerResult;
-import referee.clients.IPlayerInterface;
-import remote.JSON.MethodJsonSerializer;
+import player.IPlayer;
+import remote.JSON.JsonMethodSerializer;
 
 import java.net.Socket;
 import java.util.Optional;
@@ -23,13 +23,13 @@ import java.util.Optional;
  * JSON, sending and receiving new JSON, and deserialize the new JSON back into a model data
  * representation.
  */
-public class ProxyPlayerInterface implements IPlayerInterface {
+public class ProxyPlayerInterface implements IPlayer {
 
   private final Socket client;
   private String playerName;
   private final MazeJsonSerializer mazeSerializer;
 
-  private final MethodJsonSerializer serializer;
+  private final JsonMethodSerializer serializer;
 
   private final PrintWriter out;
 
@@ -41,7 +41,7 @@ public class ProxyPlayerInterface implements IPlayerInterface {
     this.client = client;
     this.playerName = playerName;
     this.mazeSerializer = new MazeJsonSerializer();
-    this.serializer = new MethodJsonSerializer();
+    this.serializer = new JsonMethodSerializer();
 
     this.out = new PrintWriter(client.getOutputStream(), true);
     this.input = new BufferedReader(new InputStreamReader(client.getInputStream()));

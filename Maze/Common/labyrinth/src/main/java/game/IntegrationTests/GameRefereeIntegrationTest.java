@@ -5,14 +5,15 @@ import game.model.PrivateGameState;
 import game.model.projections.ObserverGameProjection;
 import protocol.serialization.MazeJsonParser;
 import protocol.serialization.MazeJsonSerializer;
-import player.IPlayer;
+
 import referee.Referee;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import referee.clients.IPlayerInterface;
+import player.IPlayer;
+
 
 import static referee.PlayerResult.WINNER;
 
@@ -29,7 +30,7 @@ public class GameRefereeIntegrationTest {
             PrivateGameState game = mazeParser.getGameWithGoals();
 
             List<IntegrationPlayer> intClients = new ArrayList<>();
-            List<IPlayerInterface> clients = new ArrayList<>();
+            List<IPlayer> clients = new ArrayList<>();
             for (IPlayer player : players) {
                 IntegrationPlayer client = new IntegrationPlayer(player);
                 clients.add(client);

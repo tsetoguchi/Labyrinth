@@ -12,7 +12,6 @@ import game.IntegrationTests.TestPlayer;
 import game.IntegrationTests.processing.IntegrationTestUtils;
 import game.model.*;
 import player.EuclideanStrategy;
-import player.IPlayer;
 import player.RiemannStrategy;
 import player.IStrategy;
 
@@ -23,6 +22,7 @@ import java.io.InputStream;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
+import player.IPlayer;
 
 /**
  * Deserialization methods for Labyrinth models. Created with a parser and each public method reads

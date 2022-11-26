@@ -4,14 +4,15 @@ import game.model.GameStatus;
 import game.model.Position;
 import game.model.projections.PlayerGameProjection;
 import referee.PlayerResult;
-import referee.clients.IPlayerInterface;
+
 
 import java.util.Optional;
+import player.IPlayer;
 
 /**
  * A mock player client for testing which keeps track of the messages it receives for comparison.
  */
-public abstract class TestIPlayerInterface implements IPlayerInterface {
+public abstract class TestIPlayerInterface implements IPlayer {
     public boolean informedOfGoalReached;
     public GameStatus finalGameResult;
     public PlayerResult finalPlayerResult;
@@ -23,13 +24,11 @@ public abstract class TestIPlayerInterface implements IPlayerInterface {
     }
 
     /** Record that this client was told to go home. **/
-    @Override
     public void returnHome(Position homeTile) {
         this.informedOfGoalReached = true; // mark that this player was told to go home
     }
 
     /** Record results for comparison. **/
-    @Override
     public void informGameEnd(GameStatus status, PlayerResult result) {
         this.finalGameResult = status;
         this.finalPlayerResult = result;

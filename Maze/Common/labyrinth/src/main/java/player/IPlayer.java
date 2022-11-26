@@ -1,36 +1,35 @@
 package player;
 
 import game.model.Board;
+import game.model.GameStatus;
 import game.model.Position;
 import game.model.projections.PlayerGameProjection;
+import player.TurnPlan;
+import referee.PlayerResult;
 
 import java.util.Optional;
 
-/**
- * A single player in the game of Labyrinth. Represents the controls of an actual player to interact
- * with any Referee.
- */
+
 public interface IPlayer {
 
-  boolean win(boolean w);
 
-  boolean setup(Optional<PlayerGameProjection> state, Position goal);
-
-  /**
-   * Propose a board layout for the game.
-   **/
-  Board proposeBoard(int rows, int columns);
-
-  /**
-   * Given a view of the current game and a target tile to try to reach first, create a plan for the
-   * turn.
-   **/
   Optional<TurnPlan> takeTurn(PlayerGameProjection game);
 
-  String getName();
+  boolean setup(Optional<PlayerGameProjection> game, Position goal);
+
+  boolean win(boolean playerWon);
+
+  Board proposeBoard(int rows, int columns);
+
+  void returnHome(Position homeTile);
+
+  void informGameEnd(GameStatus status, PlayerResult result);
+
+  String getPlayerName();
 
   /**
-   * Accept a new goal from the referee. Returns true if update was successful and false otherwise.
+   * Accepts the current game state and the current goal and updates accordingly. returning True if
+   * the player successfully responds to setup.
    */
   boolean updateGoal(Position goal);
 }

@@ -2,14 +2,17 @@ package game.it;
 
 import game.it.processing.IntegrationTestUtils;
 import game.model.Board;
+import game.model.GameStatus;
 import game.model.Position;
 import game.model.projections.PlayerGameProjection;
 
 import java.util.Optional;
 
-import player.IPlayer;
+
 import player.IStrategy;
 import player.TurnPlan;
+import referee.PlayerResult;
+import player.IPlayer;
 
 public class BadTestPlayer implements IPlayer {
 
@@ -64,6 +67,21 @@ public class BadTestPlayer implements IPlayer {
         return null;
     }
 
+    @Override
+    public void returnHome(Position homeTile) {
+
+    }
+
+    @Override
+    public void informGameEnd(GameStatus status, PlayerResult result) {
+
+    }
+
+    @Override
+    public String getPlayerName() {
+        return null;
+    }
+
     /**
      * Given a view of the current game and a target tile to try to reach first, create a plan for the
      * turn.
@@ -81,10 +99,6 @@ public class BadTestPlayer implements IPlayer {
                 game.getPreviousSlideAndInsert(), IntegrationTestUtils.getCurrentGoal(game.getSelf()));
     }
 
-    @Override
-    public String getName() {
-        return this.name;
-    }
 
     /**
      * Accept a new goal from the referee. Returns true if update was successful and false otherwise.

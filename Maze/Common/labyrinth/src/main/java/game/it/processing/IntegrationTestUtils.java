@@ -92,7 +92,7 @@ public class IntegrationTestUtils {
         return playerInformation.getGoalPosition();
     }
 
-    public static Tile[][] generateRandomTileGrid() {
+    public static Tile[][] generateRandom7x7TileGrid() {
         Tile[][] tileGrid = new Tile[7][7];
         List<Gem> randomGems = Arrays.asList(Gem.values());
         randomGems.remove(Gem.hackmanite); // we will use this for the spare tile
@@ -100,6 +100,20 @@ public class IntegrationTestUtils {
 
         for (int row = 0; row < 7; row++) {
             for (int col = 0; col < 7; col++) {
+                tileGrid[row][col] = generateRandomTile(randomGems.get(row), randomGems.get(col));
+            }
+        }
+        return tileGrid;
+    }
+
+    public static Tile[][] generateRandomTileGrid(int height, int width) {
+        Tile[][] tileGrid = new Tile[height][width];
+        List<Gem> randomGems = Arrays.asList(Gem.values());
+        randomGems.remove(Gem.hackmanite); // we will use this for the spare tile
+        Collections.shuffle(randomGems);
+
+        for (int row = 0; row < height; row++) {
+            for (int col = 0; col < width; col++) {
                 tileGrid[row][col] = generateRandomTile(randomGems.get(row), randomGems.get(col));
             }
         }

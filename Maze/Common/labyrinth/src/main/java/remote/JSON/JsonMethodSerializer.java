@@ -7,16 +7,16 @@ import game.model.projections.PlayerGameProjection;
 
 import java.util.Optional;
 
-public class MethodJsonSerializer {
+public class JsonMethodSerializer {
 
   private final ObjectMapper mapper;
 
-  public MethodJsonSerializer() {
+  public JsonMethodSerializer() {
     this.mapper = new ObjectMapper();
   }
 
   public String generateWinJson(boolean win) throws JsonProcessingException {
-    return this.mapper.writeValueAsString(new JsonWin[]{new JsonWin(win)});
+    return this.mapper.writeValueAsString(new JsonWin(new boolean[] {win}));
   }
 
   public String generateTakeTurnJson(PlayerGameProjection game) throws JsonProcessingException {

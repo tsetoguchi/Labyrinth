@@ -4,14 +4,13 @@ import game.model.Board;
 import game.model.GameStatus;
 import game.model.Position;
 import game.model.projections.PlayerGameProjection;
-import player.IPlayer;
 import player.TurnPlan;
 import referee.PlayerResult;
-import referee.clients.RefereePlayerInterface;
+import player.IPlayer;
 
 import java.util.Optional;
 
-public class IntegrationRefereePlayerInterface implements RefereePlayerInterface {
+public class IntegrationRefereePlayerInterface implements IPlayer {
     private IPlayer player;
     private PlayerResult result;
 
@@ -22,7 +21,7 @@ public class IntegrationRefereePlayerInterface implements RefereePlayerInterface
 
     @Override
     public Optional<TurnPlan> takeTurn(PlayerGameProjection game) {
-        return player.takeTurn(game);
+        return this.player.takeTurn(game);
     }
 
     @Override
@@ -43,7 +42,7 @@ public class IntegrationRefereePlayerInterface implements RefereePlayerInterface
 
     @Override
     public String getPlayerName() {
-        return player.getName();
+        return this.player.getPlayerName();
     }
 
     @Override

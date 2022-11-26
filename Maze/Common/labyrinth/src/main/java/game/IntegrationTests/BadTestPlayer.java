@@ -2,14 +2,16 @@ package game.IntegrationTests;
 
 import game.IntegrationTests.processing.IntegrationTestUtils;
 import game.model.Board;
+import game.model.GameStatus;
 import game.model.Position;
 import game.model.projections.PlayerGameProjection;
 
 import java.util.Optional;
 
-import player.IPlayer;
 import player.IStrategy;
 import player.TurnPlan;
+import referee.PlayerResult;
+import player.IPlayer;
 
 public class BadTestPlayer implements IPlayer {
 
@@ -59,8 +61,23 @@ public class BadTestPlayer implements IPlayer {
     /**
      * Propose a board layout for the game.
      **/
-    @Override
+
     public Board proposeBoard(int rows, int columns) {
+        return null;
+    }
+
+
+    public void returnHome(Position homeTile) {
+
+    }
+
+
+    public void informGameEnd(GameStatus status, PlayerResult result) {
+
+    }
+
+
+    public String getPlayerName() {
         return null;
     }
 
@@ -81,7 +98,7 @@ public class BadTestPlayer implements IPlayer {
                 game.getPreviousSlideAndInsert(), IntegrationTestUtils.getCurrentGoal(game.getSelf()));
     }
 
-    @Override
+
     public String getName() {
         return this.name;
     }
@@ -91,7 +108,7 @@ public class BadTestPlayer implements IPlayer {
      *
      * @param goal
      */
-    @Override
+
     public boolean updateGoal(Position goal) {
         return false;
     }

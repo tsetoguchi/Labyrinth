@@ -9,11 +9,11 @@ import player.RiemannStrategy;
 import player.TurnPlan;
 import referee.PlayerResult;
 import referee.Referee;
-import referee.clients.IPlayerInterface;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import player.IPlayer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -33,7 +33,7 @@ public class RefereeTest {
         PlayerAvatar avatar3 = new PlayerAvatar(Color.RED, new Position(5, 5),
                 new Position(1, 3));
 
-        List<IPlayerInterface> clients = List.of(bored1, bored2, bored3);
+        List<IPlayer> clients = List.of(bored1, bored2, bored3);
         List<PlayerAvatar> avatars = List.of(avatar1, avatar2, avatar3);
 
         Game game = new Game(
@@ -67,7 +67,7 @@ public class RefereeTest {
         avatar2.setCurrentPosition(new Position(0, 2));
 
 
-        List<IPlayerInterface> clients = List.of(ob1, ob2);
+        List<IPlayer> clients = List.of(ob1, ob2);
         List<PlayerAvatar> avatars = List.of(avatar1, avatar2);
 
         Game game = new Game(
@@ -89,7 +89,7 @@ public class RefereeTest {
     @Test
     public void testGameWithOnlyCheatersResultsInNoRemainingPlayersGameOver() {
         List<TestIPlayerInterface> testClients = new ArrayList<>();
-        List<IPlayerInterface> clients = new ArrayList<>();
+        List<IPlayer> clients = new ArrayList<>();
         List<PlayerAvatar> avatars = new ArrayList<>();
 
         for (int i = 0; i < 500; i++) {
@@ -128,7 +128,7 @@ public class RefereeTest {
                 new Position(1, 1));
 
         List<TestIPlayerInterface> testClients = new ArrayList<>();
-        List<IPlayerInterface> clients = new ArrayList<>();
+        List<IPlayer> clients = new ArrayList<>();
         testClients.add(ob1);
         clients.add(ob1);
         List<PlayerAvatar> avatars = new ArrayList<>();
@@ -172,7 +172,7 @@ public class RefereeTest {
     public void testGameWithMixOfBoredPlayersAndNaughtyPlayersResultsInOnlyBoredPlayersAtEnd() {
         List<TestIPlayerInterface> goodClients = new ArrayList<>();
         List<TestIPlayerInterface> badClients = new ArrayList<>();
-        List<IPlayerInterface> clients = new ArrayList<>();
+        List<IPlayer> clients = new ArrayList<>();
         List<PlayerAvatar> avatars = new ArrayList<>();
 
         int numGoodPlayers = 5;

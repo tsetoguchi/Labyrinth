@@ -1,7 +1,5 @@
 package remote.JSON;
 
-import static java.lang.System.in;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 
@@ -9,9 +7,12 @@ public class JsonDeserializeTest {
 
   public static void main(String[] args) throws IOException {
 
-//    ObjectMapper om = new ObjectMapper();
-//
-//    remote.JSON.JsonBoard board = om.readValue(in, remote.JSON.JsonBoard.class);
+    ObjectMapper om = new ObjectMapper();
+    String json = "[\"win\", [true]]";
+    JsonWin jsonWin = om.readValue(json, JsonWin.class);
+
+//    JsonTakeTurn jsonTakeTurn = om.readValue(json, JsonTakeTurn.class);
+
 //    remote.JSON.JsonState state = om.readValue(in, remote.JSON.JsonState.class);
 //
 //    Object[] output = new Object[]{
@@ -23,11 +24,11 @@ public class JsonDeserializeTest {
     //
 //    JsonWin[] win = om.readValue(in, JsonWin[].class);
 
-    MethodJsonSerializer serializer = new MethodJsonSerializer();
+    JsonMethodSerializer serializer = new JsonMethodSerializer();
     String winJson = serializer.generateWinJson(true);
 
 
-    System.out.println(winJson);
+    System.out.println(om.writeValueAsString(jsonWin));
   }
 
 }

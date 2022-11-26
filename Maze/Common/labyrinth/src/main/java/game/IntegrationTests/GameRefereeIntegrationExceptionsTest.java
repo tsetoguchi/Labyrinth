@@ -1,19 +1,17 @@
 package game.IntegrationTests;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import static referee.PlayerResult.WINNER;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import game.model.GameResults;
 import game.model.PrivateGameState;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import player.IPlayer;
 import protocol.serialization.MazeJsonParser;
 import referee.Referee;
-import referee.clients.IPlayerInterface;
-
-import static referee.PlayerResult.WINNER;
+import player.IPlayer;
 
 public class GameRefereeIntegrationExceptionsTest {
 
@@ -30,14 +28,14 @@ public class GameRefereeIntegrationExceptionsTest {
       PrivateGameState game = mazeParser.getGameWithGoals();
 
       List<IntegrationPlayer> intClients = new ArrayList<>();
-      List<IPlayerInterface> clients = new ArrayList<>();
+      List<IPlayer> clients = new ArrayList<>();
       for (IPlayer player : badPlayerSpec) {
         IntegrationPlayer client = new IntegrationPlayer(player);
         clients.add(client);
         intClients.add(client);
       }
       Referee referee = new Referee(game, clients);
-      referee.runGame();
+      GameResults result = referee.runGame();
       List<String> winnerNames = intClients.stream()
           .filter((IntegrationPlayer client) -> WINNER.equals(client.getResult()))
           .map(IntegrationPlayer::getPlayerName)

@@ -8,10 +8,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import player.IPlayer;
 import protocol.serialization.MazeJsonParser;
 import referee.Referee;
-import referee.clients.RefereePlayerInterface;
+import player.IPlayer;
 
 import static referee.PlayerResult.WINNER;
 
@@ -30,7 +29,7 @@ public class GameRefereeIntegrationExceptionsTest {
       PrivateGameState game = mazeParser.getGameWithGoals();
 
       List<IntegrationRefereePlayerInterface> intClients = new ArrayList<>();
-      List<RefereePlayerInterface> clients = new ArrayList<>();
+      List<IPlayer> clients = new ArrayList<>();
       for (IPlayer player : badPlayerSpec) {
         IntegrationRefereePlayerInterface client = new IntegrationRefereePlayerInterface(player);
         clients.add(client);

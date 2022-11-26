@@ -4,19 +4,19 @@ import game.model.GameStatus;
 import game.model.Position;
 import game.model.projections.PlayerGameProjection;
 import referee.PlayerResult;
-import referee.clients.RefereePlayerInterface;
+import player.IPlayer;
 
 import java.util.Optional;
 
 /**
  * A mock player client for testing which keeps track of the messages it receives for comparison.
  */
-public abstract class TestRefereePlayerInterface implements RefereePlayerInterface {
+public abstract class TestIPlayer implements IPlayer {
     public boolean informedOfGoalReached;
     public GameStatus finalGameResult;
     public PlayerResult finalPlayerResult;
 
-    public TestRefereePlayerInterface() {
+    public TestIPlayer() {
         this.informedOfGoalReached = false;
         this.finalGameResult = null; // these are null for testing purposes
         this.finalPlayerResult = null;

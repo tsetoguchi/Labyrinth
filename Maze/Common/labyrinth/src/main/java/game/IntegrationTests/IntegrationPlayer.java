@@ -4,14 +4,13 @@ import game.model.Board;
 import game.model.GameStatus;
 import game.model.Position;
 import game.model.projections.PlayerGameProjection;
-import player.IPlayer;
 import player.TurnPlan;
 import referee.PlayerResult;
 
 import java.util.Optional;
-import referee.clients.IPlayerInterface;
+import player.IPlayer;
 
-public class IntegrationPlayer implements IPlayerInterface {
+public class IntegrationPlayer implements IPlayer {
     private IPlayer player;
     private PlayerResult result;
 
@@ -25,12 +24,12 @@ public class IntegrationPlayer implements IPlayerInterface {
         return player.takeTurn(game);
     }
 
-    @Override
+
     public void returnHome(Position homeTile) {
         this.player.updateGoal(homeTile);
     }
 
-    @Override
+
     public void informGameEnd(GameStatus status, PlayerResult result) {
         this.result = result;
 //        if (result.equals(PlayerResult.WINNER)) {
@@ -44,7 +43,7 @@ public class IntegrationPlayer implements IPlayerInterface {
 
     @Override
     public String getPlayerName() {
-        return player.getName();
+        return player.getPlayerName();
     }
 
     @Override

@@ -1,12 +1,12 @@
 package game.it;
 
+import game.Controller.ObserverController;
 import game.model.PrivateGameState;
 import game.model.projections.ObserverGameProjection;
 import protocol.serialization.MazeJsonParser;
 import protocol.serialization.MazeJsonSerializer;
-import player.IPlayer;
 import referee.Referee;
-import referee.clients.RefereePlayerInterface;
+import player.IPlayer;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public class GameRefereeIntegrationTest {
             PrivateGameState game = mazeParser.getGameWithGoals();
 
             List<IntegrationRefereePlayerInterface> intClients = new ArrayList<>();
-            List<RefereePlayerInterface> clients = new ArrayList<>();
+            List<IPlayer> clients = new ArrayList<>();
             for (IPlayer player : players) {
                 IntegrationRefereePlayerInterface client = new IntegrationRefereePlayerInterface(player);
                 clients.add(client);

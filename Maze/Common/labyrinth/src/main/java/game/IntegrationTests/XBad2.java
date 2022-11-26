@@ -11,10 +11,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import player.IPlayer;
+
 import protocol.serialization.MazeJsonParser;
 import referee.Referee;
-import referee.clients.IPlayerInterface;
+import player.IPlayer;
+
 
 public class XBad2 {
 
@@ -27,7 +28,7 @@ public class XBad2 {
       PrivateGameState game = mazeParser.getGameWithGoals();
 
       List<IntegrationPlayer> intClients = new ArrayList<>();
-      List<IPlayerInterface> clients = new ArrayList<>();
+      List<IPlayer> clients = new ArrayList<>();
       for (IPlayer player : badPlayerSpec2) {
         IntegrationPlayer client = new IntegrationPlayer(player);
         clients.add(client);

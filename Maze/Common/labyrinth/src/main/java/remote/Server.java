@@ -3,7 +3,7 @@ package remote;
 import game.model.GameResults;
 import referee.IReferee;
 import referee.Referee;
-import referee.clients.IPlayerInterface;
+import player.IPlayer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,7 +18,7 @@ import java.util.concurrent.*;
 
 public class Server {
 
-    private static List<IPlayerInterface> proxyPlayers = new ArrayList<>();
+    private static final List<IPlayer> proxyPlayers = new ArrayList<>();
 
     private static ExecutorService service;
 

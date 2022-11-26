@@ -5,6 +5,7 @@ import game.model.*;
 import game.model.projections.PlayerGameProjection;
 
 import java.util.Optional;
+import referee.PlayerResult;
 
 /**
  * Contains the logic involved in a player's decision making, handling a state and returns TurnPlans.
@@ -37,14 +38,24 @@ public class Player implements IPlayer {
     }
 
     @Override
-    public Optional<TurnPlan> takeTurn(PlayerGameProjection game) {
-        return this.strategy.createTurnPlan(game.getBoard(), game.getSelf(),
-                game.getPreviousSlideAndInsert(), IntegrationTestUtils.getCurrentGoal(game.getSelf()));
+    public void returnHome(Position homeTile) {
+
     }
 
     @Override
-    public String getName() {
-        return this.name;
+    public void informGameEnd(GameStatus status, PlayerResult result) {
+
+    }
+
+    @Override
+    public String getPlayerName() {
+        return null;
+    }
+
+    @Override
+    public Optional<TurnPlan> takeTurn(PlayerGameProjection game) {
+        return this.strategy.createTurnPlan(game.getBoard(), game.getSelf(),
+                game.getPreviousSlideAndInsert(), IntegrationTestUtils.getCurrentGoal(game.getSelf()));
     }
 
     @Override
