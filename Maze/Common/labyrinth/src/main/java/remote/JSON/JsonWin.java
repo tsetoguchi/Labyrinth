@@ -2,9 +2,10 @@ package remote.JSON;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import player.IPlayer;
 
 @JsonFormat(shape=JsonFormat.Shape.ARRAY)
-public class JsonWin {
+public class JsonWin implements JsonMethod {
 
   @JsonProperty("MName")
   private final String mName;
@@ -20,5 +21,11 @@ public class JsonWin {
 
   public JsonWin(boolean[] win) {
     this("win", win);
+  }
+
+  @Override
+  public String executeMethod(IPlayer player) {
+    player.win(this.win[0]);
+    return "void";
   }
 }

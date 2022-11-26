@@ -11,7 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import protocol.serialization.MazeJsonSerializer;
+import protocol.serialization.JsonSerializer;
 
 public class Controls extends JPanel {
 
@@ -52,7 +52,7 @@ public class Controls extends JPanel {
   }
 
   private String encodeState() {
-    MazeJsonSerializer serializer = new MazeJsonSerializer();
+    JsonSerializer serializer = new JsonSerializer();
 
     ObserverGameProjection currentState = this.states.get(this.currentState);
     try {

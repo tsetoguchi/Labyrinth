@@ -1,8 +1,8 @@
 package game.IntegrationTests;
 
-import game.model.PrivateGameState;
+import game.model.PrivateState;
 import protocol.serialization.MazeJsonParser;
-import protocol.serialization.MazeJsonSerializer;
+import protocol.serialization.JsonSerializer;
 import game.model.Position;
 import game.model.projections.ExperimentationBoardProjection;
 import game.model.projections.SelfPlayerProjection;
@@ -16,12 +16,12 @@ public class StrategyIntegrationTest {
     public static void executeTest() {
         try {
             MazeJsonParser mazeParser = new MazeJsonParser(System.in);
-            MazeJsonSerializer mazeSerializer = new MazeJsonSerializer();
+            JsonSerializer mazeSerializer = new JsonSerializer();
 
             mazeParser.readNext();
             IStrategy strategy = mazeParser.getStrategy();
             mazeParser.readNext();
-            PrivateGameState game = mazeParser.getGame();
+            PrivateState game = mazeParser.getGame();
             mazeParser.readNext();
             Position goal = mazeParser.getCoordinate();
 

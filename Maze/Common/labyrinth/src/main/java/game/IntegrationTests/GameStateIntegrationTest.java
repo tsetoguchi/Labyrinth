@@ -1,9 +1,9 @@
 package game.IntegrationTests;
 
 import game.IntegrationTests.processing.IntegrationTestUtils;
-import game.model.PrivateGameState;
+import game.model.PrivateState;
 import protocol.serialization.MazeJsonParser;
-import protocol.serialization.MazeJsonSerializer;
+import protocol.serialization.JsonSerializer;
 import game.model.Direction;
 import game.model.Position;
 
@@ -16,10 +16,10 @@ public class GameStateIntegrationTest {
     public static void executeTest() {
         try {
             MazeJsonParser mazeParser = new MazeJsonParser(System.in);
-            MazeJsonSerializer mazeSerializer = new MazeJsonSerializer();
+            JsonSerializer mazeSerializer = new JsonSerializer();
 
             mazeParser.readNext();
-            PrivateGameState game = mazeParser.getGame();
+            PrivateState game = mazeParser.getGame();
             mazeParser.readNext();
             int index = mazeParser.getInt();
             mazeParser.readNext();

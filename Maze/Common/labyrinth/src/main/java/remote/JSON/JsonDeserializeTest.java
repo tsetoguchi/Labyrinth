@@ -1,7 +1,9 @@
 package remote.JSON;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import game.model.PrivateState;
 import java.io.IOException;
+import protocol.serialization.MazeJsonParser;
 
 public class JsonDeserializeTest {
 
@@ -10,8 +12,6 @@ public class JsonDeserializeTest {
     ObjectMapper om = new ObjectMapper();
     String json = "[\"win\", [true]]";
     JsonWin jsonWin = om.readValue(json, JsonWin.class);
-
-//    JsonTakeTurn jsonTakeTurn = om.readValue(json, JsonTakeTurn.class);
 
 //    remote.JSON.JsonState state = om.readValue(in, remote.JSON.JsonState.class);
 //

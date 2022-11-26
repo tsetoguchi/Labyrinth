@@ -2,7 +2,7 @@ package game.it;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import game.model.PrivateGameState;
+import game.model.PrivateState;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,7 +26,7 @@ public class GameRefereeIntegrationExceptionsTest {
       List<IPlayer> badPlayerSpec = mazeParser.getPSAndBadPS();
 
       mazeParser.readNext();
-      PrivateGameState game = mazeParser.getGameWithGoals();
+      PrivateState game = mazeParser.getGameWithGoals();
 
       List<IntegrationRefereePlayerInterface> intClients = new ArrayList<>();
       List<IPlayer> clients = new ArrayList<>();

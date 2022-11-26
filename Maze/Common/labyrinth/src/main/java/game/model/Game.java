@@ -14,7 +14,7 @@ import java.util.Set;
 /**
  * Represents the game state.
  */
-public class Game implements PrivateGameState {
+public class Game implements PrivateState {
 
   private final Board board;
 

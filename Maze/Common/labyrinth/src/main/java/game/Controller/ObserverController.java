@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import game.model.projections.ObserverGameProjection;
 
 import game.view.OldObserverView;
-import protocol.serialization.MazeJsonSerializer;
+import protocol.serialization.JsonSerializer;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -109,7 +109,7 @@ public class ObserverController implements IObserver, ActionListener {
     }
 
     private String encodeState() {
-        MazeJsonSerializer serializer = new MazeJsonSerializer();
+        JsonSerializer serializer = new JsonSerializer();
         try {
             return serializer.observerGameToJson(this.currentState);
         } catch (JsonProcessingException e) {

@@ -4,7 +4,7 @@ import static referee.PlayerResult.WINNER;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import game.model.GameResults;
-import game.model.PrivateGameState;
+import game.model.PrivateState;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -25,7 +25,7 @@ public class GameRefereeIntegrationExceptionsTest {
       List<IPlayer> badPlayerSpec = mazeParser.getPSAndBadPS();
 
       mazeParser.readNext();
-      PrivateGameState game = mazeParser.getGameWithGoals();
+      PrivateState game = mazeParser.getGameWithGoals();
 
       List<IntegrationPlayer> intClients = new ArrayList<>();
       List<IPlayer> clients = new ArrayList<>();

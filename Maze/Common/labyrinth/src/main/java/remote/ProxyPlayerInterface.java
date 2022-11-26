@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import player.TurnPlan;
-import protocol.serialization.MazeJsonSerializer;
+import protocol.serialization.JsonSerializer;
 import referee.PlayerResult;
 import player.IPlayer;
 import remote.JSON.JsonMethodSerializer;
@@ -27,7 +27,7 @@ public class ProxyPlayerInterface implements IPlayer {
 
   private final Socket client;
   private String playerName;
-  private final MazeJsonSerializer mazeSerializer;
+  private final JsonSerializer mazeSerializer;
 
   private final JsonMethodSerializer serializer;
 
@@ -40,7 +40,7 @@ public class ProxyPlayerInterface implements IPlayer {
     //System.out.println("Proxy player: " + playerName);
     this.client = client;
     this.playerName = playerName;
-    this.mazeSerializer = new MazeJsonSerializer();
+    this.mazeSerializer = new JsonSerializer();
     this.serializer = new JsonMethodSerializer();
 
     this.out = new PrintWriter(client.getOutputStream(), true);

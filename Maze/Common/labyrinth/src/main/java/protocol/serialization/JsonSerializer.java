@@ -14,10 +14,10 @@ import java.util.Optional;
 /**
  * Serialization methods for Labyrinth models.
  */
-public class MazeJsonSerializer {
+public class JsonSerializer {
     ObjectMapper mapper;
 
-    public MazeJsonSerializer() {
+    public JsonSerializer() {
         this.mapper = new ObjectMapper();
     }
 

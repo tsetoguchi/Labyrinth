@@ -4,7 +4,7 @@ import static referee.PlayerResult.WINNER;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import game.model.PrivateGameState;
+import game.model.PrivateState;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ public class XBad2 {
       mazeParser.readNext();
       List<IPlayer> badPlayerSpec2 = mazeParser.getPSBadPSAndBadPS2();
       mazeParser.readNext();
-      PrivateGameState game = mazeParser.getGameWithGoals();
+      PrivateState game = mazeParser.getGameWithGoals();
 
       List<IntegrationRefereePlayerInterface> intClients = new ArrayList<>();
       List<IPlayer> clients = new ArrayList<>();

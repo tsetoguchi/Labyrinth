@@ -26,7 +26,7 @@ import static referee.PlayerResult.*;
  */
 public class Referee implements IReferee {
 
-  private PrivateGameState game;
+  private PrivateState game;
   /**
    * Stores which client should be used to talk to each Player.
    **/
@@ -48,7 +48,7 @@ public class Referee implements IReferee {
    * order of players in the Game. Accepts an optional observer which will be updated as the game
    * progresses.
    */
-  public Referee(PrivateGameState game, List<IPlayer> players,
+  public Referee(PrivateState game, List<IPlayer> players,
       List<IObserver> observers) {
     this.game = game;
     this.playerAvatarToHandler = this.mapPlayerAvatarsToPlayerHandlers(game, players);
@@ -57,7 +57,7 @@ public class Referee implements IReferee {
     this.eliminated = new ArrayList<>();
   }
 
-  public Referee(PrivateGameState game, List<IPlayer> players) {
+  public Referee(PrivateState game, List<IPlayer> players) {
     this(game, players, List.of());
   }
 
@@ -99,7 +99,7 @@ public class Referee implements IReferee {
     for (int i = 0; i < uniqueColors.size(); i++) {
       playerAvatars.add(new PlayerAvatar(uniqueColors.get(i), goals.get(i), homes.get(i)));
     }
-    PrivateGameState game = new Game(board, playerAvatars);
+    PrivateState game = new Game(board, playerAvatars);
     this.game = game;
     this.playerAvatarToHandler = this.mapPlayerAvatarsToPlayerHandlers(game, players);
     this.playersCollectedTreasures = new ArrayList<>();
@@ -128,7 +128,7 @@ public class Referee implements IReferee {
         this.getNamesFromRefereePlayerInterfaces(this.eliminated));
   }
 
-  public void resume(PrivateGameState game, List<IPlayer> iPlayerInterfaces) {
+  public void resume(PrivateState game, List<IPlayer> iPlayerInterfaces) {
     this.playerAvatarToHandler = this.mapPlayerAvatarsToPlayerHandlers(game, iPlayerInterfaces);
     this.game = game;
     this.runGame();
@@ -397,7 +397,7 @@ public class Referee implements IReferee {
     }
   }
 
-  private Map<PlayerAvatar, PlayerHandler> mapPlayerAvatarsToPlayerHandlers(PrivateGameState game,
+  private Map<PlayerAvatar, PlayerHandler> mapPlayerAvatarsToPlayerHandlers(PrivateState game,
       List<IPlayer> IPlayers) {
     if (IPlayers.size() != game.getPlayerList().size()) {
       throw new IllegalArgumentException("Amount of clients and players do not match.");

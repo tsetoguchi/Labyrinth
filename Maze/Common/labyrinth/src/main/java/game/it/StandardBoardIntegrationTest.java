@@ -2,7 +2,7 @@ package game.it;
 
 import game.it.processing.IntegrationTestUtils;
 import protocol.serialization.MazeJsonParser;
-import protocol.serialization.MazeJsonSerializer;
+import protocol.serialization.JsonSerializer;
 import game.model.*;
 
 import java.io.IOException;
@@ -13,7 +13,7 @@ public class StandardBoardIntegrationTest {
     public static void executeTest() {
         try {
             MazeJsonParser mazeParser = new MazeJsonParser(System.in);
-            MazeJsonSerializer mazeSerializer = new MazeJsonSerializer();
+            JsonSerializer mazeSerializer = new JsonSerializer();
 
             Board board = mazeParser.getBoardNoSpareTile();
             mazeParser.readNext();

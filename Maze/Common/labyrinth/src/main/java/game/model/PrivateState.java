@@ -7,7 +7,7 @@ import java.util.Optional;
  * Represents a Game state with a full set of functionality that is needed to manage a Game.
  * This is mainly to be given to the Referee only.
  */
-public interface PrivateGameState {
+public interface PrivateState {
 
   GameStatus getGameStatus();
 

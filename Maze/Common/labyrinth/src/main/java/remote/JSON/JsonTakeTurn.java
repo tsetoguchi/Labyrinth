@@ -2,6 +2,7 @@ package remote.JSON;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import player.IPlayer;
 
 @JsonFormat(shape=JsonFormat.Shape.ARRAY)
 public class JsonTakeTurn {
@@ -10,7 +11,7 @@ public class JsonTakeTurn {
   private final String mName;
 
   @JsonProperty("Arguments")
-  private final JsonState[] arguments;
+  private final Object[] arguments;
 
   public JsonTakeTurn(@JsonProperty("Arguments") JsonState state) {
     this.mName = "take-turn";
@@ -18,8 +19,4 @@ public class JsonTakeTurn {
     this.arguments[0] = state;
   }
 
-
-  public JsonState getJsonState() {
-
-  }
 }
