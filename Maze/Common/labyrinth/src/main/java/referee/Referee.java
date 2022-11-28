@@ -10,13 +10,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
-
 import player.TurnPlan;
 import player.TurnWrapper;
 import player.IPlayer;
-
 import java.util.*;
-
 import static game.model.GameStatus.*;
 import static referee.PlayerResult.*;
 
@@ -30,7 +27,6 @@ public class Referee implements IReferee {
   /**
    * Stores which client should be used to talk to each Player.
    **/
-  //private Map<PlayerAvatar, PlayerClient> playerAvatarToClient;
   private Map<PlayerAvatar, PlayerHandler> playerAvatarToHandler;
   private final List<PlayerAvatar> playersCollectedTreasures;
 

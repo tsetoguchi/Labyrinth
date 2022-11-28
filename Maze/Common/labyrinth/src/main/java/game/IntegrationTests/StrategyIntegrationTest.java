@@ -1,6 +1,7 @@
 package game.IntegrationTests;
 
 import game.model.PrivateState;
+import org.json.JSONObject;
 import protocol.serialization.MazeJsonParser;
 import protocol.serialization.JsonSerializer;
 import game.model.Position;
@@ -38,5 +39,6 @@ public class StrategyIntegrationTest {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
     }
 }

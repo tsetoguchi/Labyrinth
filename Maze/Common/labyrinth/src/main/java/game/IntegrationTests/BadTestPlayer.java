@@ -26,18 +26,6 @@ public class BadTestPlayer implements IPlayer {
     }
 
 
-//  public TurnPlan takeTurn(PlayerGameProjection state) throws ArithmeticException {
-//
-//    if (this.badFM.equals(BadFM.TAKETURN)) {
-//      int i = 1 / 0;
-//    }
-//    else {
-//
-//    }
-//
-//    return null;
-//  }
-
     @Override
     public boolean win(boolean w) throws ArithmeticException {
 

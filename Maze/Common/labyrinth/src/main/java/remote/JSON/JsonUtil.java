@@ -5,8 +5,20 @@ import game.model.Tile;
 import game.model.projections.PlayerGameProjection;
 import game.model.projections.PublicPlayerProjection;
 import java.util.Optional;
+import java.util.Scanner;
+import org.json.JSONTokener;
 
 public class JsonUtil {
+
+
+  public static JSONTokener getInput() {
+    Scanner sc = new Scanner(System.in);
+    StringBuilder str = new StringBuilder();
+    while (sc.hasNext()) {
+      str.append(sc.next());
+    }
+    return new JSONTokener(str.toString());
+  }
 
   private static JsonPlayer[] getPlmtFromGame(PlayerGameProjection game) {
     JsonPlayer[] plmt = new JsonPlayer[game.getPlayers().size()];

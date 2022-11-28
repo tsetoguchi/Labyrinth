@@ -1,5 +1,6 @@
 package remote.client;
 
+import player.IPlayer;
 import player.Player;
 import player.RiemannStrategy;
 import remote.ProxyReferee;
@@ -16,14 +17,14 @@ import java.util.Optional;
 /**
  *
  */
-public class PlayerClient {
-    Player player;
+public class PlayerClient implements Runnable {
+    private final IPlayer player;
     private final InetAddress address;
     private final int port;
     PrintWriter out;
 
-    public PlayerClient(Player p, InetAddress address, int port) {
-        this.player = p;
+    public PlayerClient(IPlayer player, InetAddress address, int port) {
+        this.player = player;
         this.address = address;
         this.port = port;
     }
@@ -36,7 +37,7 @@ public class PlayerClient {
      * making all communication take place within it.
      */
     public void run() {
-        InetSocketAddress socketAddress = new InetSocketAddress(address, port);
+        InetSocketAddress socketAddress = new InetSocketAddress(this.address, this.port);
         Optional<Socket> socket = Optional.empty();
         while(socket.isEmpty()){
             try {
@@ -47,7 +48,7 @@ public class PlayerClient {
         }
 
         try {
-            ProxyReferee proxyRef = new ProxyReferee(socket.get(), player);
+            ProxyReferee proxyRef = new ProxyReferee(socket.get(), this.player);
             proxyRef.run();
         } catch(IOException e){
             throw new RuntimeException(e);
