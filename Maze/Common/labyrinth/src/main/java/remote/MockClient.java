@@ -1,10 +1,12 @@
-package remote;
+package remote.client;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+
+import remote.NetUtil;
 
 /**
  * A mock client used to test connections to the Server.
