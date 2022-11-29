@@ -2,12 +2,11 @@ package IntegrationTests;
 
 import game.Utils;
 import game.model.*;
-import game.model.projections.PlayerStateProjection;
+import game.model.projections.StateProjection;
 import player.IStrategy;
 import player.Turn;
 
 import java.util.*;
-import referee.PlayerResult;
 import player.IPlayer;
 
 /**
@@ -28,7 +27,7 @@ public class TestPlayer implements IPlayer {
     }
 
     @Override
-    public boolean setup(Optional<PlayerStateProjection> state, Position goal) {
+    public boolean setup(Optional<StateProjection> state, Position goal) {
         return true;
     }
 
@@ -44,20 +43,15 @@ public class TestPlayer implements IPlayer {
 
     }
 
-    @Override
-    public void informGameEnd(GameStatus status, PlayerResult result) {
-
-    }
-
 
     public String getPlayerName() {
         return null;
     }
 
 
-    public Optional<Turn> takeTurn(PlayerStateProjection game) {
-        return this.strategy.createTurnPlan(game.getBoard(), game.getSelf(),
-                game.getPreviousSlideAndInsert(), this.goal);
+    public Optional<Turn> takeTurn(StateProjection game) {
+        return this.strategy.createTurnPlan(, game.getBoard(),
+            this.goal);
     }
 
 

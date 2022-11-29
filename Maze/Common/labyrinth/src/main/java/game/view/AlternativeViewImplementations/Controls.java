@@ -1,7 +1,6 @@
 package game.view.AlternativeViewImplementations;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import game.model.projections.ObserverGameProjection;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;

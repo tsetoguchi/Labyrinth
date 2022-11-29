@@ -1,6 +1,5 @@
 package game.view.AlternativeViewImplementations;
 
-import game.model.projections.ObserverGameProjection;
 import java.awt.Color;
 import java.awt.GridBagLayout;
 import java.util.List;

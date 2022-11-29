@@ -2,7 +2,6 @@ package IntegrationTests;
 
 import game.Utils;
 import game.model.IState;
-import protocol.serialization.MazeJsonParser;
 import protocol.serialization.JsonSerializer;
 import game.model.Direction;
 import game.model.Position;

@@ -1,5 +1,6 @@
 package game.model;
 
+import game.model.projections.StateProjection;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,15 +12,13 @@ public interface IState {
 
   GameStatus getGameStatus();
 
-  PlayerAvatar getActivePlayer();
-
   IBoard getBoard();
 
   List<PlayerAvatar> getPlayerList();
 
   void moveActivePlayer(Position destination);
 
-  void kickActivePlayer();
+  StateProjection getStateProjection();
 
   void kickPlayer(PlayerAvatar player);
 

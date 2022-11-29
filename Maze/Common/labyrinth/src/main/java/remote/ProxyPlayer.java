@@ -2,7 +2,7 @@ package remote;
 
 import game.Exceptions.IllegalPlayerActionException;
 import game.model.*;
-import game.model.projections.PlayerStateProjection;
+import game.model.projections.StateProjection;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -43,12 +43,13 @@ public class ProxyPlayer implements IPlayer {
   }
 
   @Override
-  public Optional<Turn> takeTurn(PlayerStateProjection game) throws IllegalPlayerActionException {
+  public Optional<Turn> takeTurn(StateProjection game) throws IllegalPlayerActionException {
 
     // Converts call into JSON and sends it to the client
     String jsonState = JsonSerializer.stateProjectionToJson(game);
     this.out.print(jsonState);
 
+    String response = this.input.read();
     String response;
     // Wait for a response
     while (true) {
@@ -68,7 +69,7 @@ public class ProxyPlayer implements IPlayer {
   }
 
   @Override
-  public boolean setup(Optional<PlayerStateProjection> game, Position goal) {
+  public boolean setup(Optional<StateProjection> game, Position goal) {
 
     String json = this.serializer.generateSetupJson(game, goal);
     this.out.print(json);

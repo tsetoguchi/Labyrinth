@@ -1,19 +1,17 @@
 package game.model.projections;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import game.model.IBoard;
 import game.model.Position;
 import game.model.Tile;
-import protocol.serialization.model.ReadOnlyBoardProjectionSerializer;
 
 /**
  * A read-only projection of a board which can be used to view tiles.
  */
-@JsonSerialize(using = ReadOnlyBoardProjectionSerializer.class)
-public class ReadOnlyBoardProjection {
+
+public class BoardProjection {
     IBoard board;
 
-    public ReadOnlyBoardProjection(IBoard board) {
+    public BoardProjection(IBoard board) {
         this.board = board;
     }
 

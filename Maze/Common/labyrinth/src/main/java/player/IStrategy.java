@@ -1,10 +1,8 @@
 package player;
 
-import game.model.IBoard;
 import game.model.Position;
-import game.model.SlideAndInsertRecord;
 
-import game.model.projections.PublicPlayerProjection;
+import game.model.projections.StateProjection;
 import java.util.Optional;
 
 /**
@@ -18,7 +16,5 @@ public interface IStrategy {
    * includes all the actions the player wishes to take, prioritizing getting to the given goal if
    * possible. Returns Optional.empty() if the player wishes to pass.
    */
-  Optional<Turn> createTurnPlan(IBoard board,
-                                PublicPlayerProjection playerInformation,
-                                Optional<SlideAndInsertRecord> previousSlide, Position goal);
+  Optional<Turn> createTurnPlan(StateProjection state, Position goal);
 }

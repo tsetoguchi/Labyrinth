@@ -1,7 +1,6 @@
 package game.view;
 
-import game.model.projections.ObserverGameProjection;
-
+import game.model.projections.StateProjection;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -13,7 +12,7 @@ import java.util.Optional;
  */
 public class OldObserverView extends JFrame {
 
-  private ObserverGameProjection currentState;
+  private StateProjection currentState;
 
   private OldBoardView boardFrame;
   private JPanel spareTilePanel;
@@ -23,7 +22,7 @@ public class OldObserverView extends JFrame {
 
   private static final int CELL_SIDE_LEN = 80;
 
-  public OldObserverView(ObserverGameProjection currentState) {
+  public OldObserverView(StateProjection currentState) {
 
     this.setLayout(new GridBagLayout());
     this.currentState = currentState;
@@ -55,7 +54,7 @@ public class OldObserverView extends JFrame {
     this.setVisible(true);
   }
 
-  public void updateView(ObserverGameProjection newState) {
+  public void updateView(StateProjection newState) {
 //    System.out.println("Updating");
 //
     this.remove(this.boardFrame);

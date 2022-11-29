@@ -2,8 +2,8 @@ package remote.JSON;
 
 import game.model.SlideAndInsertRecord;
 import game.model.Tile;
-import game.model.projections.PlayerStateProjection;
-import game.model.projections.PublicPlayerProjection;
+import game.model.projections.StateProjection;
+import game.model.projections.PlayerProjection;
 import java.util.Optional;
 import java.util.Scanner;
 import org.json.JSONTokener;
@@ -20,17 +20,17 @@ public class JsonUtil {
     return new JSONTokener(str.toString());
   }
 
-  private static JsonPlayer[] getPlmtFromGame(PlayerStateProjection game) {
+  private static JsonPlayer[] getPlmtFromGame(StateProjection game) {
     JsonPlayer[] plmt = new JsonPlayer[game.getPlayers().size()];
     for (int i = 0; i < game.getPlayers().size(); i++) {
-      PublicPlayerProjection player = game.getPlayers().get(i);
+      PlayerProjection player = game.getPlayers().get(i);
       plmt[i] = new JsonPlayer(player.getAvatarPosition(), player.getHomePosition(),
           player.getColor());
     }
     return plmt;
   }
 
-  private static JsonTile getSpareTile(PlayerStateProjection game) {
+  private static JsonTile getSpareTile(StateProjection game) {
     Tile spare = game.getBoard().getSpareTile();
     JsonTile jsonSpareTile = new JsonTile(spare.toSymbol(),
         spare.getTreasure().getGems().get(0).withDashes(),
@@ -38,7 +38,7 @@ public class JsonUtil {
     return jsonSpareTile;
   }
 
-  public static JsonState getJsonState(PlayerStateProjection game) {
+  public static JsonState getJsonState(StateProjection game) {
 
     JsonBoard board = new JsonBoard(game.getBoard());
     JsonTile jsonSpareTile = getSpareTile(game);

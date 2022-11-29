@@ -4,6 +4,7 @@ import static game.model.Direction.*;
 import static game.model.GameStatus.*;
 
 import game.Exceptions.IllegalGameActionException;
+import game.model.projections.StateProjection;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -321,4 +322,14 @@ public class State implements IState {
       }
     }
   }
+
+  public StateProjection getStateProjection() {
+
+
+
+    new StateProjection()
+
+  }
+
+
 }

@@ -3,7 +3,7 @@ package game.referee.client;
 import game.model.IBoard;
 import game.model.Direction;
 import game.model.Position;
-import game.model.projections.PlayerStateProjection;
+import game.model.projections.StateProjection;
 import player.Turn;
 
 import java.util.Optional;
@@ -13,7 +13,7 @@ import java.util.Optional;
  */
 public class BadTestIPlayerInterface extends TestIPlayerInterface {
     @Override
-    public Optional<Turn> takeTurn(PlayerStateProjection game) {
+    public Optional<Turn> takeTurn(StateProjection game) {
         return Optional.of(new Turn(Direction.UP, 1, 0, new Position(8, 9)));
     }
 

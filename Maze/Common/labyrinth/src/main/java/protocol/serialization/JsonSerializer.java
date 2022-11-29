@@ -3,7 +3,6 @@ package protocol.serialization;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import game.model.Position;
-import game.model.projections.ObserverGameProjection;
 import player.Turn;
 
 import java.io.IOException;

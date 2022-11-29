@@ -2,7 +2,7 @@ package game.referee.client;
 
 import game.model.GameStatus;
 import game.model.Position;
-import game.model.projections.PlayerStateProjection;
+import game.model.projections.StateProjection;
 import referee.PlayerResult;
 import player.IPlayer;
 
@@ -41,7 +41,7 @@ public abstract class TestIPlayer implements IPlayer {
     }
 
     @Override
-    public boolean setup(Optional<PlayerStateProjection> game, Position goal) {
+    public boolean setup(Optional<StateProjection> game, Position goal) {
         return true;
     }
 

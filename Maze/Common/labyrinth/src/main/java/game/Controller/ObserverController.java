@@ -1,8 +1,8 @@
 package game.Controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import game.model.projections.ObserverGameProjection;
 
+import game.model.projections.StateProjection;
 import game.view.OldObserverView;
 import protocol.serialization.JsonSerializer;
 
@@ -23,9 +23,9 @@ public class ObserverController implements IObserver, ActionListener {
 
     private final OldObserverView view;
 
-    private Queue<ObserverGameProjection> nextStates;
+    private Queue<StateProjection> nextStates;
 
-    private ObserverGameProjection currentState;
+    private StateProjection currentState;
 
     private boolean gameOver;
 
@@ -33,7 +33,7 @@ public class ObserverController implements IObserver, ActionListener {
 
 
 
-    public ObserverController(ObserverGameProjection currentState) {
+    public ObserverController(StateProjection currentState) {
         this.currentState = currentState;
         this.gameOver = false;
 
@@ -48,8 +48,7 @@ public class ObserverController implements IObserver, ActionListener {
     /**
      * Accept a new state from the referee and add it to the queue of states that can be displayed.
      */
-    @Override
-    public void update(ObserverGameProjection newState) {
+    public void update(StateProjection newState) {
         this.nextStates.add(newState);
 //        this.view.enableNextButton(true);
     }

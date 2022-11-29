@@ -3,7 +3,7 @@ package remote.JSON;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import game.model.Position;
-import game.model.projections.PlayerStateProjection;
+import game.model.projections.StateProjection;
 
 import java.util.Optional;
 
@@ -19,15 +19,15 @@ public class JsonMethodSerializer {
     return this.mapper.writeValueAsString(new JsonWin(new boolean[] {win}));
   }
 
-  public String generateTakeTurnJson(PlayerStateProjection game) throws JsonProcessingException {
+  public String generateTakeTurnJson(StateProjection game) throws JsonProcessingException {
     JsonState jsonState = JsonUtil.getJsonState(game);
     return this.mapper.writeValueAsString(new JsonTakeTurn[]{new JsonTakeTurn(jsonState)});
   }
 
-  public String generateSetupJson(Optional<PlayerStateProjection> game, Position goal)
+  public String generateSetupJson(Optional<StateProjection> game, Position goal)
       throws JsonProcessingException {
 
-    PlayerStateProjection gameState = null;
+    StateProjection gameState = null;
 
     if (game.isPresent()) {
       gameState = game.get();

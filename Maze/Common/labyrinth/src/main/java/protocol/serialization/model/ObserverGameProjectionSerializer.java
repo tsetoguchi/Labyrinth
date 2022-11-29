@@ -3,8 +3,8 @@ package protocol.serialization.model;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import game.model.projections.ObserverGameProjection;
 
+import game.model.projections.PlayerProjection;
 import java.io.IOException;
 
 /**
@@ -25,7 +25,7 @@ public class ObserverGameProjectionSerializer extends StdSerializer<ObserverGame
         gen.writeStartObject();
         gen.writeObjectField("board", observerGameProjection.getBoard());
         gen.writeArrayFieldStart("players");
-        for (PublicPlayerProjection player : observerGameProjection.getPlayers()) {
+        for (PlayerProjection player : observerGameProjection.getPlayers()) {
             gen.writeObject(player);
         }
         gen.writeEndArray();

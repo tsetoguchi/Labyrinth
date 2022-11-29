@@ -11,7 +11,7 @@ import java.awt.*;
  * A read-only projection of a player which allows access to public information.
  */
 @JsonSerialize(using = PublicPlayerProjectionSerializer.class)
-public class PublicPlayerProjection {
+public class PlayerProjection {
 
     private final Position avatarPosition;
 
@@ -19,7 +19,7 @@ public class PublicPlayerProjection {
 
     private final Color color;
 
-    public PublicPlayerProjection(PlayerAvatar player) {
+    public PlayerProjection(PlayerAvatar player) {
         this.avatarPosition = player.getCurrentPosition();
         this.homePosition = player.getHome();
         this.color = player.getColor();

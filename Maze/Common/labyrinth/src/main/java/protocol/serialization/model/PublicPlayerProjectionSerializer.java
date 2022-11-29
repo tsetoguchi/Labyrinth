@@ -4,28 +4,28 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
-import game.model.projections.PublicPlayerProjection;
+import game.model.projections.PlayerProjection;
 import java.awt.*;
 import java.io.IOException;
 
 /**
  * JSON serialization class for PublicPlayerProjection.
  */
-public class PublicPlayerProjectionSerializer extends StdSerializer<PublicPlayerProjection> {
+public class PublicPlayerProjectionSerializer extends StdSerializer<PlayerProjection> {
     public PublicPlayerProjectionSerializer() {
         this(null);
     }
-    public PublicPlayerProjectionSerializer(Class<PublicPlayerProjection> t) {
+    public PublicPlayerProjectionSerializer(Class<PlayerProjection> t) {
         super(t);
     }
 
     @Override
-    public void serialize(PublicPlayerProjection publicPlayerProjection, JsonGenerator gen,
+    public void serialize(PlayerProjection playerProjection, JsonGenerator gen,
                           SerializerProvider serializerProvider) throws IOException {
         gen.writeStartObject();
-        gen.writeStringField("color", this.getColorString(publicPlayerProjection.getColor()));
-        gen.writeObjectField("home", publicPlayerProjection.getHomePosition());
-        gen.writeObjectField("avatar", publicPlayerProjection.getAvatarPosition());
+        gen.writeStringField("color", this.getColorString(playerProjection.getColor()));
+        gen.writeObjectField("home", playerProjection.getHomePosition());
+        gen.writeObjectField("avatar", playerProjection.getAvatarPosition());
         gen.writeEndObject();
     }
 

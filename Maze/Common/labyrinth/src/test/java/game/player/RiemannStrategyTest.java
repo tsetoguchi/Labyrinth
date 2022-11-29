@@ -2,7 +2,6 @@ package game.player;
 
 import game.model.*;
 import game.TestUtils;
-import game.model.projections.ExperimentationBoardProjection;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,8 +41,7 @@ public class RiemannStrategyTest {
         class AnonymousRiemannStrategy extends RiemannStrategy {
             public void testCandidateOrder() {
                 List<Position> candidatesInOrder = this.getCandidatesInOrder(experimentationUniformBoardView,
-                        experimentationUniformBoardView.getSpareTile(), publicPlayerProjection,
-                        publicPlayerProjection.getGoalPosition());
+                    publicPlayerProjection.getGoalPosition());
 
                 assertEquals(publicPlayerProjection.getGoalPosition(), candidatesInOrder.get(0));
                 int i = 1;
@@ -69,8 +67,9 @@ public class RiemannStrategyTest {
         PlayerAvatar playerSkip = new PlayerAvatar(Color.BLUE, new Position(3, 3),
                 new Position(4, 4));
         PublicPlayerProjection playerSkipView = new PublicPlayerProjection(playerSkip);
-        Optional<Turn> turnPlan = this.riemannStrategy.createTurnPlan(experimentationEmptyBoardView, playerSkipView,
-                Optional.empty(), new Position(4, 4));
+        Optional<Turn> turnPlan = this.riemannStrategy.createTurnPlan(,
+            experimentationEmptyBoardView,
+            new Position(4, 4));
         assertTrue(turnPlan.isEmpty());
     }
 
@@ -79,8 +78,9 @@ public class RiemannStrategyTest {
         PlayerAvatar player = new PlayerAvatar(Color.BLUE,
                 new Position(2, 2), new Position(2, 0));
         PublicPlayerProjection playerView = new PublicPlayerProjection(player);
-        Optional<Turn> turnPlan = this.riemannStrategy.createTurnPlan(experimentationUniformBoardView, playerView,
-                Optional.empty(), new Position(2, 2));
+        Optional<Turn> turnPlan = this.riemannStrategy.createTurnPlan(,
+            experimentationUniformBoardView,
+            new Position(2, 2));
         assertFalse(turnPlan.isEmpty());
         assertEquals(Direction.LEFT, turnPlan.get().getSlideDirection());
         assertEquals(0, turnPlan.get().getSlideIndex());
@@ -100,8 +100,8 @@ public class RiemannStrategyTest {
         colPlayer.setCurrentPosition(new Position(6, 0));
         PublicPlayerProjection colPlayerView = new PublicPlayerProjection(colPlayer);
 
-        Optional<Turn> turnPlan = riemannStrategy.createTurnPlan(experimentationBoardProjection, colPlayerView,
-                Optional.empty(), new Position(1, 1));
+        Optional<Turn> turnPlan = riemannStrategy.createTurnPlan(, experimentationBoardProjection,
+            new Position(1, 1));
 
         assertTrue(turnPlan.isPresent());
         assertEquals(RIGHT, turnPlan.get().getSlideDirection());
@@ -118,8 +118,8 @@ public class RiemannStrategyTest {
         bottomRightPlayer.setCurrentPosition(new Position(0, 3));
         PublicPlayerProjection bottomRightPlayerView = new PublicPlayerProjection(bottomRightPlayer);
 
-        Optional<Turn> turnPlanOpt = riemannStrategy.createTurnPlan(experimentationBoardProjection, bottomRightPlayerView,
-                Optional.of(new SlideAndInsertRecord(RIGHT, 0, 0)), new Position(0, 0));
+        Optional<Turn> turnPlanOpt = riemannStrategy.createTurnPlan(, experimentationBoardProjection,
+            new Position(0, 0));
         assertTrue(turnPlanOpt.isPresent());
         Turn turn = turnPlanOpt.get();
         assertEquals(RIGHT, turn.getSlideDirection());

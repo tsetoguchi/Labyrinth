@@ -1,7 +1,7 @@
 package game.referee.client;
 
 import game.model.IBoard;
-import game.model.projections.PlayerStateProjection;
+import game.model.projections.StateProjection;
 import player.IStrategy;
 import player.Turn;
 
@@ -18,9 +18,9 @@ public class StrategyTestRefereePlayerInterface extends TestIPlayer {
     }
 
     @Override
-    public Optional<Turn> takeTurn(PlayerStateProjection game) {
-        return this.strategy.createTurnPlan(game.getBoard(), game.getSelf(),
-                game.getPreviousSlideAndInsert(), this.getGoalPosition(game));
+    public Optional<Turn> takeTurn(StateProjection game) {
+        return this.strategy.createTurnPlan(, game.getBoard(),
+            this.getGoalPosition(game));
     }
 
     @Override

@@ -2,7 +2,8 @@ package player;
 
 import game.model.*;
 
-import game.model.projections.PublicPlayerProjection;
+import game.model.projections.PlayerProjection;
+import game.model.projections.StateProjection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -19,8 +20,7 @@ public abstract class AbstractStrategy implements IStrategy {
    * Gets all candidates to be considered in the desired order.
    */
   abstract protected List<Position> getCandidatesInOrder(IBoard board,
-                                                         Tile spareTile,
-                                                         PublicPlayerProjection playerInformation, Position goal);
+      Position goal);
 
   /**
    * Given the current board, spare tile, and player information, produces a plan for the turn which
@@ -28,19 +28,20 @@ public abstract class AbstractStrategy implements IStrategy {
    * possible. Returns Optional.empty() if the player wishes to pass.
    */
   @Override
-  public Optional<Turn> createTurnPlan(IBoard board,
-                                       PublicPlayerProjection playerInformation,
-                                       Optional<SlideAndInsertRecord> previousSlide, Position goal) {
-    for (Position candidate : this.getCandidatesInOrder(board, board.getSpareTile(),
-        playerInformation, goal)) {
-      Optional<Turn> planForCandidate =
-          this.createTurnPlanForCandidate(playerInformation.getAvatarPosition(), board, candidate,
-              previousSlide);
+  public Optional<Turn> createTurnPlan(StateProjection state, Position goal) {
+    IBoard board = state.getBoard();
+    PlayerProjection player = state.getSelf();
+    Optional<Turn> planForCandidate = Optional.empty();
+    for (Position candidate : this.getCandidatesInOrder(board,
+        goal)) {
+      planForCandidate =
+          this.createTurnPlanForCandidate(player.getAvatarPosition(), board, candidate,
+              state.getPreviousSlideAndInsert());
       if (planForCandidate.isPresent()) {
         return planForCandidate;
       }
     }
-    return Optional.empty();
+    return planForCandidate;
   }
 
   /**
@@ -48,8 +49,8 @@ public abstract class AbstractStrategy implements IStrategy {
    * Optional.empty() if it cannot find such a plan.
    */
   private Optional<Turn> createTurnPlanForCandidate(Position currentPosition,
-                                                    IBoard board, Position candidate,
-                                                    Optional<SlideAndInsertRecord> previousSlide) {
+      IBoard board, Position candidate,
+      Optional<SlideAndInsertRecord> previousSlide) {
     int boardHeight = board.getHeight();
     int boardWidth = board.getWidth();
 
@@ -82,10 +83,10 @@ public abstract class AbstractStrategy implements IStrategy {
   }
 
   private Optional<Turn> trySlide(IBoard board,
-                                  Direction direction, int index, int rotations,
-                                  Position currentPosition,
-                                  Position candidate,
-                                  Optional<SlideAndInsertRecord> previousSlide) {
+      Direction direction, int index, int rotations,
+      Position currentPosition,
+      Position candidate,
+      Optional<SlideAndInsertRecord> previousSlide) {
 
     boolean slideValid = board.getRules().isValidSlideAndInsert(direction, index, rotations);
     boolean reversesPrevious =
@@ -94,8 +95,9 @@ public abstract class AbstractStrategy implements IStrategy {
 
     if (slideValid && !reversesPrevious) {
       Set<Position> reachableTilePositionsAfterSlide =
-          board.findReachableTilePositionsAfterSlideAndInsert(direction, index, rotations,
-              currentPosition);
+          board.getExperimentationBoard()
+              .findReachableTilePositionsAfterSlideAndInsert(direction, index, rotations,
+                  currentPosition);
       if (reachableTilePositionsAfterSlide.contains(candidate)) {
         return Optional.of(new Turn(direction, index, rotations, candidate));
       }

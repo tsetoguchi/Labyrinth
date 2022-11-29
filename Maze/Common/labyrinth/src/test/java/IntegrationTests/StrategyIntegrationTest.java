@@ -1,10 +1,8 @@
 package IntegrationTests;
 
 import game.model.IState;
-import protocol.serialization.MazeJsonParser;
 import protocol.serialization.JsonSerializer;
 import game.model.Position;
-import game.model.projections.ExperimentationBoardProjection;
 import player.IStrategy;
 import player.Turn;
 
@@ -27,11 +25,9 @@ public class StrategyIntegrationTest {
             game.getPlayerList().set(0, mazeParser.createPlayerWithUpdatedGoal(game.getActivePlayer(),
                     goal));
 
-            Optional<Turn> turnPlan = strategy.createTurnPlan(
-                    new ExperimentationBoardProjection(game.getBoard().getExperimentationBoard()),
-                    new PublicPlayerProjection(game.getActivePlayer()),
-                    Optional.empty(),
-                    goal);
+            Optional<Turn> turnPlan = strategy.createTurnPlan(,
+                new ExperimentationBoardProjection(game.getBoard().getExperimentationBoard()),
+                goal);
             System.out.println(mazeSerializer.turnPlanToJson(turnPlan));
 
         } catch (IOException e) {

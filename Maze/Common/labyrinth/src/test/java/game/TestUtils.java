@@ -1,7 +1,6 @@
 package game;
 
 import game.model.*;
-import game.model.projections.ExperimentationBoardProjection;
 
 import static game.model.Direction.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -2,9 +2,7 @@ package player;
 
 import game.model.IBoard;
 import game.model.Position;
-import game.model.Tile;
 
-import game.model.projections.PublicPlayerProjection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,8 +17,7 @@ public class RiemannStrategy extends AbstractStrategy {
    */
   @Override
   protected List<Position> getCandidatesInOrder(IBoard board,
-                                                Tile spareTile,
-                                                PublicPlayerProjection playerInformation, Position goal) {
+      Position goal) {
     List<Position> candidates = new ArrayList<>();
     candidates.add(goal);
     for (int rowIndex = 0; rowIndex < board.getHeight(); rowIndex++) {

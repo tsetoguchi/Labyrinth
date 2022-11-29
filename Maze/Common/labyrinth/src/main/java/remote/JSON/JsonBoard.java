@@ -4,7 +4,6 @@ package remote.JSON;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import game.model.Position;
 import game.model.Tile;
-import game.model.projections.ExperimentationBoardProjection;
 
 public class JsonBoard {
 

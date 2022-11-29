@@ -3,7 +3,7 @@ package IntegrationTests;
 import game.model.IBoard;
 import game.model.GameStatus;
 import game.model.Position;
-import game.model.projections.PlayerStateProjection;
+import game.model.projections.StateProjection;
 import player.Turn;
 import referee.PlayerResult;
 
@@ -20,7 +20,7 @@ public class IntegrationPlayer implements IPlayer {
     }
 
     @Override
-    public Optional<Turn> takeTurn(PlayerStateProjection game) {
+    public Optional<Turn> takeTurn(StateProjection game) {
         return player.takeTurn(game);
     }
 
@@ -56,7 +56,7 @@ public class IntegrationPlayer implements IPlayer {
     }
 
     @Override
-    public boolean setup(Optional<PlayerStateProjection> game, Position goal) {
+    public boolean setup(Optional<StateProjection> game, Position goal) {
         return this.player.setup(game, goal);
     }
 

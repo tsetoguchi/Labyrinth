@@ -2,8 +2,8 @@ package game.view;
 
 import game.model.Position;
 import game.model.Tile;
-import game.model.projections.PublicPlayerProjection;
-import game.model.projections.ReadOnlyBoardProjection;
+import game.model.projections.PlayerProjection;
+import game.model.projections.BoardProjection;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,15 +13,15 @@ import java.util.List;
  * The JFrame component which displays a board and the objects populating it. Does not include the spare tile.
  */
 public class OldBoardView extends JPanel {
-    private ReadOnlyBoardProjection board;
-    private List<PublicPlayerProjection> players;
+    private BoardProjection board;
+    private List<PlayerProjection> players;
     private final OldTileView[][] tileGrid;
     private final int width;
     private final int height;
 
     private final int cellSideLen; // in pixels
 
-    public OldBoardView(ReadOnlyBoardProjection board, List<PublicPlayerProjection> players, int cellSideLen) {
+    public OldBoardView(BoardProjection board, List<PlayerProjection> players, int cellSideLen) {
         this.board = board;
         this.width = board.getWidth();
         this.height = board.getHeight();
@@ -71,7 +71,7 @@ public class OldBoardView extends JPanel {
      * Adds the color of a player's avatar and a player's home for each player to their corresponding tile.
      */
     private void addPlayersToTiles() {
-        for (PublicPlayerProjection player : this.players) {
+        for (PlayerProjection player : this.players) {
             int avatarRow = player.getAvatarPosition().getRow();
             int avatarCol = player.getAvatarPosition().getColumn();
             int homeRow = player.getHomePosition().getRow();

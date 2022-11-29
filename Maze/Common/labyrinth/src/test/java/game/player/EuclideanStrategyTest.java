@@ -2,7 +2,6 @@ package game.player;
 
 import game.TestUtils;
 import game.model.*;
-import game.model.projections.ExperimentationBoardProjection;
 
 import org.junit.jupiter.api.Test;
 import player.EuclideanStrategy;
@@ -65,8 +64,7 @@ public class EuclideanStrategyTest {
         public List<Position> getCandidatesInOrderExposed() {
 
             return this.getCandidatesInOrder(experimentationUniformBoardView,
-                    experimentationUniformBoardView.getSpareTile(), publicPlayerProjection,
-                    new Position(0,0));
+                new Position(0,0));
             //ToDo fix this!
         }
     }

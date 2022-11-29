@@ -14,7 +14,7 @@ public class StandardExperimentationIBoardTest {
 
     @BeforeEach
     public void setup() {
-        DefaultBoard defaultBoard = TestUtils.createUniformBoard(false, false, true, true,
+        Board defaultBoard = TestUtils.createUniformBoard(false, false, true, true,
                 TestUtils.makeTile(true, true, false, false,
                         TestUtils.makeTreasure(Gem.ammolite, Gem.labradorite)));
         exBoard = new DefaultExperimentationBoard(defaultBoard);

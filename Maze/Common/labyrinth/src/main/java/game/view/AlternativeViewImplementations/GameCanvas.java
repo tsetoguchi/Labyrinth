@@ -6,11 +6,10 @@ import static game.model.Direction.RIGHT;
 import static game.model.Direction.UP;
 
 import game.model.Gem;
+import game.model.IBoard;
 import game.model.Position;
 import game.model.Tile;
-import game.model.projections.ObserverGameProjection;
-import game.model.projections.PublicPlayerProjection;
-import game.model.projections.ReadOnlyBoardProjection;
+import game.model.projections.PlayerProjection;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -37,7 +36,7 @@ public class GameCanvas extends JPanel {
     this.currentState = 0;
     this.parameters = new Parameters(cellSize);
 
-    ReadOnlyBoardProjection board = this.getCurrentState().getBoard();
+    IBoard board = this.getCurrentState().getBoard();
     this.setBounds(this.getX(), this.getY(),
         board.getWidth() * cellSize,
         board.getHeight() * cellSize);
@@ -49,7 +48,7 @@ public class GameCanvas extends JPanel {
     return this.states.get(this.currentState);
   }
 
-  private List<PublicPlayerProjection> getPlayers() {
+  private List<PlayerProjection> getPlayers() {
     return this.getCurrentState().getPlayers();
   }
 
@@ -57,23 +56,23 @@ public class GameCanvas extends JPanel {
   public void paint(Graphics g) {
     super.paint(g);
 
-    List<PublicPlayerProjection> players = this.getPlayers();
+    List<PlayerProjection> players = this.getPlayers();
 
     for (int row = 0; row < this.getCurrentState().getHeight(); row++) {
       for (int col = 0; col < this.getCurrentState().getWidth(); col++) {
         Position position = new Position(row, col);
 
-        List<PublicPlayerProjection> homes = players.stream()
+        List<PlayerProjection> homes = players.stream()
             .filter(p -> p.getHomePosition().equals(position)).collect(
                 Collectors.toList());
 
-        List<PublicPlayerProjection> avatarPositions = players.stream()
+        List<PlayerProjection> avatarPositions = players.stream()
             .filter(p -> p.getAvatarPosition().equals(position)).collect(
                 Collectors.toList());
 
         Tile tile = this.getCurrentState().getBoard().getTileAt(position);
         List<Color> playersTileIsHome = new ArrayList<>();
-        for (PublicPlayerProjection player : homes) {
+        for (PlayerProjection player : homes) {
           playersTileIsHome.add(player.getColor());
         }
 
@@ -88,7 +87,7 @@ public class GameCanvas extends JPanel {
   }
 
   private void drawTile(Graphics2D g, Parameters p, Tile tile,
-      List<PublicPlayerProjection> homes, List<Color> homeColors) {
+      List<PlayerProjection> homes, List<Color> homeColors) {
     this.drawPathways(g, tile, p);
     this.drawGems(g, tile, p);
     this.drawAvatars(g, p);
@@ -145,7 +144,7 @@ public class GameCanvas extends JPanel {
   private void drawAvatars(Graphics g, Parameters p) {
     int i = 0;
     List<Color> avatars = new ArrayList<>();
-    for (PublicPlayerProjection player : this.getPlayers()) {
+    for (PlayerProjection player : this.getPlayers()) {
       avatars.add(player.getColor());
     }
     for (Color avatarColor : avatars) {

@@ -1,7 +1,6 @@
 package IntegrationTests;
 
 import game.Utils;
-import protocol.serialization.MazeJsonParser;
 import protocol.serialization.JsonSerializer;
 import game.model.*;
 

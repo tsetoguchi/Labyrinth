@@ -2,8 +2,6 @@ package IntegrationTests;
 
 import game.Controller.ObserverController;
 import game.model.IState;
-import game.model.projections.ObserverGameProjection;
-import protocol.serialization.MazeJsonParser;
 import protocol.serialization.JsonSerializer;
 
 import referee.Referee;

@@ -2,8 +2,7 @@ package referee;
 
 import game.Controller.IObserver;
 import game.model.*;
-import game.model.projections.ObserverGameProjection;
-import game.model.projections.PlayerStateProjection;
+import game.model.projections.StateProjection;
 
 import java.awt.Color;
 import java.util.concurrent.ExecutorService;
@@ -181,7 +180,7 @@ public class Referee implements IReferee {
     PlayerHandler playerHandler = this.playerAvatarToHandler.get(player);
     System.out.println(this.playerAvatarToHandler);
     Optional<Optional<Turn>> playerTurn = playerHandler.takeTurn(
-        new PlayerStateProjection(this.game, player, this.game.getPreviousSlideAndInsert()));
+        new StateProjection(this.game, player, this.game.getPreviousSlideAndInsert()));
 
     if (playerTurn.isEmpty()) {
       // Player timed out or has an exception
@@ -368,7 +367,7 @@ public class Referee implements IReferee {
     for (PlayerAvatar player : this.game.getPlayerList()) {
       PlayerHandler playerHandler = this.playerAvatarToHandler.get(player);
       Optional<Boolean> outcome = playerHandler.setup(Optional.of(
-          new PlayerStateProjection(this.game, player, this.game.getPreviousSlideAndInsert())),
+          new StateProjection(this.game, player, this.game.getPreviousSlideAndInsert())),
           player.getGoal());
 
       if (outcome.isEmpty()) {
@@ -383,7 +382,7 @@ public class Referee implements IReferee {
 
   private void informObserverOfState() {
     for (IObserver observer : this.observers) {
-      observer.update(new ObserverGameProjection(this.game));
+      observer.update(new StateProjection(this.game));
     }
   }
 
@@ -497,13 +496,13 @@ public class Referee implements IReferee {
       });
     }
 
-    public Optional<Optional<Turn>> takeTurn(PlayerStateProjection game) {
+    public Optional<Optional<Turn>> takeTurn(StateProjection game) {
       return this.timeoutExceptionHandler(() -> {
         return this.player.takeTurn(game);
       });
     }
 
-    public Optional<Boolean> setup(Optional<PlayerStateProjection> state, Position goal) {
+    public Optional<Boolean> setup(Optional<StateProjection> state, Position goal) {
       return this.timeoutExceptionHandler(() -> {
         return this.player.setup(state, goal);
       });

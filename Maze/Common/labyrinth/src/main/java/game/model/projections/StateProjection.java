@@ -1,5 +1,6 @@
 package game.model.projections;
 
+import game.model.ExperimentationBoard;
 import game.model.IBoard;
 import game.model.PlayerAvatar;
 import game.model.IState;
@@ -12,16 +13,16 @@ import java.util.Optional;
 /**
  * A read-only projection of the information available to a player about a state.
  */
-public class PlayerStateProjection {
-    private final IBoard board;
-    private final List<PublicPlayerProjection> players;
+public class StateProjection {
+    private final ExperimentationBoard board;
+    private final List<PlayerProjection> players;
     private final Optional<SlideAndInsertRecord> previousSlideAndInsert;
 
-    public PlayerStateProjection(IState game, PlayerAvatar viewer, Optional<SlideAndInsertRecord> previousSlideAndInsert) {
-        this.board = game.getBoard().deepCopy();
-        List<PublicPlayerProjection> playerViews = new ArrayList<>();
+    public StateProjection(IState game, PlayerAvatar viewer, Optional<SlideAndInsertRecord> previousSlideAndInsert) {
+        this.board = game.getBoard().getExperimentationBoard();
+        List<PlayerProjection> playerViews = new ArrayList<>();
         for (PlayerAvatar player : game.getPlayerList()) {
-            playerViews.add(new PublicPlayerProjection(player));
+            playerViews.add(new PlayerProjection(player));
         }
         this.players = playerViews;
         this.previousSlideAndInsert = previousSlideAndInsert;
@@ -31,11 +32,11 @@ public class PlayerStateProjection {
         return this.board;
     }
 
-    public List<PublicPlayerProjection> getPlayers() {
+    public List<PlayerProjection> getPlayers() {
         return this.players;
     }
 
-    public PublicPlayerProjection getSelf() {
+    public PlayerProjection getSelf() {
         return this.players.get(0);
     }
 

@@ -1,14 +1,10 @@
-package protocol.serialization;
+package IntegrationTests;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import IntegrationTests.BadFM;
-import IntegrationTests.BadTestPlayer;
-import IntegrationTests.BadTestPlayer2;
-import IntegrationTests.TestPlayer;
 import game.Utils;
 import game.model.*;
 import player.EuclideanStrategy;

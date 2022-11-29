@@ -11,7 +11,7 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 
-public abstract class AbstractBoard implements IBoard {
+public class Board implements IBoard {
 
   protected final Tile[][] tileGrid;
 
@@ -23,7 +23,7 @@ public abstract class AbstractBoard implements IBoard {
 
   protected final IRules rules;
 
-  public AbstractBoard(int width, int height, Tile[][] tileGrid, Tile spareTile, IRules rules) {
+  public Board(int width, int height, Tile[][] tileGrid, Tile spareTile, IRules rules) {
 
     // TODO: fix exception messages
     this.width = width;
@@ -42,10 +42,10 @@ public abstract class AbstractBoard implements IBoard {
     this.rules = rules;
   }
 
-  public AbstractBoard(int width, int height) {
+  public Board(int width, int height) {
     this.width = width;
     this.height = height;
-    this.rules = new FlexibleDefaultRules(width, height);
+    this.rules = new DefaultRules(width, height);
 
     Gem[] gemPoolArray = Gem.values();
     List<Gem> gemPool = List.of(gemPoolArray);
@@ -174,7 +174,8 @@ public abstract class AbstractBoard implements IBoard {
    */
   @Override
   public ExperimentationBoard getExperimentationBoard() {
-    return new DefaultExperimentationBoard(this);
+    IBoard copy = this.deepCopy();
+    return (ExperimentationBoard) copy;
   }
 
   @Override
@@ -197,7 +198,16 @@ public abstract class AbstractBoard implements IBoard {
     return this.rules;
   }
 
-  public abstract IBoard deepCopy();
+  public IBoard deepCopy() {
+    Tile[][] newGrid = new Tile[this.getHeight()][this.getWidth()];
+    for (int row = 0; row < newGrid.length; row++) {
+      for (int col = 0; col < newGrid[row].length; col++) {
+        newGrid[row][col] = (this.getTileAt(new Position(row, col)).deepCopy());
+      }
+    }
+    return new Board(this.width,
+        this.height, newGrid, this.spareTile.deepCopy(), this.rules);
+  }
 
 
   /**

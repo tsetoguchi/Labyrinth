@@ -1,7 +1,7 @@
 package game.referee.client;
 
 import game.model.IBoard;
-import game.model.projections.PlayerStateProjection;
+import game.model.projections.StateProjection;
 import player.Turn;
 
 import java.util.Optional;
@@ -17,7 +17,7 @@ public class ObsessiveTestIPlayerInterface extends TestIPlayerInterface {
     }
 
     @Override
-    public Optional<Turn> takeTurn(PlayerStateProjection game) {
+    public Optional<Turn> takeTurn(StateProjection game) {
         return Optional.of(this.plan);
     }
 

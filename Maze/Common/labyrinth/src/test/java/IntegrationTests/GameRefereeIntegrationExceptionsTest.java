@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import protocol.serialization.MazeJsonParser;
 import referee.Referee;
 import player.IPlayer;
 
