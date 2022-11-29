@@ -3,7 +3,7 @@ package referee;
 import game.Controller.IObserver;
 import game.model.*;
 import game.model.projections.ObserverGameProjection;
-import game.model.projections.PlayerGameProjection;
+import game.model.projections.PlayerStateProjection;
 
 import java.awt.Color;
 import java.util.concurrent.ExecutorService;
@@ -181,7 +181,7 @@ public class Referee implements IReferee {
     PlayerHandler playerHandler = this.playerAvatarToHandler.get(player);
     System.out.println(this.playerAvatarToHandler);
     Optional<Optional<Turn>> playerTurn = playerHandler.takeTurn(
-        new PlayerGameProjection(this.game, player, this.game.getPreviousSlideAndInsert()));
+        new PlayerStateProjection(this.game, player, this.game.getPreviousSlideAndInsert()));
 
     if (playerTurn.isEmpty()) {
       // Player timed out or has an exception
@@ -368,7 +368,7 @@ public class Referee implements IReferee {
     for (PlayerAvatar player : this.game.getPlayerList()) {
       PlayerHandler playerHandler = this.playerAvatarToHandler.get(player);
       Optional<Boolean> outcome = playerHandler.setup(Optional.of(
-          new PlayerGameProjection(this.game, player, this.game.getPreviousSlideAndInsert())),
+          new PlayerStateProjection(this.game, player, this.game.getPreviousSlideAndInsert())),
           player.getGoal());
 
       if (outcome.isEmpty()) {
@@ -497,13 +497,13 @@ public class Referee implements IReferee {
       });
     }
 
-    public Optional<Optional<Turn>> takeTurn(PlayerGameProjection game) {
+    public Optional<Optional<Turn>> takeTurn(PlayerStateProjection game) {
       return this.timeoutExceptionHandler(() -> {
         return this.player.takeTurn(game);
       });
     }
 
-    public Optional<Boolean> setup(Optional<PlayerGameProjection> state, Position goal) {
+    public Optional<Boolean> setup(Optional<PlayerStateProjection> state, Position goal) {
       return this.timeoutExceptionHandler(() -> {
         return this.player.setup(state, goal);
       });

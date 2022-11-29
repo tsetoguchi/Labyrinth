@@ -3,7 +3,6 @@ package game.player;
 import game.model.*;
 import game.TestUtils;
 import game.model.projections.ExperimentationBoardProjection;
-import game.model.projections.PublicPlayerAvatar;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +23,7 @@ public class RiemannStrategyTest {
     private ExperimentationBoardProjection experimentationUniformBoardView;
     private RiemannStrategy riemannStrategy;
     private PlayerAvatar player;
-    private PublicPlayerAvatar publicPlayerAvatar;
+    private PublicPlayerProjection publicPlayerProjection;
 
     @BeforeEach
     public void setup() {
@@ -34,7 +33,7 @@ public class RiemannStrategyTest {
         this.riemannStrategy = new RiemannStrategy();
         this.player = new PlayerAvatar(Color.BLUE, new Position(3, 5),
                 new Position(3, 5));
-        this.publicPlayerAvatar = new PublicPlayerAvatar(player);
+        this.publicPlayerProjection = new PublicPlayerProjection(player);
     }
 
     @Test
@@ -43,10 +42,10 @@ public class RiemannStrategyTest {
         class AnonymousRiemannStrategy extends RiemannStrategy {
             public void testCandidateOrder() {
                 List<Position> candidatesInOrder = this.getCandidatesInOrder(experimentationUniformBoardView,
-                        experimentationUniformBoardView.getSpareTile(), publicPlayerAvatar,
-                        publicPlayerAvatar.getGoalPosition());
+                        experimentationUniformBoardView.getSpareTile(), publicPlayerProjection,
+                        publicPlayerProjection.getGoalPosition());
 
-                assertEquals(publicPlayerAvatar.getGoalPosition(), candidatesInOrder.get(0));
+                assertEquals(publicPlayerProjection.getGoalPosition(), candidatesInOrder.get(0));
                 int i = 1;
                 for (int row = 0; row < experimentationUniformBoardView.getHeight(); row++) {
                     for (int col = 0; col < experimentationUniformBoardView.getWidth(); col++) {
@@ -69,7 +68,7 @@ public class RiemannStrategyTest {
         ExperimentationBoardProjection experimentationEmptyBoardView = new ExperimentationBoardProjection(experimentationDeadEndBoard);
         PlayerAvatar playerSkip = new PlayerAvatar(Color.BLUE, new Position(3, 3),
                 new Position(4, 4));
-        PublicPlayerAvatar playerSkipView = new PublicPlayerAvatar(playerSkip);
+        PublicPlayerProjection playerSkipView = new PublicPlayerProjection(playerSkip);
         Optional<Turn> turnPlan = this.riemannStrategy.createTurnPlan(experimentationEmptyBoardView, playerSkipView,
                 Optional.empty(), new Position(4, 4));
         assertTrue(turnPlan.isEmpty());
@@ -79,7 +78,7 @@ public class RiemannStrategyTest {
     public void testCanMoveToGoalAtStart() {
         PlayerAvatar player = new PlayerAvatar(Color.BLUE,
                 new Position(2, 2), new Position(2, 0));
-        PublicPlayerAvatar playerView = new PublicPlayerAvatar(player);
+        PublicPlayerProjection playerView = new PublicPlayerProjection(player);
         Optional<Turn> turnPlan = this.riemannStrategy.createTurnPlan(experimentationUniformBoardView, playerView,
                 Optional.empty(), new Position(2, 2));
         assertFalse(turnPlan.isEmpty());
@@ -99,7 +98,7 @@ public class RiemannStrategyTest {
         PlayerAvatar colPlayer = new PlayerAvatar(Color.RED,
                 new Position(1, 1), new Position(1, 3));
         colPlayer.setCurrentPosition(new Position(6, 0));
-        PublicPlayerAvatar colPlayerView = new PublicPlayerAvatar(colPlayer);
+        PublicPlayerProjection colPlayerView = new PublicPlayerProjection(colPlayer);
 
         Optional<Turn> turnPlan = riemannStrategy.createTurnPlan(experimentationBoardProjection, colPlayerView,
                 Optional.empty(), new Position(1, 1));
@@ -117,7 +116,7 @@ public class RiemannStrategyTest {
         PlayerAvatar bottomRightPlayer = new PlayerAvatar(Color.BLUE,
                 new Position(1, 1), new Position(5, 5));
         bottomRightPlayer.setCurrentPosition(new Position(0, 3));
-        PublicPlayerAvatar bottomRightPlayerView = new PublicPlayerAvatar(bottomRightPlayer);
+        PublicPlayerProjection bottomRightPlayerView = new PublicPlayerProjection(bottomRightPlayer);
 
         Optional<Turn> turnPlanOpt = riemannStrategy.createTurnPlan(experimentationBoardProjection, bottomRightPlayerView,
                 Optional.of(new SlideAndInsertRecord(RIGHT, 0, 0)), new Position(0, 0));

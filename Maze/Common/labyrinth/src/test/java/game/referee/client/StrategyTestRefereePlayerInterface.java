@@ -1,9 +1,7 @@
 package game.referee.client;
 
 import game.model.IBoard;
-import game.model.Position;
-import game.model.projections.PlayerGameProjection;
-import game.model.projections.PublicPlayerAvatar;
+import game.model.projections.PlayerStateProjection;
 import player.IStrategy;
 import player.Turn;
 
@@ -20,7 +18,7 @@ public class StrategyTestRefereePlayerInterface extends TestIPlayer {
     }
 
     @Override
-    public Optional<Turn> takeTurn(PlayerGameProjection game) {
+    public Optional<Turn> takeTurn(PlayerStateProjection game) {
         return this.strategy.createTurnPlan(game.getBoard(), game.getSelf(),
                 game.getPreviousSlideAndInsert(), this.getGoalPosition(game));
     }
@@ -30,13 +28,13 @@ public class StrategyTestRefereePlayerInterface extends TestIPlayer {
         return null;
     }
 
-    private Position getGoalPosition(PlayerGameProjection game) {
-        PublicPlayerAvatar self = game.getSelf();
-        if (self.hasReachedGoal()) {
-            return self.getHomePosition();
-        }
-        else {
-            return self.getGoalPosition();
-        }
-    }
+//    private Position getGoalPosition(PlayerStateProjection game) {
+//        PublicPlayerProjection self = game.getSelf();
+//        if (self.hasReachedGoal()) {
+//            return self.getHomePosition();
+//        }
+//        else {
+//            return self.getGoalPosition();
+//        }
+//    }
 }

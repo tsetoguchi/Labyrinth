@@ -5,7 +5,6 @@ import game.model.Tile;
 import game.model.projections.PublicPlayerProjection;
 import game.model.projections.ReadOnlyBoardProjection;
 
-import java.lang.reflect.Parameter;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;

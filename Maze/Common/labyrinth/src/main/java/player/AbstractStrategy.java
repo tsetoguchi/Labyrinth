@@ -1,9 +1,8 @@
 package player;
 
 import game.model.*;
-import game.model.projections.ExperimentationBoardProjection;
-import game.model.projections.PublicPlayerAvatar;
 
+import game.model.projections.PublicPlayerProjection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -21,7 +20,7 @@ public abstract class AbstractStrategy implements IStrategy {
    */
   abstract protected List<Position> getCandidatesInOrder(IBoard board,
                                                          Tile spareTile,
-                                                         PublicPlayerAvatar playerInformation, Position goal);
+                                                         PublicPlayerProjection playerInformation, Position goal);
 
   /**
    * Given the current board, spare tile, and player information, produces a plan for the turn which
@@ -30,7 +29,7 @@ public abstract class AbstractStrategy implements IStrategy {
    */
   @Override
   public Optional<Turn> createTurnPlan(IBoard board,
-                                       PublicPlayerAvatar playerInformation,
+                                       PublicPlayerProjection playerInformation,
                                        Optional<SlideAndInsertRecord> previousSlide, Position goal) {
     for (Position candidate : this.getCandidatesInOrder(board, board.getSpareTile(),
         playerInformation, goal)) {

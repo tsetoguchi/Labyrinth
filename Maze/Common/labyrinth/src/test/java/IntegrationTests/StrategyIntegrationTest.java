@@ -5,7 +5,6 @@ import protocol.serialization.MazeJsonParser;
 import protocol.serialization.JsonSerializer;
 import game.model.Position;
 import game.model.projections.ExperimentationBoardProjection;
-import game.model.projections.PublicPlayerAvatar;
 import player.IStrategy;
 import player.Turn;
 
@@ -30,7 +29,7 @@ public class StrategyIntegrationTest {
 
             Optional<Turn> turnPlan = strategy.createTurnPlan(
                     new ExperimentationBoardProjection(game.getBoard().getExperimentationBoard()),
-                    new PublicPlayerAvatar(game.getActivePlayer()),
+                    new PublicPlayerProjection(game.getActivePlayer()),
                     Optional.empty(),
                     goal);
             System.out.println(mazeSerializer.turnPlanToJson(turnPlan));

@@ -1,7 +1,7 @@
 package player;
 
 import game.model.*;
-import game.model.projections.PlayerGameProjection;
+import game.model.projections.PlayerStateProjection;
 
 import java.util.Optional;
 
@@ -28,13 +28,13 @@ public class Player implements IPlayer {
     }
 
     @Override
-    public boolean setup(Optional<PlayerGameProjection> state, Position goal) {
+    public boolean setup(Optional<PlayerStateProjection> state, Position goal) {
         this.destination = goal;
         return true;
     }
 
     @Override
-    public Optional<Turn> takeTurn(PlayerGameProjection game) {
+    public Optional<Turn> takeTurn(PlayerStateProjection game) {
         return this.strategy.createTurnPlan(game.getBoard(), game.getSelf(),
                 game.getPreviousSlideAndInsert(), this.destination);
     }

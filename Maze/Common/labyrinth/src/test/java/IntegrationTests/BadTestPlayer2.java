@@ -2,7 +2,7 @@ package IntegrationTests;
 
 import game.Utils;
 import game.model.Position;
-import game.model.projections.PlayerGameProjection;
+import game.model.projections.PlayerStateProjection;
 import java.util.Optional;
 import player.IStrategy;
 import player.Turn;
@@ -39,7 +39,7 @@ public class BadTestPlayer2 extends BadTestPlayer {
    * turn.
    */
   @Override
-  public Optional<Turn> takeTurn(PlayerGameProjection game) throws ArithmeticException {
+  public Optional<Turn> takeTurn(PlayerStateProjection game) throws ArithmeticException {
     this.takeTurnCount++;
 
     if (this.badFM.equals(BadFM.TAKETURN) && this.takeTurnCount == this.count) {
@@ -47,11 +47,11 @@ public class BadTestPlayer2 extends BadTestPlayer {
     }
 
     return this.strategy.createTurnPlan(game.getBoard(), game.getSelf(),
-        game.getPreviousSlideAndInsert(), Utils.getCurrentGoal(game.getSelf()));
+        game.getPreviousSlideAndInsert(), this.goal);
   }
 
   @Override
-  public boolean setup(Optional<PlayerGameProjection> state, Position goal)
+  public boolean setup(Optional<PlayerStateProjection> state, Position goal)
       throws ArithmeticException {
     this.setupCount++;
 

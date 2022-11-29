@@ -2,7 +2,7 @@ package remote.JSON;
 
 import game.model.SlideAndInsertRecord;
 import game.model.Tile;
-import game.model.projections.PlayerGameProjection;
+import game.model.projections.PlayerStateProjection;
 import game.model.projections.PublicPlayerProjection;
 import java.util.Optional;
 import java.util.Scanner;
@@ -20,7 +20,7 @@ public class JsonUtil {
     return new JSONTokener(str.toString());
   }
 
-  private static JsonPlayer[] getPlmtFromGame(PlayerGameProjection game) {
+  private static JsonPlayer[] getPlmtFromGame(PlayerStateProjection game) {
     JsonPlayer[] plmt = new JsonPlayer[game.getPlayers().size()];
     for (int i = 0; i < game.getPlayers().size(); i++) {
       PublicPlayerProjection player = game.getPlayers().get(i);
@@ -30,7 +30,7 @@ public class JsonUtil {
     return plmt;
   }
 
-  private static JsonTile getSpareTile(PlayerGameProjection game) {
+  private static JsonTile getSpareTile(PlayerStateProjection game) {
     Tile spare = game.getBoard().getSpareTile();
     JsonTile jsonSpareTile = new JsonTile(spare.toSymbol(),
         spare.getTreasure().getGems().get(0).withDashes(),
@@ -38,7 +38,7 @@ public class JsonUtil {
     return jsonSpareTile;
   }
 
-  public static JsonState getJsonState(PlayerGameProjection game) {
+  public static JsonState getJsonState(PlayerStateProjection game) {
 
     JsonBoard board = new JsonBoard(game.getBoard());
     JsonTile jsonSpareTile = getSpareTile(game);

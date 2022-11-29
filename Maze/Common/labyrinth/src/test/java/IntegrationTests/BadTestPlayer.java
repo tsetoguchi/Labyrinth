@@ -4,7 +4,7 @@ import game.Utils;
 import game.model.IBoard;
 import game.model.GameStatus;
 import game.model.Position;
-import game.model.projections.PlayerGameProjection;
+import game.model.projections.PlayerStateProjection;
 
 import java.util.Optional;
 
@@ -19,6 +19,7 @@ public class BadTestPlayer implements IPlayer {
     private final String name;
     protected final BadFM badFM;
 
+    private final Position goal;
     public BadTestPlayer(String name, IStrategy strategy, BadFM badFM) {
         this.strategy = strategy;
         this.name = name;
@@ -37,7 +38,7 @@ public class BadTestPlayer implements IPlayer {
     }
 
     @Override
-    public boolean setup(Optional<PlayerGameProjection> state, Position goal)
+    public boolean setup(Optional<PlayerStateProjection> state, Position goal)
             throws ArithmeticException {
         if (this.badFM.equals(BadFM.SETUP)) {
             if (1 / 0 == 1);
@@ -76,14 +77,14 @@ public class BadTestPlayer implements IPlayer {
      * @param game
      */
     @Override
-    public Optional<Turn> takeTurn(PlayerGameProjection game) throws ArithmeticException {
+    public Optional<Turn> takeTurn(PlayerStateProjection game) throws ArithmeticException {
 
         if (this.badFM.equals(BadFM.TAKETURN)) {
             if (1 / 0 == 1);
         }
 
         return this.strategy.createTurnPlan(game.getBoard(), game.getSelf(),
-                game.getPreviousSlideAndInsert(), Utils.getCurrentGoal(game.getSelf()));
+                game.getPreviousSlideAndInsert(), this.goal);
     }
 
 

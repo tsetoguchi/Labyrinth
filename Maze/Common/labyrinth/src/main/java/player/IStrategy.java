@@ -3,9 +3,8 @@ package player;
 import game.model.IBoard;
 import game.model.Position;
 import game.model.SlideAndInsertRecord;
-import game.model.projections.ExperimentationBoardProjection;
-import game.model.projections.PublicPlayerAvatar;
 
+import game.model.projections.PublicPlayerProjection;
 import java.util.Optional;
 
 /**
@@ -20,6 +19,6 @@ public interface IStrategy {
    * possible. Returns Optional.empty() if the player wishes to pass.
    */
   Optional<Turn> createTurnPlan(IBoard board,
-                                PublicPlayerAvatar playerInformation,
+                                PublicPlayerProjection playerInformation,
                                 Optional<SlideAndInsertRecord> previousSlide, Position goal);
 }

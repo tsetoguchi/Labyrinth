@@ -10,22 +10,20 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * A read-only projection of the information available to a player about a game.
+ * A read-only projection of the information available to a player about a state.
  */
-public class PlayerGameProjection {
+public class PlayerStateProjection {
     private final IBoard board;
     private final List<PublicPlayerProjection> players;
-    private final PublicPlayerAvatar self;
     private final Optional<SlideAndInsertRecord> previousSlideAndInsert;
 
-    public PlayerGameProjection(IState game, PlayerAvatar viewer, Optional<SlideAndInsertRecord> previousSlideAndInsert) {
+    public PlayerStateProjection(IState game, PlayerAvatar viewer, Optional<SlideAndInsertRecord> previousSlideAndInsert) {
         this.board = game.getBoard().deepCopy();
         List<PublicPlayerProjection> playerViews = new ArrayList<>();
         for (PlayerAvatar player : game.getPlayerList()) {
             playerViews.add(new PublicPlayerProjection(player));
         }
         this.players = playerViews;
-        this.self = new PublicPlayerAvatar(viewer);
         this.previousSlideAndInsert = previousSlideAndInsert;
     }
 
@@ -37,8 +35,8 @@ public class PlayerGameProjection {
         return this.players;
     }
 
-    public PublicPlayerAvatar getSelf() {
-        return this.self;
+    public PublicPlayerProjection getSelf() {
+        return this.players.get(0);
     }
 
     public Optional<SlideAndInsertRecord> getPreviousSlideAndInsert() {

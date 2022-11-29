@@ -1,7 +1,7 @@
 package game.referee.client;
 
 import game.model.IBoard;
-import game.model.projections.PlayerGameProjection;
+import game.model.projections.PlayerStateProjection;
 import player.Turn;
 
 import java.util.Optional;
@@ -11,7 +11,7 @@ import java.util.Optional;
  */
 public class BoredTestIPlayerInterface extends TestIPlayerInterface {
     @Override
-    public Optional<Turn> takeTurn(PlayerGameProjection game) {
+    public Optional<Turn> takeTurn(PlayerStateProjection game) {
         return Optional.empty();
     }
 

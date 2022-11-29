@@ -3,7 +3,6 @@ package game.player;
 import game.TestUtils;
 import game.model.*;
 import game.model.projections.ExperimentationBoardProjection;
-import game.model.projections.PublicPlayerAvatar;
 
 import org.junit.jupiter.api.Test;
 import player.EuclideanStrategy;
@@ -20,7 +19,7 @@ public class EuclideanStrategyTest {
     private ExperimentationBoardProjection experimentationUniformBoardView;
     private RiemannStrategy riemannStrategy;
     private PlayerAvatar player;
-    private PublicPlayerAvatar publicPlayerAvatar;
+    private PublicPlayerProjection publicPlayerProjection;
 
     public void setup() {
         this.uniformBoard = TestUtils.createUniformBoard(false, false, true, true);
@@ -29,7 +28,7 @@ public class EuclideanStrategyTest {
         this.riemannStrategy = new RiemannStrategy();
         this.player = new PlayerAvatar(Color.BLUE, new Position(3, 5),
                 new Position(1, 1));
-        this.publicPlayerAvatar = new PublicPlayerAvatar(player);
+        this.publicPlayerProjection = new PublicPlayerProjection(player);
     }
 
     @Test
@@ -66,7 +65,7 @@ public class EuclideanStrategyTest {
         public List<Position> getCandidatesInOrderExposed() {
 
             return this.getCandidatesInOrder(experimentationUniformBoardView,
-                    experimentationUniformBoardView.getSpareTile(), publicPlayerAvatar,
+                    experimentationUniformBoardView.getSpareTile(), publicPlayerProjection,
                     new Position(0,0));
             //ToDo fix this!
         }

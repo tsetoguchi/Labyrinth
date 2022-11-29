@@ -4,8 +4,6 @@ import game.model.*;
 
 import java.util.*;
 
-import game.model.projections.PublicPlayerAvatar;
-
 import static game.model.Direction.*;
 
 public class Utils {
@@ -85,12 +83,6 @@ public class Utils {
         return new Treasure(gems);
     }
 
-    public static Position getCurrentGoal(PublicPlayerAvatar playerInformation) {
-        if (playerInformation.hasReachedGoal()) {
-            return playerInformation.getHomePosition();
-        }
-        return playerInformation.getGoalPosition();
-    }
 
     public static Tile[][] generateRandomTileGrid() {
         Tile[][] tileGrid = new Tile[7][7];

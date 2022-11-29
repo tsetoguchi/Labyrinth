@@ -2,12 +2,13 @@ package remote;
 
 import game.Exceptions.IllegalPlayerActionException;
 import game.model.*;
-import game.model.projections.PlayerGameProjection;
+import game.model.projections.PlayerStateProjection;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
+import player.IPlayer;
 import player.Turn;
 import protocol.serialization.JsonSerializer;
 import referee.PlayerResult;
@@ -23,13 +24,10 @@ import java.util.Optional;
  * JSON, sending and receiving new JSON, and deserialize the new JSON back into a model data
  * representation.
  */
-public class ProxyPlayer implements RefereePlayerInterface {
+public class ProxyPlayer implements IPlayer {
 
   private final Socket client;
   private String playerName;
-  private final JsonSerializer mazeSerializer;
-
-  private final MethodJsonSerializer serializer;
 
   private final PrintWriter out;
 
@@ -37,22 +35,19 @@ public class ProxyPlayer implements RefereePlayerInterface {
 
 
   public ProxyPlayer(Socket client, String playerName) throws IOException {
-    //System.out.println("Proxy player: " + playerName);
     this.client = client;
     this.playerName = playerName;
-    this.mazeSerializer = new JsonSerializer();
-    this.serializer = new MethodJsonSerializer();
 
     this.out = new PrintWriter(client.getOutputStream(), true);
     this.input = new BufferedReader(new InputStreamReader(client.getInputStream()));
   }
 
   @Override
-  public Optional<Turn> takeTurn(PlayerGameProjection game) throws IllegalPlayerActionException {
+  public Optional<Turn> takeTurn(PlayerStateProjection game) throws IllegalPlayerActionException {
 
     // Converts call into JSON and sends it to the client
-    String json = this.serializer.generateTakeTurnJson(game);
-    this.out.print(json);
+    String jsonState = JsonSerializer.stateProjectionToJson(game);
+    this.out.print(jsonState);
 
     String response;
     // Wait for a response
@@ -73,7 +68,7 @@ public class ProxyPlayer implements RefereePlayerInterface {
   }
 
   @Override
-  public boolean setup(Optional<PlayerGameProjection> game, Position goal) {
+  public boolean setup(Optional<PlayerStateProjection> game, Position goal) {
 
     String json = this.serializer.generateSetupJson(game, goal);
     this.out.print(json);
