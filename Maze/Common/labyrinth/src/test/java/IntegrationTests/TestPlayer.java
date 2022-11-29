@@ -1,8 +1,11 @@
 package IntegrationTests;
 
-import game.Utils;
-import game.model.*;
-import game.model.projections.StateProjection;
+import model.Utils;
+import model.model.*;
+import model.board.Gem;
+import model.board.IBoard;
+import model.board.Tile;
+import model.projections.StateProjection;
 import player.IStrategy;
 import player.Turn;
 

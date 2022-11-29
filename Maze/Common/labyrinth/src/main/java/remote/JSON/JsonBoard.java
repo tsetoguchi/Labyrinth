@@ -2,8 +2,8 @@ package remote.JSON;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import game.model.Position;
-import game.model.Tile;
+import model.Position;
+import model.board.Tile;
 
 public class JsonBoard {
 

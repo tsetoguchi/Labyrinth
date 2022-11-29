@@ -1,8 +1,8 @@
 //package game.referee.client;
 //
-//import game.model.GameStatus;
-//import game.model.Position;
-//import game.model.projections.PlayerStateProjection;
+//import game.state.GameStatus;
+//import game.Position;
+//import game.projections.PlayerStateProjection;
 //import referee.PlayerResult;
 //
 //

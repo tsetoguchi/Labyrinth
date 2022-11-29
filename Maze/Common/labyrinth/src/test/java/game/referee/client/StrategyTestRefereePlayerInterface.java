@@ -1,7 +1,7 @@
-package game.referee.client;
+package model.referee.client;
 
-import game.model.IBoard;
-import game.model.projections.StateProjection;
+import model.board.IBoard;
+import model.projections.StateProjection;
 import player.IStrategy;
 import player.Turn;
 

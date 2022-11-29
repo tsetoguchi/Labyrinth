@@ -1,8 +1,12 @@
-package game.referee;
+package model.referee;
 
-import game.TestUtils;
-import game.model.*;
-import game.referee.client.*;
+import model.TestUtils;
+import model.model.*;
+import model.board.Direction;
+import model.state.GameStatus;
+import model.state.PlayerAvatar;
+import model.state.State;
+import model.referee.client.*;
 import org.junit.jupiter.api.Test;
 import player.EuclideanStrategy;
 import player.RiemannStrategy;

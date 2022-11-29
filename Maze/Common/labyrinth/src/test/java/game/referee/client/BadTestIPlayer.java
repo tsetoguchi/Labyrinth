@@ -1,9 +1,9 @@
-package game.referee.client;
+package model.referee.client;
 
-import game.model.IBoard;
-import game.model.Direction;
-import game.model.Position;
-import game.model.projections.StateProjection;
+import model.board.IBoard;
+import model.board.Direction;
+import model.model.Position;
+import model.projections.StateProjection;
 import player.Turn;
 
 import java.util.Optional;

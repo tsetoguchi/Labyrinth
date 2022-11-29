@@ -1,11 +1,15 @@
-package game.model;
+package model.model;
 
-import game.TestUtils;
+import model.TestUtils;
+import model.board.Gem;
+import model.board.Tile;
+import model.board.Treasure;
+
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;
 
-import static game.model.Direction.*;
+import static model.board.Direction.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TileTest {

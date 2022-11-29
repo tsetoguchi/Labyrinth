@@ -1,8 +1,8 @@
 package IntegrationTests;
 
-import game.model.IState;
+import model.state.IState;
 import protocol.serialization.JsonSerializer;
-import game.model.Position;
+import model.model.Position;
 import player.IStrategy;
 import player.Turn;
 

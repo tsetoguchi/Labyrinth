@@ -1,7 +1,7 @@
 package remote.JSON;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import game.model.Position;
+import model.Position;
 
 @JsonFormat(shape=JsonFormat.Shape.ARRAY)
 public class JsonSetup {

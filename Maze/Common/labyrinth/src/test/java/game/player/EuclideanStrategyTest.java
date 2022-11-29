@@ -1,9 +1,12 @@
-package game.player;
+package model.player;
 
-import game.TestUtils;
-import game.model.*;
+import model.TestUtils;
+import model.model.*;
 
 import org.junit.jupiter.api.Test;
+
+import model.board.ExperimentationBoard;
+import model.state.PlayerAvatar;
 import player.EuclideanStrategy;
 import player.RiemannStrategy;
 

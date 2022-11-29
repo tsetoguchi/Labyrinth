@@ -1,9 +1,9 @@
 package remote.JSON;
 
-import game.model.SlideAndInsertRecord;
-import game.model.Tile;
-import game.model.projections.StateProjection;
-import game.model.projections.PlayerProjection;
+import model.state.SlideAndInsertRecord;
+import model.board.Tile;
+import model.projections.StateProjection;
+import model.projections.PlayerProjection;
 import java.util.Optional;
 import java.util.Scanner;
 import org.json.JSONTokener;
@@ -24,7 +24,7 @@ public class JsonUtil {
     JsonPlayer[] plmt = new JsonPlayer[game.getPlayers().size()];
     for (int i = 0; i < game.getPlayers().size(); i++) {
       PlayerProjection player = game.getPlayers().get(i);
-      plmt[i] = new JsonPlayer(player.getAvatarPosition(), player.getHomePosition(),
+      plmt[i] = new JsonPlayer(player.getCurrentPosition(), player.getHomePosition(),
           player.getColor());
     }
     return plmt;

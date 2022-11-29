@@ -1,14 +1,18 @@
-package game.player;
+package model.player;
 
-import game.model.*;
-import game.TestUtils;
+import model.model.*;
+import model.TestUtils;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
+
+import model.board.Direction;
+import model.board.ExperimentationBoard;
+import model.state.PlayerAvatar;
 import player.RiemannStrategy;
 import player.Turn;
 
-import static game.model.Direction.RIGHT;
+import static model.board.Direction.RIGHT;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.awt.*;

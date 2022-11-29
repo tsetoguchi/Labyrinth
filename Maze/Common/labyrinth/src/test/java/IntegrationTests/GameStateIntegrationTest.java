@@ -1,10 +1,10 @@
 package IntegrationTests;
 
-import game.Utils;
-import game.model.IState;
+import model.Utils;
+import model.state.IState;
 import protocol.serialization.JsonSerializer;
-import game.model.Direction;
-import game.model.Position;
+import model.board.Direction;
+import model.model.Position;
 
 import java.io.IOException;
 import java.util.List;

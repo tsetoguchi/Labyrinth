@@ -1,7 +1,7 @@
 package remote;
 
-import game.model.GameResults;
-import game.model.IState;
+import model.state.GameResults;
+import model.state.IState;
 import referee.IReferee;
 import referee.Referee;
 import player.IPlayer;

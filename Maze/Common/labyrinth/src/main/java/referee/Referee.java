@@ -1,8 +1,6 @@
 package referee;
 
-import game.Controller.IObserver;
-import game.model.*;
-import game.model.projections.StateProjection;
+import model.Position;
 
 import java.awt.Color;
 import java.util.concurrent.ExecutorService;
@@ -10,11 +8,22 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
+import model.board.Direction;
+import model.board.ExperimentationBoard;
+import model.board.IBoard;
+import model.projections.StateProjection;
+import model.state.GameResults;
+import model.state.GameStatus;
+import model.state.IState;
+import model.state.PlayerAvatar;
+import model.state.State;
+import observer.Controller.IObserver;
 import player.Turn;
 import player.TurnWrapper;
 import player.IPlayer;
 import java.util.*;
-import static game.model.GameStatus.*;
+
+import static model.state.GameStatus.IN_PROGRESS;
 import static referee.PlayerResult.*;
 
 /**
@@ -334,7 +343,7 @@ public class Referee implements IReferee {
     List<PlayerAvatar> playerList = this.game.getPlayerList();
     for (PlayerAvatar player : playerList) {
       Position playerPosition = player.getCurrentPosition();
-      Position goalPosition = this.game.getActivePlayer().getGoal();
+      Position goalPosition = player.getGoal();
       playerDistanceMap.put(player, Position.getEuclideanDistance(playerPosition, goalPosition));
     }
     return playerDistanceMap;

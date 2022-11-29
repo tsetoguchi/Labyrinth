@@ -1,7 +1,7 @@
 package IntegrationTests.Remote;
 
-import game.model.GameResults;
-import game.model.IState;
+import model.state.GameResults;
+import model.state.IState;
 
 import org.json.JSONObject;
 import org.json.JSONTokener;

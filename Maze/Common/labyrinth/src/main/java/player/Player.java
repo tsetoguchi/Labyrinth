@@ -1,7 +1,8 @@
 package player;
 
-import game.model.*;
-import game.model.projections.StateProjection;
+import model.Position;
+import model.board.IBoard;
+import model.projections.StateProjection;
 
 import java.util.Optional;
 

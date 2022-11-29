@@ -1,8 +1,9 @@
 package IntegrationTests;
 
-import game.Utils;
+import model.Utils;
+import model.board.IBoard;
 import protocol.serialization.JsonSerializer;
-import game.model.*;
+import model.model.*;
 
 import java.io.IOException;
 import java.util.*;

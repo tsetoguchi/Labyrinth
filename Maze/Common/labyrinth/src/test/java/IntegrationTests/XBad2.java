@@ -9,7 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import game.model.IState;
+import model.state.IState;
 
 import java.util.ArrayList;
 import java.util.Collections;

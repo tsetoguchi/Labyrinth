@@ -1,6 +1,6 @@
 package remote.JSON;
 
-import game.model.Direction;
+import model.board.Direction;
 
 public class JsonSlideAndInsertRecord {
 

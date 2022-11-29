@@ -1,16 +1,18 @@
 package remote;
 
-import game.Exceptions.IllegalPlayerActionException;
-import game.model.*;
-import game.model.projections.StateProjection;
+import model.Exceptions.IllegalPlayerActionException;
+import model.Position;
+import model.board.IBoard;
+import model.projections.StateProjection;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
+import model.state.GameStatus;
 import player.IPlayer;
 import player.Turn;
-import protocol.serialization.JsonSerializer;
+import json.JsonSerializer;
 import referee.PlayerResult;
 import referee.clients.RefereePlayerInterface;
 import remote.JSON.MethodJsonSerializer;

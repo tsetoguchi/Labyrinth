@@ -1,7 +1,7 @@
 package IntegrationTests;
 
-import game.model.Position;
-import game.model.projections.StateProjection;
+import model.model.Position;
+import model.projections.StateProjection;
 import java.util.Optional;
 import player.IStrategy;
 import player.Turn;

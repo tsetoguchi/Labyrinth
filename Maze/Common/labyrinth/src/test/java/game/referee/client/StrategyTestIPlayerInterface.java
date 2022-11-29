@@ -1,9 +1,9 @@
 //package game.referee.client;
 //
-//import game.model.IBoard;
-//import game.model.Position;
-//import game.model.projections.PlayerStateProjection;
-//import game.model.projections.PublicPlayerAvatar;
+//import game.board.IBoard;
+//import game.Position;
+//import game.projections.PlayerStateProjection;
+//import game.projections.PublicPlayerAvatar;
 //import player.IStrategy;
 //import player.Turn;
 //

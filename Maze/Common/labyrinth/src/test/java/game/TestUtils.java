@@ -1,8 +1,12 @@
-package game;
+package model;
 
-import game.model.*;
+import model.model.*;
+import model.board.Direction;
+import model.board.Gem;
+import model.board.Tile;
+import model.board.Treasure;
 
-import static game.model.Direction.*;
+import static model.board.Direction.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

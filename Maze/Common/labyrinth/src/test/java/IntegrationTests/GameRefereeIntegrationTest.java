@@ -1,7 +1,7 @@
 package IntegrationTests;
 
-import game.Controller.ObserverController;
-import game.model.IState;
+import observer.Controller.ObserverController;
+import model.state.IState;
 import protocol.serialization.JsonSerializer;
 
 import referee.Referee;

@@ -1,16 +1,18 @@
 package remote;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import game.Exceptions.IllegalPlayerActionException;
-import game.model.*;
-import game.model.projections.PlayerGameProjection;
+import model.Exceptions.IllegalPlayerActionException;
+import model.Position;
+import model.board.IBoard;
+import model.projections.PlayerGameProjection;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
+import model.state.GameStatus;
 import player.Turn;
-import protocol.serialization.JsonSerializer;
+import json.JsonSerializer;
 import referee.PlayerResult;
 import player.IPlayer;
 import remote.JSON.JsonMethodSerializer;

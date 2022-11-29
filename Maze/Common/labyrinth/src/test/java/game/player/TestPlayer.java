@@ -1,9 +1,9 @@
 //package game.player;
 //
 //import game.model.*;
-//import game.model.projections.ExperimentationBoardProjection;
-//import game.model.projections.PlayerGameProjection;
-//import game.model.projections.PublicPlayerAvatar;
+//import game.projections.ExperimentationBoardProjection;
+//import game.projections.PlayerGameProjection;
+//import game.projections.PublicPlayerAvatar;
 //import player.Player;
 //import player.Strategy;
 //import player.Turn;

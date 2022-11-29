@@ -1,7 +1,7 @@
 package player;
 
-import game.model.IBoard;
-import game.model.Position;
+import model.board.IBoard;
+import model.Position;
 
 import java.util.ArrayList;
 import java.util.List;

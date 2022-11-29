@@ -1,4 +1,4 @@
-package game.model;
+package model.model;
 
 import org.junit.jupiter.api.Test;
 

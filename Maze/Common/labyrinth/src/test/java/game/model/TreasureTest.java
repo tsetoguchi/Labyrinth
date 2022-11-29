@@ -1,8 +1,11 @@
-package game.model;
+package model.model;
 
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
+
+import model.board.Gem;
+import model.board.Treasure;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -1,9 +1,9 @@
 package IntegrationTests;
 
-import game.model.IBoard;
-import game.model.GameStatus;
-import game.model.Position;
-import game.model.projections.StateProjection;
+import model.board.IBoard;
+import model.state.GameStatus;
+import model.model.Position;
+import model.projections.StateProjection;
 import player.Turn;
 import referee.PlayerResult;
 

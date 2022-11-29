@@ -13,7 +13,7 @@ public class TestRunner {
             case "board":
                 StandardBoardIntegrationTest.executeTest();
                 break;
-            case "game":
+            case "model":
                 GameStateIntegrationTest.executeTest();
                 break;
             case "strategy":

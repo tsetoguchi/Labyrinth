@@ -1,8 +1,8 @@
 //package player;
 //
-//import game.model.IBoard;
-//import game.model.Position;
-//import game.model.projections.PlayerGameProjection;
+//import game.board.IBoard;
+//import game.Position;
+//import game.projections.PlayerGameProjection;
 //
 //import java.util.Optional;
 //

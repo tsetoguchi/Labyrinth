@@ -1,8 +1,8 @@
-package game.referee.client;
+package model.referee.client;
 
-import game.model.GameStatus;
-import game.model.Position;
-import game.model.projections.StateProjection;
+import model.state.GameStatus;
+import model.model.Position;
+import model.projections.StateProjection;
 import referee.PlayerResult;
 import player.IPlayer;
 

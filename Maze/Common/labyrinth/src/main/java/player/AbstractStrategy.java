@@ -1,14 +1,18 @@
 package player;
 
-import game.model.*;
+import model.Position;
 
-import game.model.projections.PlayerProjection;
-import game.model.projections.StateProjection;
+import model.board.Direction;
+import model.board.IBoard;
+import model.projections.PlayerProjection;
+import model.projections.StateProjection;
+import model.state.SlideAndInsertRecord;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static game.model.Direction.*;
+import static model.board.Direction.*;
 
 /**
  * A category of strategies which search every possible move to find a way to reach a candidate
@@ -35,7 +39,7 @@ public abstract class AbstractStrategy implements IStrategy {
     for (Position candidate : this.getCandidatesInOrder(board,
         goal)) {
       planForCandidate =
-          this.createTurnPlanForCandidate(player.getAvatarPosition(), board, candidate,
+          this.createTurnPlanForCandidate(player.getCurrentPosition(), board, candidate,
               state.getPreviousSlideAndInsert());
       if (planForCandidate.isPresent()) {
         return planForCandidate;

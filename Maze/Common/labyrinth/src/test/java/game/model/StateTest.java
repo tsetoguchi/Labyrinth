@@ -1,7 +1,14 @@
-package game.model;
+package model.model;
 
-import game.TestUtils;
-import game.Exceptions.IllegalGameActionException;
+import model.TestUtils;
+import model.Exceptions.IllegalGameActionException;
+import model.board.IBoard;
+import model.board.Tile;
+import model.state.GameStatus;
+import model.state.PlayerAvatar;
+import model.state.SlideAndInsertRecord;
+import model.state.State;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,8 +18,8 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-import static game.model.Direction.*;
-import static game.model.Direction.RIGHT;
+import static model.board.Direction.*;
+import static model.board.Direction.RIGHT;
 
 public class StateTest {
     private IBoard uniformBoard;

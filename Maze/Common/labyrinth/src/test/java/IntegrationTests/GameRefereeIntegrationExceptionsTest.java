@@ -3,8 +3,8 @@ package IntegrationTests;
 import static referee.PlayerResult.WINNER;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import game.model.GameResults;
-import game.model.IState;
+import model.state.GameResults;
+import model.state.IState;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

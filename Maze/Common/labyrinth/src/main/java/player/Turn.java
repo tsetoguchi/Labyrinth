@@ -1,7 +1,7 @@
 package player;
 
-import game.model.Direction;
-import game.model.Position;
+import model.board.Direction;
+import model.Position;
 
 /**
  * The set of actions that a player intends to perform on its turn.

@@ -1,10 +1,6 @@
 package remote;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import game.model.GameResults;
-import game.model.PrivateGameState;
+import model.model.PrivateGameState;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,11 +8,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.Optional;
 
 import player.IPlayer;
-import referee.IReferee;
 import referee.clients.RefereePlayerInterface;
 import remote.json.JsonState;
 

@@ -1,7 +1,7 @@
 package remote.JSON;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import game.model.Position;
+import model.Position;
 
 import java.awt.*;
 
