@@ -62,9 +62,9 @@ public class OldObserverView extends JFrame {
     this.remove(this.spareTilePanel);
 
 
-//    System.out.println("Current State: " + this.currentState.toString());
+//    System.out.println("Current IState: " + this.currentState.toString());
     this.currentState = newState;
-//    System.out.println("New State: " + this.currentState.toString());
+//    System.out.println("New IState: " + this.currentState.toString());
 
     this.drawCurrentState();
   }

@@ -12,7 +12,7 @@ import java.awt.*;
  */
 @JsonSerialize(using = PublicPlayerProjectionSerializer.class)
 public class PublicPlayerProjection {
-    PlayerAvatar player;
+    private final PlayerAvatar player;
 
     public PublicPlayerProjection(PlayerAvatar player) {
         this.player = player;
@@ -23,7 +23,7 @@ public class PublicPlayerProjection {
     }
 
     public Position getHomePosition() {
-        return this.player.getHomePosition();
+        return this.player.getHome();
     }
 
     public Color getColor() { return this.player.getColor(); }

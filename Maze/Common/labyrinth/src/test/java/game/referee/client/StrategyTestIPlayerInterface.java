@@ -1,11 +1,11 @@
 package game.referee.client;
 
-import game.model.Board;
+import game.model.IBoard;
 import game.model.Position;
 import game.model.projections.PlayerGameProjection;
-import game.model.projections.SelfPlayerProjection;
+import game.model.projections.PublicPlayerAvatar;
 import player.IStrategy;
-import player.TurnPlan;
+import player.Turn;
 
 import java.util.Optional;
 
@@ -20,18 +20,18 @@ public class StrategyTestIPlayerInterface extends TestIPlayerInterface {
     }
 
     @Override
-    public Optional<TurnPlan> takeTurn(PlayerGameProjection game) {
+    public Optional<Turn> takeTurn(PlayerGameProjection game) {
         return this.strategy.createTurnPlan(game.getBoard(), game.getSelf(),
                 game.getPreviousSlideAndInsert(), this.getGoalPosition(game));
     }
 
     @Override
-    public Board proposeBoard(int rows, int columns) {
+    public IBoard proposeBoard(int rows, int columns) {
         return null;
     }
 
     private Position getGoalPosition(PlayerGameProjection game) {
-        SelfPlayerProjection self = game.getSelf();
+        PublicPlayerAvatar self = game.getSelf();
         if (self.hasReachedGoal()) {
             return self.getHomePosition();
         }

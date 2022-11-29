@@ -1,7 +1,7 @@
 package game.model.projections;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import game.model.Board;
+import game.model.IBoard;
 import game.model.Position;
 import game.model.Tile;
 import protocol.serialization.model.ReadOnlyBoardProjectionSerializer;
@@ -11,9 +11,9 @@ import protocol.serialization.model.ReadOnlyBoardProjectionSerializer;
  */
 @JsonSerialize(using = ReadOnlyBoardProjectionSerializer.class)
 public class ReadOnlyBoardProjection {
-    Board board;
+    IBoard board;
 
-    public ReadOnlyBoardProjection(Board board) {
+    public ReadOnlyBoardProjection(IBoard board) {
         this.board = board;
     }
 

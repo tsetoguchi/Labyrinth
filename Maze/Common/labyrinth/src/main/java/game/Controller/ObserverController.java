@@ -25,7 +25,6 @@ public class ObserverController implements IObserver, ActionListener {
 
     private Queue<ObserverGameProjection> nextStates;
 
-
     private ObserverGameProjection currentState;
 
     private boolean gameOver;

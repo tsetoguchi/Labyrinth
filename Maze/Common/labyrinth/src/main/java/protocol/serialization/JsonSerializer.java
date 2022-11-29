@@ -3,9 +3,8 @@ package protocol.serialization;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import game.model.Position;
-import game.model.SlideAndInsertRecord;
 import game.model.projections.ObserverGameProjection;
-import player.TurnPlan;
+import player.Turn;
 
 import java.io.IOException;
 import java.util.List;
@@ -25,11 +24,11 @@ public class JsonSerializer {
         return this.mapper.writeValueAsString(reachablePositionsList);
     }
 
-    public String turnPlanToJson(Optional<TurnPlan> turnPlan) throws JsonProcessingException {
+    public String turnPlanToJson(Optional<Turn> turnPlan) throws JsonProcessingException {
         if (turnPlan.isEmpty()) {
             return "PASS";
         }
-        TurnPlan actions = turnPlan.get();
+        Turn actions = turnPlan.get();
 
         Object[] resultArray = new Object[4];
 

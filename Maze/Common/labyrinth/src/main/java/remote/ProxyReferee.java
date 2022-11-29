@@ -105,38 +105,38 @@ public class ProxyReferee implements Runnable {
     }
   }
 
-
-  private void executeSetup(JSONArray args) throws JSONException, IOException {
-    Optional<State> maybeState = Optional.empty();
-    try{
-      State s = JSONConverter.stateFromJSON(args.getJSONObject(0));
-      maybeState = Optional.of(s);
-    } catch (JSONException ignore){}
-
-    Coordinate destination = JSONConverter.coordinateFromJSON(args.getJSONObject(1));
-
-    this.player.setup(maybeState, destination);
-    this.out.write(Utils.toBytes("\"void\""));
-  }
-
-
-  private void executeWin(JSONArray args) throws JSONException, IOException {
-    boolean didWin = args.getBoolean(0);
-    this.player.won(didWin);
-    this.gameOver = true;
-    this.out.write(Utils.toBytes("\"void\""));
-  }
-
-
-  private void executeTakeTurn(JSONArray args) throws JSONException, IOException {
-    State state = JSONConverter.stateFromJSON(args.getJSONObject(0));
-    Action a = this.player.takeTurn(state);
-    if(a.isMove()){
-      this.out.write(Utils.toBytes(JSONConverter.moveActionToJSON(a.getMove()).toString()));
-    } else{
-      this.out.write(Utils.toBytes("\"PASS\""));
-    }
-  }
+//
+//  private void executeSetup(JSONArray args) throws JSONException, IOException {
+//    Optional<State> maybeState = Optional.empty();
+//    try{
+//      State s = JSONConverter.stateFromJSON(args.getJSONObject(0));
+//      maybeState = Optional.of(s);
+//    } catch (JSONException ignore){}
+//
+//    Coordinate destination = JSONConverter.coordinateFromJSON(args.getJSONObject(1));
+//
+//    this.player.setup(maybeState, destination);
+//    this.out.write(Utils.toBytes("\"void\""));
+//  }
+//
+//
+//  private void executeWin(JSONArray args) throws JSONException, IOException {
+//    boolean didWin = args.getBoolean(0);
+//    this.player.won(didWin);
+//    this.gameOver = true;
+//    this.out.write(Utils.toBytes("\"void\""));
+//  }
+//
+//
+//  private void executeTakeTurn(JSONArray args) throws JSONException, IOException {
+//    State state = JSONConverter.stateFromJSON(args.getJSONObject(0));
+//    Action a = this.player.takeTurn(state);
+//    if(a.isMove()){
+//      this.out.write(Utils.toBytes(JSONConverter.moveActionToJSON(a.getMove()).toString()));
+//    } else{
+//      this.out.write(Utils.toBytes("\"PASS\""));
+//    }
+//  }
 
 
 

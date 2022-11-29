@@ -11,7 +11,7 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 
-public abstract class AbstractBoard implements Board {
+public abstract class AbstractBoard implements IBoard {
 
   protected final Tile[][] tileGrid;
 
@@ -174,7 +174,7 @@ public abstract class AbstractBoard implements Board {
    */
   @Override
   public ExperimentationBoard getExperimentationBoard() {
-    return new StandardExperimentationBoard(this);
+    return new DefaultExperimentationBoard(this);
   }
 
   @Override
@@ -197,7 +197,7 @@ public abstract class AbstractBoard implements Board {
     return this.rules;
   }
 
-  public abstract Board deepCopy();
+  public abstract IBoard deepCopy();
 
 
   /**

@@ -16,7 +16,7 @@ public class FlexibleBoard extends AbstractBoard {
   }
 
   @Override
-  public Board deepCopy() {
+  public IBoard deepCopy() {
     Tile[][] newGrid = new Tile[this.getHeight()][this.getWidth()];
 
     for (int row = 0; row < newGrid.length; row++) {

@@ -6,7 +6,7 @@ import game.referee.client.*;
 import org.junit.jupiter.api.Test;
 import player.EuclideanStrategy;
 import player.RiemannStrategy;
-import player.TurnPlan;
+import player.Turn;
 import referee.PlayerResult;
 import referee.Referee;
 
@@ -36,12 +36,12 @@ public class RefereeTest {
         List<IPlayer> clients = List.of(bored1, bored2, bored3);
         List<PlayerAvatar> avatars = List.of(avatar1, avatar2, avatar3);
 
-        Game game = new Game(
+        State state = new State(
                 TestUtils.createUniformBoard(true, true, false, false),
                 avatars
         );
 
-        Referee referee = new Referee(game, clients);
+        Referee referee = new Referee(state, clients);
 
         referee.runGame();
 
@@ -56,8 +56,8 @@ public class RefereeTest {
 
     @Test
     public void testGameWithObsessivePlayersWhoLoopEndsAfter1000Rounds() {
-        ObsessiveTestIPlayerInterface ob1 = new ObsessiveTestIPlayerInterface(new TurnPlan(Direction.DOWN, 0, 0, new Position(0, 0)));
-        ObsessiveTestIPlayerInterface ob2 = new ObsessiveTestIPlayerInterface(new TurnPlan(Direction.DOWN, 2, 0, new Position(0, 2)));
+        ObsessiveTestIPlayerInterface ob1 = new ObsessiveTestIPlayerInterface(new Turn(Direction.DOWN, 0, 0, new Position(0, 0)));
+        ObsessiveTestIPlayerInterface ob2 = new ObsessiveTestIPlayerInterface(new Turn(Direction.DOWN, 2, 0, new Position(0, 2)));
 
         PlayerAvatar avatar1 = new PlayerAvatar(Color.BLUE, new Position(5, 5),
                 new Position(1, 1));
@@ -70,12 +70,12 @@ public class RefereeTest {
         List<IPlayer> clients = List.of(ob1, ob2);
         List<PlayerAvatar> avatars = List.of(avatar1, avatar2);
 
-        Game game = new Game(
+        State state = new State(
                 TestUtils.createUniformBoard(true, true, false, false),
                 avatars
         );
 
-        Referee referee = new Referee(game, clients);
+        Referee referee = new Referee(state, clients);
 
         referee.runGame();
 
@@ -100,12 +100,12 @@ public class RefereeTest {
                     new Position(5, 5), new Position(1, 1)));
         }
 
-        Game game = new Game(
+        State state = new State(
                 TestUtils.createUniformBoard(true, true, true, true),
                 avatars
         );
 
-        Referee referee = new Referee(game, clients);
+        Referee referee = new Referee(state, clients);
 
         referee.runGame();
 
@@ -117,7 +117,7 @@ public class RefereeTest {
             assertNull(testClients.get(i).finalPlayerResult);
         }
 
-        assertEquals(GameStatus.NO_REMAINING_PLAYERS, game.getGameStatus());
+        assertEquals(GameStatus.NO_REMAINING_PLAYERS, state.getGameStatus());
     }
 
     @Test
@@ -149,12 +149,12 @@ public class RefereeTest {
                     new Position(5, 5), new Position(1, 1)));
         }
 
-        Game game = new Game(
+        State state = new State(
                 TestUtils.createUniformBoard(true, true, true, true),
                 avatars
         );
 
-        Referee referee = new Referee(game, clients);
+        Referee referee = new Referee(state, clients);
 
         referee.runGame();
 
@@ -192,12 +192,12 @@ public class RefereeTest {
                     new Position(5, 5), new Position(1, 1)));
         }
 
-        Game game = new Game(
+        State state = new State(
                 TestUtils.createUniformBoard(true, true, true, true),
                 avatars
         );
 
-        Referee referee = new Referee(game, clients);
+        Referee referee = new Referee(state, clients);
 
         referee.runGame();
 

@@ -8,7 +8,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import player.TurnPlan;
+
+import player.Turn;
 import protocol.serialization.JsonSerializer;
 import referee.PlayerResult;
 import player.IPlayer;
@@ -48,7 +49,7 @@ public class ProxyPlayerInterface implements IPlayer {
   }
 
   @Override
-  public Optional<TurnPlan> takeTurn(PlayerGameProjection game) throws IllegalPlayerActionException {
+  public Optional<Turn> takeTurn(PlayerGameProjection game) throws IllegalPlayerActionException {
 
     // Converts call into JSON and sends it to the client
     try {
@@ -71,8 +72,8 @@ public class ProxyPlayerInterface implements IPlayer {
       }
     }
 
-    // Deserialize response into a TurnPlan
-    //Optional<TurnPlan> turnPlan = Serializer.getTurnPlan(response);
+    // Deserialize response into a Turn
+    //Optional<Turn> turnPlan = Serializer.getTurnPlan(response);
 
     // return to send back to real Ref in Optional
     return Optional.empty();
@@ -162,7 +163,7 @@ public class ProxyPlayerInterface implements IPlayer {
   }
 
   @Override
-  public Board proposeBoard(int rows, int columns) {
+  public IBoard proposeBoard(int rows, int columns) {
     return new FlexibleBoard(columns, rows);
   }
 

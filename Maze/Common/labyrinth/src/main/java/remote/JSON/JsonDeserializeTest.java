@@ -1,9 +1,8 @@
 package remote.JSON;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import game.model.PrivateState;
+
 import java.io.IOException;
-import protocol.serialization.MazeJsonParser;
 
 public class JsonDeserializeTest {
 

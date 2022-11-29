@@ -10,7 +10,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
-import player.TurnPlan;
+
+import player.Turn;
 import player.TurnWrapper;
 import player.IPlayer;
 import java.util.*;
@@ -23,7 +24,7 @@ import static referee.PlayerResult.*;
  */
 public class Referee implements IReferee {
 
-  private PrivateState game;
+  private IState game;
   /**
    * Stores which client should be used to talk to each Player.
    **/
@@ -41,11 +42,11 @@ public class Referee implements IReferee {
   /**
    * Creates a referee and assigns it a game to moderate, as well as a list of clients which should
    * be used to interface with players. The order of the clients in the list must correspond to the
-   * order of players in the Game. Accepts an optional observer which will be updated as the game
+   * order of players in the State. Accepts an optional observer which will be updated as the game
    * progresses.
    */
-  public Referee(PrivateState game, List<IPlayer> players,
-      List<IObserver> observers) {
+  public Referee(IState game, List<IPlayer> players,
+                 List<IObserver> observers) {
     this.game = game;
     this.playerAvatarToHandler = this.mapPlayerAvatarsToPlayerHandlers(game, players);
     this.playersCollectedTreasures = new ArrayList<>();
@@ -53,23 +54,23 @@ public class Referee implements IReferee {
     this.eliminated = new ArrayList<>();
   }
 
-  public Referee(PrivateState game, List<IPlayer> players) {
+  public Referee(IState game, List<IPlayer> players) {
     this(game, players, List.of());
   }
 
   /**
-   * Initialize a Referee with a just a set of proxy players, building a new randomized Game from
+   * Initialize a Referee with a just a set of proxy players, building a new randomized State from
    * scratch.
    */
   public Referee(List<IPlayer> players) {
-    List<Board> proposedBoards = new ArrayList<>();
+    List<IBoard> proposedBoards = new ArrayList<>();
     List<Color> uniqueColors = this.generateUniqueColors(players.size());
 
     // get proposed board
     List<PlayerHandler> playerHandlers = this.interfaceToHandlers(players, uniqueColors);
     List<PlayerHandler> invalidProposals = new ArrayList<>();
     for (PlayerHandler playerHandler : playerHandlers) {
-      Optional<Board> board = playerHandler
+      Optional<IBoard> board = playerHandler
           .proposeBoard(this.game.getBoard().getHeight(), this.game.getBoard().getWidth());
       if (board.isPresent()) {
         proposedBoards.add(board.get());
@@ -81,7 +82,7 @@ public class Referee implements IReferee {
     for (PlayerHandler playerHandler : invalidProposals) {
       playerHandlers.remove(playerHandler);
     }
-    Board board = proposedBoards.get(new Random().nextInt(proposedBoards.size() - 1));
+    IBoard board = proposedBoards.get(new Random().nextInt(proposedBoards.size() - 1));
 
     List<Position> immovablePositions = this.immovablePositionsForBoard(board);
     Collections.shuffle(immovablePositions);
@@ -95,7 +96,7 @@ public class Referee implements IReferee {
     for (int i = 0; i < uniqueColors.size(); i++) {
       playerAvatars.add(new PlayerAvatar(uniqueColors.get(i), goals.get(i), homes.get(i)));
     }
-    PrivateState game = new Game(board, playerAvatars);
+    IState game = new State(board, playerAvatars);
     this.game = game;
     this.playerAvatarToHandler = this.mapPlayerAvatarsToPlayerHandlers(game, players);
     this.playersCollectedTreasures = new ArrayList<>();
@@ -124,7 +125,7 @@ public class Referee implements IReferee {
         this.getNamesFromRefereePlayerInterfaces(this.eliminated));
   }
 
-  public void resume(PrivateState game, List<IPlayer> iPlayerInterfaces) {
+  public void resume(IState game, List<IPlayer> iPlayerInterfaces) {
     this.playerAvatarToHandler = this.mapPlayerAvatarsToPlayerHandlers(game, iPlayerInterfaces);
     this.game = game;
     this.runGame();
@@ -145,7 +146,7 @@ public class Referee implements IReferee {
       this.kickPlayerInGameAndRef(activePlayer.getColor());
       return;
     }
-    Optional<TurnPlan> turnPlan = turnWrapper.getTurnPlan();
+    Optional<Turn> turnPlan = turnWrapper.getTurnPlan();
     if (this.isValidTurnPlan(turnPlan)) {
 
       // Pass
@@ -171,7 +172,7 @@ public class Referee implements IReferee {
       PlayerAvatar toBeKickedPlayer = this.game.getActivePlayer();
       this.eliminated.add(this.playerAvatarToHandler.get(toBeKickedPlayer).getPlayerClient());
       this.playerAvatarToHandler.remove(toBeKickedPlayer);
-      this.game.kickActivePlayer();
+      this.game.kickPlayer(toBeKickedPlayer);
     }
   }
 
@@ -179,7 +180,7 @@ public class Referee implements IReferee {
     System.out.println(player);
     PlayerHandler playerHandler = this.playerAvatarToHandler.get(player);
     System.out.println(this.playerAvatarToHandler);
-    Optional<Optional<TurnPlan>> playerTurn = playerHandler.takeTurn(
+    Optional<Optional<Turn>> playerTurn = playerHandler.takeTurn(
         new PlayerGameProjection(this.game, player, this.game.getPreviousSlideAndInsert()));
 
     if (playerTurn.isEmpty()) {
@@ -191,7 +192,7 @@ public class Referee implements IReferee {
     }
   }
 
-  private boolean isValidTurnPlan(Optional<TurnPlan> turnPlan) {
+  private boolean isValidTurnPlan(Optional<Turn> turnPlan) {
     if (turnPlan.isEmpty()) {
       return true;
     }
@@ -319,7 +320,7 @@ public class Referee implements IReferee {
     List<PlayerAvatar> playerList = this.game.getPlayerList();
     for (PlayerAvatar player : playerList) {
       Position playerPosition = player.getCurrentPosition();
-      Position homePosition = player.getHomePosition();
+      Position homePosition = player.getHome();
       playerDistanceMap.put(player, Position.getEuclideanDistance(playerPosition, homePosition));
     }
     return playerDistanceMap;
@@ -334,20 +335,20 @@ public class Referee implements IReferee {
     List<PlayerAvatar> playerList = this.game.getPlayerList();
     for (PlayerAvatar player : playerList) {
       Position playerPosition = player.getCurrentPosition();
-      Position goalPosition = this.game.getActivePlayer().getGoalPosition();
+      Position goalPosition = this.game.getActivePlayer().getGoal();
       playerDistanceMap.put(player, Position.getEuclideanDistance(playerPosition, goalPosition));
     }
     return playerDistanceMap;
   }
 
-  private Map<PlayerAvatar, IPlayer> mapPlayerAvatarsToPlayerClients(Game game,
-      List<IPlayer> iPlayerInterfaces) {
+  private Map<PlayerAvatar, IPlayer> mapPlayerAvatarsToPlayerClients(State state,
+                                                                     List<IPlayer> iPlayerInterfaces) {
     Map<PlayerAvatar, IPlayer> map = new HashMap<>();
-    if (iPlayerInterfaces.size() != game.getPlayerList().size()) {
+    if (iPlayerInterfaces.size() != state.getPlayerList().size()) {
       throw new IllegalArgumentException("Amount of clients and players do not match.");
     }
     for (int i = 0; i < iPlayerInterfaces.size(); i++) {
-      map.put(game.getPlayerList().get(i), iPlayerInterfaces.get(i));
+      map.put(state.getPlayerList().get(i), iPlayerInterfaces.get(i));
     }
     return map;
   }
@@ -355,8 +356,7 @@ public class Referee implements IReferee {
   private void remindPlayersReturnHome() {
     for (PlayerAvatar player : this.game.getPlayerList()) {
       if (player.hasReachedGoal() && !this.playersCollectedTreasures.contains(player)) {
-        this.playerAvatarToHandler.get(player).returnHome(player.getHomePosition());
-        this.playerAvatarToHandler.get(player).setup(Optional.empty(), player.getHomePosition());
+        this.playerAvatarToHandler.get(player).setup(Optional.empty(), player.getHome());
         this.playersCollectedTreasures.add(player);
       }
     }
@@ -368,7 +368,7 @@ public class Referee implements IReferee {
       PlayerHandler playerHandler = this.playerAvatarToHandler.get(player);
       Optional<Boolean> outcome = playerHandler.setup(Optional.of(
           new PlayerGameProjection(this.game, player, this.game.getPreviousSlideAndInsert())),
-          player.getGoalPosition());
+          player.getGoal());
 
       if (outcome.isEmpty()) {
         playersToBeKicked.add(player.getColor());
@@ -393,8 +393,8 @@ public class Referee implements IReferee {
     }
   }
 
-  private Map<PlayerAvatar, PlayerHandler> mapPlayerAvatarsToPlayerHandlers(PrivateState game,
-      List<IPlayer> IPlayers) {
+  private Map<PlayerAvatar, PlayerHandler> mapPlayerAvatarsToPlayerHandlers(IState game,
+                                                                            List<IPlayer> IPlayers) {
     if (IPlayers.size() != game.getPlayerList().size()) {
       throw new IllegalArgumentException("Amount of clients and players do not match.");
     }
@@ -403,15 +403,14 @@ public class Referee implements IReferee {
 
     for (int i = 0; i < game.getPlayerList().size(); i++) {
       PlayerAvatar playerAvatar = game.getPlayerList().get(i);
-      PlayerHandler playerHandler = new PlayerHandler(playerAvatar.getColor(),
-          IPlayers.get(i));
+      PlayerHandler playerHandler = new PlayerHandler(IPlayers.get(i));
       playersToHandlers.put(playerAvatar, playerHandler);
     }
     return playersToHandlers;
   }
 
   /**
-   * Removes the player with the specified color from the Game and Referee
+   * Removes the player with the specified color from the State and Referee
    */
   private void kickPlayerInGameAndRef(Color color) {
     System.out.println("Kicked Player: ");
@@ -419,18 +418,9 @@ public class Referee implements IReferee {
     this.game.kickActivePlayer();
   }
 
-  private void kickPlayer(Color color) {
-    for (PlayerAvatar player : this.playerAvatarToHandler.keySet()) {
-      if (player.getColor().equals(color)) {
-
-        this.playerAvatarToHandler.remove(player);
-        break;
-      }
-    }
-  }
 
 
-  private List<Position> immovablePositionsForBoard(Board board) {
+  private List<Position> immovablePositionsForBoard(IBoard board) {
     List<Integer> immovableRowIndices = new ArrayList<>();
     List<Integer> immovableColIndices = new ArrayList<>();
     // Iterate through immovable rows
@@ -484,12 +474,9 @@ public class Referee implements IReferee {
    * calls.
    */
   private class PlayerHandler {
-
-    private final Color color;
     private final IPlayer player;
 
-    public PlayerHandler(Color color, IPlayer player) {
-      this.color = color;
+    public PlayerHandler(IPlayer player) {
       this.player = player;
     }
 
@@ -509,7 +496,7 @@ public class Referee implements IReferee {
       });
     }
 
-    public Optional<Optional<TurnPlan>> takeTurn(PlayerGameProjection game) {
+    public Optional<Optional<Turn>> takeTurn(PlayerGameProjection game) {
       return this.timeoutExceptionHandler(() -> {
         return this.player.takeTurn(game);
       });
@@ -521,35 +508,11 @@ public class Referee implements IReferee {
       });
     }
 
-    public Optional<Board> proposeBoard(int rows, int columns) {
+    public Optional<IBoard> proposeBoard(int rows, int columns) {
       return this.timeoutExceptionHandler(() -> {
         return this.player.proposeBoard(rows, columns);
       });
     }
-
-    // TODO: Understand more about remote proxy pattern, do we care if the PlayerClient received information
-    // from the Referee?
-    public void informGameEnd(GameStatus gameStatus, PlayerResult resultForPlayer) {
-      this.timeoutExceptionHandler(() -> {
-        this.player.informGameEnd(gameStatus, resultForPlayer);
-        return Optional.empty();
-      });
-      //this.player.informGameEnd(gameStatus, resultForPlayer);
-    }
-
-    void returnHome(Position homeTile) {
-      this.timeoutExceptionHandler(() -> {
-        this.player.returnHome(homeTile);
-        return Optional.empty();
-      });
-    }
-
-//        void setup(PlayerGameProjection game, Position goal) {
-//            this.exceptionHandler(() -> {
-//                this.player.setup(game, goal);
-//                return Optional.empty();
-//            });
-//        }
 
     // Should be stored locally in the ProxyPlayer - doesn't require a network call, and thus can't time out
     public String getPlayerName() {
@@ -558,10 +521,6 @@ public class Referee implements IReferee {
 
     public IPlayer getPlayerClient() {
       return this.player;
-    }
-
-    public Color getColor() {
-      return this.color;
     }
 
   }

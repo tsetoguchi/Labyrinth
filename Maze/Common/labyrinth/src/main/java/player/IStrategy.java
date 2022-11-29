@@ -1,14 +1,15 @@
 package player;
 
+import game.model.IBoard;
 import game.model.Position;
 import game.model.SlideAndInsertRecord;
 import game.model.projections.ExperimentationBoardProjection;
-import game.model.projections.SelfPlayerProjection;
+import game.model.projections.PublicPlayerAvatar;
 
 import java.util.Optional;
 
 /**
- * Classes which implement this interface can create a TurnPlan given the information about the
+ * Classes which implement this interface can create a Turn given the information about the
  * board and the player.
  */
 public interface IStrategy {
@@ -18,7 +19,7 @@ public interface IStrategy {
    * includes all the actions the player wishes to take, prioritizing getting to the given goal if
    * possible. Returns Optional.empty() if the player wishes to pass.
    */
-  Optional<TurnPlan> createTurnPlan(ExperimentationBoardProjection board,
-      SelfPlayerProjection playerInformation,
-      Optional<SlideAndInsertRecord> previousSlide, Position goal);
+  Optional<Turn> createTurnPlan(IBoard board,
+                                PublicPlayerAvatar playerInformation,
+                                Optional<SlideAndInsertRecord> previousSlide, Position goal);
 }

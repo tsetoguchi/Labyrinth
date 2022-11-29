@@ -11,7 +11,7 @@ import java.util.*;
 
 public class TestUtils {
 
-  public static StandardBoard NON_UNIFORM_BOARD;
+  public static DefaultBoard NON_UNIFORM_BOARD;
 
   public static Gem[] rowGems = {Gem.alexandrite, Gem.mexican_opal, Gem.aplite, Gem.apatite,
       Gem.hackmanite, Gem.beryl, Gem.orange_radiant};
@@ -22,8 +22,8 @@ public class TestUtils {
     NON_UNIFORM_BOARD = createNonUniformBoard();
   }
 
-  public static StandardBoard createUniformBoard(boolean up, boolean down, boolean left,
-      boolean right) {
+  public static DefaultBoard createUniformBoard(boolean up, boolean down, boolean left,
+                                                boolean right) {
     Tile[][] grid = new Tile[7][7];
     for (int rowIndex = 0; rowIndex < 7; rowIndex++) {
       for (int colIndex = 0; colIndex < 7; colIndex++) {
@@ -31,13 +31,13 @@ public class TestUtils {
             makeTreasure(rowGems[rowIndex], colGems[colIndex]));
       }
     }
-    StandardBoard board = new StandardBoard(grid,
+    DefaultBoard board = new DefaultBoard(grid,
         makeTile(up, down, left, right, makeTreasure(Gem.ammolite, Gem.mexican_opal)));
     return board;
   }
 
-  public static StandardBoard createUniformBoard(boolean up, boolean down, boolean left,
-      boolean right, Tile spare) {
+  public static DefaultBoard createUniformBoard(boolean up, boolean down, boolean left,
+                                                boolean right, Tile spare) {
     Tile[][] grid = new Tile[7][7];
     for (int rowIndex = 0; rowIndex < 7; rowIndex++) {
       for (int colIndex = 0; colIndex < 7; colIndex++) {
@@ -45,10 +45,10 @@ public class TestUtils {
             makeTreasure(rowGems[rowIndex], colGems[colIndex]));
       }
     }
-    return new StandardBoard(grid, spare);
+    return new DefaultBoard(grid, spare);
   }
 
-  public static StandardBoard createNonUniformBoard() {
+  public static DefaultBoard createNonUniformBoard() {
 
     Tile[][] grid = new Tile[7][7];
 
@@ -74,12 +74,12 @@ public class TestUtils {
     grid[0][6] = makeTile(true, true, false, false,
         makeTreasure(Gem.ammolite, Gem.stilbite));
 
-    StandardBoard board = new StandardBoard(grid,
+    DefaultBoard board = new DefaultBoard(grid,
         makeTile(false, false, true, true, makeTreasure(Gem.ammolite, Gem.mexican_opal)));
     return board;
   }
 
-  public static StandardBoard createNonUniformBoardWithSomeUniqueTreasures() {
+  public static DefaultBoard createNonUniformBoardWithSomeUniqueTreasures() {
 
     Tile[][] grid = new Tile[7][7];
     grid[0][0] = makeTile(true, false, false, false,
@@ -103,7 +103,7 @@ public class TestUtils {
             makeTreasure(Gem.ammolite, Gem.mexican_opal));
       }
     }
-    StandardBoard board = new StandardBoard(grid,
+    DefaultBoard board = new DefaultBoard(grid,
         makeTile(false, false, true, true, makeTreasure(Gem.ammolite, Gem.mexican_opal)));
     return board;
   }

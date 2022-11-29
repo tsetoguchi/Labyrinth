@@ -1,8 +1,9 @@
 package game.model.projections;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import game.model.IState;
 import game.model.PlayerAvatar;
-import game.model.PrivateState;
 import game.model.SlideAndInsertRecord;
 import protocol.serialization.model.ObserverGameProjectionSerializer;
 
@@ -20,7 +21,7 @@ public class ObserverGameProjection {
     private final Optional<SlideAndInsertRecord> previousSlide;
     private int activePlayer;
 
-    public ObserverGameProjection(PrivateState game) {
+    public ObserverGameProjection(IState game) {
         this.board = new ReadOnlyBoardProjection(game.getBoard().deepCopy());
         List<PublicPlayerProjection> playerViews = new ArrayList<>();
         for (PlayerAvatar player : game.getPlayerList()) {

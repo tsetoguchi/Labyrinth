@@ -1,6 +1,6 @@
 //package player;
 //
-//import game.model.Board;
+//import game.model.IBoard;
 //import game.model.Position;
 //import game.model.projections.PlayerGameProjection;
 //
@@ -19,13 +19,13 @@
 //  /**
 //   * Propose a board layout for the game.
 //   **/
-//  Board proposeBoard(int rows, int columns);
+//  IBoard proposeBoard(int rows, int columns);
 //
 //  /**
 //   * Given a view of the current game and a target tile to try to reach first, create a plan for the
 //   * turn.
 //   **/
-//  Optional<TurnPlan> takeTurn(PlayerGameProjection game);
+//  Optional<Turn> takeTurn(PlayerGameProjection game);
 //
 //  String getName();
 //

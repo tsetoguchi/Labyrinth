@@ -3,10 +3,10 @@
 //import game.model.*;
 //import game.model.projections.ExperimentationBoardProjection;
 //import game.model.projections.PlayerGameProjection;
-//import game.model.projections.SelfPlayerProjection;
+//import game.model.projections.PublicPlayerAvatar;
 //import player.Player;
 //import player.Strategy;
-//import player.TurnPlan;
+//import player.Turn;
 //
 //import java.util.*;
 //
@@ -23,14 +23,14 @@
 //    }
 //
 //    @Override
-//    public Board proposeBoard() {
+//    public IBoard proposeBoard() {
 //        Tile[][] tileGrid = this.generateRandomTileGrid();
 //        Tile spareTile = this.generateRandomTile(Gem.hackmanite, Gem.hackmanite);
-//        return new StandardBoard(tileGrid, spareTile);
+//        return new DefaultBoard(tileGrid, spareTile);
 //    }
 //
 //    @Override
-//    public Optional<TurnPlan> takeTurn(PlayerGameProjection game) {
+//    public Optional<Turn> takeTurn(PlayerGameProjection game) {
 //        return this.strategy.createTurnPlan(game.getBoard(), game.getSelf(), game.getPreviousSlideAndInsert(),
 //                this.getCurrentGoal(game.getBoard(), game.getSelf()));
 //    }
@@ -80,7 +80,7 @@
 //        return new Tile(directions, new Treasure(List.of(firstGem, secondGem)));
 //    }
 //
-//    private Position getCurrentGoal(ExperimentationBoardProjection board, SelfPlayerProjection playerInformation) {
+//    private Position getCurrentGoal(ExperimentationBoardProjection board, PublicPlayerAvatar playerInformation) {
 //        if (playerInformation.hasReachedGoal()) {
 //            return playerInformation.getHomePosition();
 //        }

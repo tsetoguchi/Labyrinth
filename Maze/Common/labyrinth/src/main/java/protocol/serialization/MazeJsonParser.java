@@ -5,11 +5,11 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import game.IntegrationTests.BadFM;
-import game.IntegrationTests.BadTestPlayer;
-import game.IntegrationTests.BadTestPlayer2;
-import game.IntegrationTests.TestPlayer;
-import game.IntegrationTests.processing.IntegrationTestUtils;
+import IntegrationTests.BadFM;
+import IntegrationTests.BadTestPlayer;
+import IntegrationTests.BadTestPlayer2;
+import IntegrationTests.TestPlayer;
+import game.Utils;
 import game.model.*;
 import player.EuclideanStrategy;
 import player.RiemannStrategy;
@@ -72,7 +72,7 @@ public class MazeJsonParser {
    * Read a game state from the current parser. Json players do not include goal tiles, so they are
    * arbitrarily assigned.
    */
-  public PrivateState getGame() throws IOException {
+  public IState getGame() throws IOException {
     return this.getGameFromState(false);
   }
 
@@ -82,7 +82,7 @@ public class MazeJsonParser {
    * @return
    * @throws IOException
    */
-  public PrivateState getGameWithGoals() throws IOException {
+  public IState getGameWithGoals() throws IOException {
     return this.getGameFromState(true);
   }
 
@@ -137,11 +137,11 @@ public class MazeJsonParser {
   }
 
   /**
-   * Read a Board from the current parser, assigning an arbitrary spare tile.
+   * Read a IBoard from the current parser, assigning an arbitrary spare tile.
    */
-  public Board getBoardNoSpareTile() throws IOException {
+  public IBoard getBoardNoSpareTile() throws IOException {
     Tile[][] tileGrid = this.getTileGrid();
-    return new StandardBoard(tileGrid, IntegrationTestUtils.createTileFromShape("├"));
+    return new DefaultBoard(tileGrid, Utils.createTileFromShape("├"));
   }
 
   /**
@@ -266,10 +266,10 @@ public class MazeJsonParser {
   }
 
   /**
-   * Read a Game from the current parser. Players will be parsed according to whether or not they
+   * Read a State from the current parser. Players will be parsed according to whether or not they
    * include goal tiles.
    */
-  private PrivateState getGameFromState(boolean playersIncludeGoals) throws IOException {
+  private IState getGameFromState(boolean playersIncludeGoals) throws IOException {
     // we use null here to hold the variables right before assigning them, there will never persist a null value
     // as we check if any remain null afterwards
     Tile[][] tileGrid = null;
@@ -298,24 +298,24 @@ public class MazeJsonParser {
           previousSlideAndInsert = this.getSlideAndInsert();
           break;
         default:
-          throw new MazeJsonProcessingException("Found invalid field" + field + " in State.");
+          throw new MazeJsonProcessingException("Found invalid field" + field + " in IState.");
       }
     }
     if (tileGrid == null || spareTile == null || playerList == null
         || previousSlideAndInsert == null) {
-      throw new MazeJsonProcessingException("Did not find all four expected values for State.");
+      throw new MazeJsonProcessingException("Did not find all four expected values for IState.");
     }
     int boardHeight = tileGrid.length;
     int boardWidth = tileGrid[0].length;
-    Board board = new FlexibleBoard(tileGrid, spareTile, boardWidth, boardHeight);
+    IBoard board = new FlexibleBoard(tileGrid, spareTile, boardWidth, boardHeight);
     if (!playersIncludeGoals) {
       // assign arbitrary goals
       List<PlayerAvatar> finalPlayerList = playerList.stream().map(
               (PlayerAvatar player) -> this.createPlayerWithUpdatedGoal(player, new Position(1, 1)))
           .collect(Collectors.toList());
-      return new Game(board, finalPlayerList, 0, previousSlideAndInsert);
+      return new State(board, finalPlayerList, 0, previousSlideAndInsert);
     }
-    return new Game(board, playerList, 0, previousSlideAndInsert);
+    return new State(board, playerList, 0, previousSlideAndInsert);
   }
 
   /**
@@ -363,7 +363,7 @@ public class MazeJsonParser {
     for (int row = 0; row < height; row++) {
       for (int col = 0; col < width; col++) {
         String shape = rawBoard.get(row).get(col);
-        Tile tile = IntegrationTestUtils.createTileFromShape(shape,
+        Tile tile = Utils.createTileFromShape(shape,
             this.createTreasureFromRaw(rawTreasures.get(row).get(col)));
         grid[row][col] = tile;
       }
@@ -379,7 +379,7 @@ public class MazeJsonParser {
     PlayerAvatar newPlayer = new PlayerAvatar(
         initialPlayer.getColor(),
         newGoal,
-        initialPlayer.getHomePosition()
+        initialPlayer.getHome()
     );
     newPlayer.setCurrentPosition(initialPlayer.getCurrentPosition());
     return newPlayer;
@@ -392,7 +392,7 @@ public class MazeJsonParser {
     if (rawTreasure.size() != 2) {
       throw new MazeJsonProcessingException("Treasure did not have exactly 2 gems.");
     }
-    return IntegrationTestUtils.createTreasure(this.stringToGem(rawTreasure.get(0)),
+    return Utils.createTreasure(this.stringToGem(rawTreasure.get(0)),
         this.stringToGem(rawTreasure.get(1)));
   }
 
@@ -408,7 +408,7 @@ public class MazeJsonParser {
 
       if (field.equals("tilekey")) {
         this.readNext();
-        directions = IntegrationTestUtils.getDirectionsForSymbol(this.parser.getText());
+        directions = Utils.getDirectionsForSymbol(this.parser.getText());
       }
       if (field.equals("1-image")) {
         this.readNext();

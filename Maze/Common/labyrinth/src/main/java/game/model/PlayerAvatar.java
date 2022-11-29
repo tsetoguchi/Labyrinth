@@ -1,6 +1,8 @@
 package game.model;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents a single Player in the game.
@@ -8,21 +10,21 @@ import java.awt.*;
 public class PlayerAvatar {
 
   private final Color color;
-  private final Position goalPosition;
-  private final Position homePosition;
+  private final List<Position> pastGoals;
+  private Position goal;
+  private final Position home;
   private Position currentPosition;
-  private boolean hasReachedGoal;
 
   /**
    * Creates a new Player with all the given properties. Used for running games.
    */
   public PlayerAvatar(Color color, Position goalPosition, Position homePosition,
-      Position currentPosition, boolean hasReachedGoal) {
+      Position currentPosition) {
     this.color = color;
-    this.goalPosition = goalPosition;
-    this.homePosition = homePosition;
+    this.goal = goalPosition;
+    this.home = homePosition;
     this.currentPosition = currentPosition;
-    this.hasReachedGoal = hasReachedGoal;
+    this.pastGoals = new ArrayList<>();
   }
 
   /**
@@ -30,15 +32,15 @@ public class PlayerAvatar {
    * the player's initial Position to the home tile's Position. Used for new games.
    */
   public PlayerAvatar(Color color, Position goalPosition, Position homePosition) {
-    this(color, goalPosition, homePosition, homePosition, false);
+    this(color, goalPosition, homePosition, homePosition);
   }
 
-  public Position getGoalPosition() {
-    return this.goalPosition;
+  public Position getGoal() {
+    return this.goal;
   }
 
-  public Position getHomePosition() {
-    return this.homePosition;
+  public Position getHome() {
+    return this.home;
   }
 
   public Color getColor() {
@@ -49,31 +51,29 @@ public class PlayerAvatar {
     return this.currentPosition;
   }
 
-  public boolean hasReachedGoal() {
-    return this.hasReachedGoal;
+  public int howManyGoalsReached() {
+    return this.pastGoals.size();
   }
 
   public void setCurrentPosition(Position currentPosition) {
     this.currentPosition = currentPosition;
   }
 
-  public void setHasReachedGoal(boolean hasReachedGoal) {
-    this.hasReachedGoal = hasReachedGoal;
+  public void newGoal(Position nextGoal) {
+    this.pastGoals.add(this.goal);
+    this.goal = nextGoal;
   }
 
-  public PlayerAvatar deepCopy() {
-    Position newPosition = new Position(this.currentPosition.getRow(),
-        this.currentPosition.getColumn());
 
-    return new PlayerAvatar(this.color, this.goalPosition, this.homePosition, newPosition,
-        this.hasReachedGoal);
+  public PlayerAvatar deepCopy() {
+    return new PlayerAvatar(this.color, this.goal, this.home, this.currentPosition);
   }
 
   @Override
   public String toString() {
     return "Player{" +
-        "goalPosition=" + this.goalPosition +
-        ", homePosition=" + this.homePosition +
+        "goalPosition=" + this.goal +
+        ", homePosition=" + this.home +
         ", currentAvatarPosition=" + this.currentPosition +
         '}';
   }

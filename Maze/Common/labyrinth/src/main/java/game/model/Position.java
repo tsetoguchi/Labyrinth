@@ -9,15 +9,12 @@ import java.util.Objects;
  * Represents a position on a board where row and column are 0-indexed from the top-left of the
  * board.
  */
-@JsonPropertyOrder({"column#", "row#"})
 public class Position {
 
-  @JsonProperty("row#")
   private final int row;
-  @JsonProperty("column#")
   private final int column;
 
-  public Position(@JsonProperty("row#") int row, @JsonProperty("column#") int column) {
+  public Position(int row, int column) {
     if (row < 0 || column < 0) {
       throw new IllegalArgumentException("Tried to create a Position with negative coordinates.");
     }
@@ -59,7 +56,7 @@ public class Position {
           return false;
       }
     Position position = (Position) o;
-    return this.row == position.row && this.column == position.column;
+    return this.row == position.getRow() && this.column == position.getColumn();
   }
 
   @Override

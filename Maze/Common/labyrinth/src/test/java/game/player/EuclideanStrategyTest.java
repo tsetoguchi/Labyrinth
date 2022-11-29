@@ -3,7 +3,8 @@ package game.player;
 import game.TestUtils;
 import game.model.*;
 import game.model.projections.ExperimentationBoardProjection;
-import game.model.projections.SelfPlayerProjection;
+import game.model.projections.PublicPlayerAvatar;
+
 import org.junit.jupiter.api.Test;
 import player.EuclideanStrategy;
 import player.RiemannStrategy;
@@ -14,21 +15,21 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class EuclideanStrategyTest {
-    private StandardBoard uniformBoard;
+    private DefaultBoard uniformBoard;
     private ExperimentationBoard experimentationUniformBoard;
     private ExperimentationBoardProjection experimentationUniformBoardView;
     private RiemannStrategy riemannStrategy;
     private PlayerAvatar player;
-    private SelfPlayerProjection selfPlayerProjection;
+    private PublicPlayerAvatar publicPlayerAvatar;
 
     public void setup() {
         this.uniformBoard = TestUtils.createUniformBoard(false, false, true, true);
-        this.experimentationUniformBoard = new StandardExperimentationBoard(this.uniformBoard);
+        this.experimentationUniformBoard = new DefaultExperimentationBoard(this.uniformBoard);
         this.experimentationUniformBoardView = new ExperimentationBoardProjection(this.experimentationUniformBoard);
         this.riemannStrategy = new RiemannStrategy();
         this.player = new PlayerAvatar(Color.BLUE, new Position(3, 5),
                 new Position(1, 1));
-        this.selfPlayerProjection = new SelfPlayerProjection(player);
+        this.publicPlayerAvatar = new PublicPlayerAvatar(player);
     }
 
     @Test
@@ -63,9 +64,11 @@ public class EuclideanStrategyTest {
 
     private class TestEuclideanStrategy extends EuclideanStrategy {
         public List<Position> getCandidatesInOrderExposed() {
+
             return this.getCandidatesInOrder(experimentationUniformBoardView,
-                    experimentationUniformBoardView.getSpareTile(), selfPlayerProjection,
-                    this.findObjectivePosition(selfPlayerProjection));
+                    experimentationUniformBoardView.getSpareTile(), publicPlayerAvatar,
+                    new Position(0,0));
+            //ToDo fix this!
         }
     }
 }
