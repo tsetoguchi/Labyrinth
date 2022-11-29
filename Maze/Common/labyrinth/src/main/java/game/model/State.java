@@ -112,7 +112,6 @@ public class State implements IState {
   public boolean activePlayerCanReachPosition(Position positionToReach) {
     Set<Position> reachableTiles = this.board.getReachablePositions(
         this.getActivePlayer().getCurrentPosition());
-
     return reachableTiles.contains(positionToReach);
   }
 

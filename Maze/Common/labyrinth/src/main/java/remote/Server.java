@@ -1,7 +1,7 @@
 package remote;
 
 import game.model.GameResults;
-import game.model.PrivateState;
+import game.model.IState;
 import referee.IReferee;
 import referee.Referee;
 import player.IPlayer;
@@ -25,7 +25,7 @@ public class Server implements Callable<GameResults> {
 
   private static final int minNumberOfPlayers = 2;
 
-  public Server(PrivateState game, int port) {
+  public Server(IState game, int port) {
     this.game = game;
     this.port = port;
   }
@@ -92,7 +92,7 @@ public class Server implements Callable<GameResults> {
 
 
   private Optional<ProxyPlayerInterface> signUpClient(ServerSocket ss,
-      long waitTimeRemaining) {
+                                                      long waitTimeRemaining) {
 
     System.out.println("signUpClient()");
     Optional<ProxyPlayerInterface> player;

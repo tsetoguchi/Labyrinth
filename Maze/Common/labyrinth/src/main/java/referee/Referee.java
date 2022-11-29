@@ -364,6 +364,7 @@ public class Referee implements IReferee {
 
   private void setupPlayers() {
     List<Color> playersToBeKicked = new ArrayList<>();
+
     for (PlayerAvatar player : this.game.getPlayerList()) {
       PlayerHandler playerHandler = this.playerAvatarToHandler.get(player);
       Optional<Boolean> outcome = playerHandler.setup(Optional.of(
@@ -412,10 +413,10 @@ public class Referee implements IReferee {
   /**
    * Removes the player with the specified color from the State and Referee
    */
-  private void kickPlayerInGameAndRef(Color color) {
+  private void kickPlayerInGameAndRef(PlayerAvatar player) {
     System.out.println("Kicked Player: ");
-    this.kickPlayer(color);
-    this.game.kickActivePlayer();
+    this.playerAvatarToHandler.remove(player);
+    this.game.kickPlayer(player);
   }
 
 
@@ -464,7 +465,7 @@ public class Referee implements IReferee {
 
     List<PlayerHandler> playerHandlers = new ArrayList<>();
     for (int i = 0; i < playerInterfaces.size(); i++) {
-      playerHandlers.add(new PlayerHandler(colors.get(i), playerInterfaces.get(i)));
+      playerHandlers.add(new PlayerHandler(playerInterfaces.get(i)));
     }
     return playerHandlers;
   }
