@@ -18,8 +18,6 @@ import model.state.IState;
 import model.state.PlayerAvatar;
 import model.state.State;
 import observer.Controller.IObserver;
-import player.Turn;
-import player.TurnWrapper;
 import player.IPlayer;
 import java.util.*;
 
@@ -38,6 +36,11 @@ public class Referee implements IReferee {
    **/
   private Map<PlayerAvatar, PlayerHandler> playerAvatarToHandler;
   private final List<PlayerAvatar> playersCollectedTreasures;
+
+  private Map<PlayerAvatar, Position> currentGoals;
+  private Map<PlayerAvatar, Integer> goalCount;
+  private Set<Position> potentialGoals;
+
 
   // TODO: Make observer handler
   private final List<IObserver> observers;

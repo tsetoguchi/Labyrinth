@@ -1,6 +1,8 @@
-package player;
+package referee;
 
 import java.util.Optional;
+
+import referee.Turn;
 
 /**
  * Wraps a Turn for the PlayerHandler,

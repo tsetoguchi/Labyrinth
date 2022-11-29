@@ -15,14 +15,14 @@ import java.util.Optional;
  */
 public class StateProjection {
     private final ExperimentationBoard board;
-    private final List<PlayerProjection> players;
+    private final List<PlayerAvatar> players;
     private final Optional<SlideAndInsertRecord> previousSlideAndInsert;
 
     public StateProjection(IState game, PlayerAvatar viewer, Optional<SlideAndInsertRecord> previousSlideAndInsert) {
         this.board = game.getBoard().getExperimentationBoard();
-        List<PlayerProjection> playerViews = new ArrayList<>();
+        List<PlayerAvatar> playerViews = new ArrayList<>();
         for (PlayerAvatar player : game.getPlayerList()) {
-            playerViews.add(new PlayerProjection(player));
+            playerViews.add(player);
         }
         this.players = playerViews;
         this.previousSlideAndInsert = previousSlideAndInsert;

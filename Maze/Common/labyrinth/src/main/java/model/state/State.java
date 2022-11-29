@@ -96,11 +96,10 @@ public class State implements IState {
    * in the specified direction, then inserts the spare tile after rotating it the given number of
    * times. If a Player is moved off the board, move the Player to the newly inserted tile.
    *
-   * @precondition isValidSlideAndInsert has been called and returned true
    */
   public void slideAndInsert(Direction direction, int index, int rotations) {
     this.assertGameIsNotOver();
-    if (doesSlideUndoPrevious(direction, index)) {
+    if (this.doesSlideUndoPrevious(direction, index)) {
       throw new IllegalGameActionException(
           "Attempted to perform a slide which undoes the previous slide.");
     }

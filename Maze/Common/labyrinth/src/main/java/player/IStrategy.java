@@ -3,6 +3,8 @@ package player;
 import model.Position;
 
 import model.projections.StateProjection;
+import referee.Turn;
+
 import java.util.Optional;
 
 /**

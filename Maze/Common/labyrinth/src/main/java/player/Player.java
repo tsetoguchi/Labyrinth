@@ -3,6 +3,7 @@ package player;
 import model.Position;
 import model.board.IBoard;
 import model.projections.StateProjection;
+import referee.Turn;
 
 import java.util.Optional;
 

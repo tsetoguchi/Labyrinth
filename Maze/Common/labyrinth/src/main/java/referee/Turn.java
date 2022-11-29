@@ -1,4 +1,4 @@
-package player;
+package referee;
 
 import model.board.Direction;
 import model.Position;

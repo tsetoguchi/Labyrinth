@@ -11,7 +11,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
 import model.state.GameStatus;
-import player.Turn;
+import referee.Turn;
 import json.JsonSerializer;
 import referee.PlayerResult;
 import player.IPlayer;

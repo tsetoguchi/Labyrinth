@@ -3,7 +3,7 @@ package json;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import model.Position;
-import player.Turn;
+import referee.Turn;
 
 import java.io.IOException;
 import java.util.List;

@@ -7,6 +7,7 @@ import model.board.IBoard;
 import model.projections.PlayerProjection;
 import model.projections.StateProjection;
 import model.state.SlideAndInsertRecord;
+import referee.Turn;
 
 import java.util.List;
 import java.util.Optional;
