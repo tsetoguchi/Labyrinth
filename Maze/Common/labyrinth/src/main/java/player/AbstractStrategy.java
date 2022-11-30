@@ -115,8 +115,7 @@ public abstract class AbstractStrategy implements IStrategy {
     if (slideValid && !reversesPrevious) {
       Set<Position> reachableTilePositionsAfterSlide =
           board.getExperimentationBoard()
-              .findReachableTilePositionsAfterSlideAndInsert(direction, index, rotations,
-                  currentPosition);
+              .findReachableTilePositionsAfterSlideAndInsert(turn);
       if (reachableTilePositionsAfterSlide.contains(candidate)) {
         return Optional.of(new Turn(direction, index, rotations, candidate));
       }

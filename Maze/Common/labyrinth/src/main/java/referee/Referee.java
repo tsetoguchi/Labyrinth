@@ -227,8 +227,7 @@ public class Referee implements IReferee {
       return false;
     }
     return expBoard
-        .findReachableTilePositionsAfterSlideAndInsert(slideDirection, slideIndex, rotations,
-            this.game.getActivePlayer().getCurrentPosition())
+        .findReachableTilePositionsAfterSlideAndInsert(turn)
         .contains(moveDestination);
   }
 

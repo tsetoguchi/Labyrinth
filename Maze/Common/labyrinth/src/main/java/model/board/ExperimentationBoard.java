@@ -8,6 +8,7 @@ import static model.board.Direction.UP;
 import java.util.Set;
 
 import model.Position;
+import referee.Turn;
 
 /**
  * A deep copy of the Board that can be experimented with.
@@ -29,7 +30,11 @@ public class ExperimentationBoard extends Board {
      * position (on the updated board) and their corresponding positions (on the updated board)
      */
 
-    public Set<Position> findReachableTilePositionsAfterSlideAndInsert(Direction direction, int index, int rotations, Position position) {
+    public Set<Position> findReachableTilePositionsAfterSlideAndInsert(Turn turn) {
+        Direction direction = turn.getSlideDirection();
+        int index = turn.getSlideIndex();
+        int rotations = turn.getSpareTileRotations();
+        Position position = turn.getMoveDestination();
         this.slideAndInsert(direction, index, rotations);
         Position avatarAfterSliding = this.getAvatarPositionAfterSliding(position,
                 this.getWidth(), this.getHeight(), direction, index);
