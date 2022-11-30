@@ -6,6 +6,8 @@
 4. Redesign *State*
 5. Build server-client architecture 
 6. Fix broken integration tests after redesign
+7. Remove arbitrary funcitonality that does not match the spec in *Server*.
+   8. "message client method".
 
 ### Completed:
 1. Fix IPlayer protocol to use setUp
