@@ -46,7 +46,6 @@ public interface IBoard {
      */
     String toSymbolGrid();
 
-    IRules getRules();
 
     IBoard deepCopy();
 }

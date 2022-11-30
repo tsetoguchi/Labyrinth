@@ -2,8 +2,10 @@ package player;
 
 import model.Position;
 
+import model.board.DefaultRules;
 import model.board.Direction;
 import model.board.IBoard;
+import model.board.IRules;
 import model.projections.PlayerAvatar;
 import model.projections.StateProjection;
 import model.state.PlayerAvatar;
@@ -22,6 +24,15 @@ import static model.board.Direction.*;
  */
 public abstract class AbstractStrategy implements IStrategy {
 
+  private final IRules rules;
+
+  public AbstractStrategy(IRules rules) {
+    this.rules = rules;
+  }
+
+  public AbstractStrategy() {
+    this(new DefaultRules());
+  }
   /**
    * Gets all candidates to be considered in the desired order.
    */
@@ -64,8 +75,8 @@ public abstract class AbstractStrategy implements IStrategy {
       for (int rotations = 4; rotations >= 1; rotations--) {
         for (Direction direction : new Direction[]{LEFT, RIGHT}) {
           Optional<Turn> leftOrRightPlan =
-              this.trySlide(board, direction,
-                  rowIndex, rotations, currentPosition, candidate, previousSlide);
+              this.trySlide(board,
+                  currentPosition, previousSlide, );
           if (leftOrRightPlan.isPresent()) {
             return leftOrRightPlan;
           }
@@ -76,8 +87,8 @@ public abstract class AbstractStrategy implements IStrategy {
       for (int rotations = 4; rotations >= 1; rotations--) {
         for (Direction direction : new Direction[]{UP, DOWN}) {
           Optional<Turn> upOrDownPlan =
-              this.trySlide(board, direction,
-                  colIndex, rotations, currentPosition, candidate, previousSlide);
+              this.trySlide(board,
+                  currentPosition, previousSlide, );
           if (upOrDownPlan.isPresent()) {
             return upOrDownPlan;
           }
@@ -89,12 +100,15 @@ public abstract class AbstractStrategy implements IStrategy {
   }
 
   private Optional<Turn> trySlide(IBoard board,
-      Direction direction, int index, int rotations,
       Position currentPosition,
-      Position candidate,
-      Optional<SlideAndInsertRecord> previousSlide) {
+      Optional<SlideAndInsertRecord> previousSlide, Turn turn) {
 
-    boolean slideValid = board.getRules().isValidSlideAndInsert(direction, index, rotations);
+    boolean slideValid = this.rules.isValidSlideAndInsert(turn, board.getWidth(), board.getHeight());
+
+    Direction direction = turn.getSlideDirection();
+    int index = turn.getSlideIndex();
+    int rotations = turn.getSpareTileRotations();
+    Position candidate = turn.getMoveDestination();
     boolean reversesPrevious =
         previousSlide.isPresent() && this.reversesPreviousSlide(direction, index,
             previousSlide.get());

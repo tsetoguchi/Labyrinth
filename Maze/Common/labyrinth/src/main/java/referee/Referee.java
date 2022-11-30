@@ -8,9 +8,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
-import model.board.Direction;
+import model.board.DefaultRules;
 import model.board.ExperimentationBoard;
 import model.board.IBoard;
+import model.board.IRules;
 import model.projections.StateProjection;
 import model.state.GameResults;
 import model.state.GameStatus;
@@ -31,6 +32,8 @@ import static referee.PlayerResult.*;
 public class Referee implements IReferee {
 
   private IState game;
+
+  private final IRules rules;
   /**
    * Stores which client should be used to talk to each Player.
    **/
@@ -56,8 +59,9 @@ public class Referee implements IReferee {
    * progresses.
    */
   public Referee(IState game, List<IPlayer> players,
-                 List<IObserver> observers) {
+      List<IObserver> observers, IRules rules) {
     this.game = game;
+    this.rules = rules;
     this.playerAvatarToHandler = this.mapPlayerAvatarsToPlayerHandlers(game, players);
     this.playersCollectedTreasures = new ArrayList<>();
     this.observers = observers;
@@ -65,14 +69,15 @@ public class Referee implements IReferee {
   }
 
   public Referee(IState game, List<IPlayer> players) {
-    this(game, players, List.of());
+    this(game, players, List.of(),
+        new DefaultRules(game.getBoard().getWidth(), game.getBoard().getHeight()));
   }
 
   /**
    * Initialize a Referee with a just a set of proxy players, building a new randomized State from
    * scratch.
    */
-  public Referee(List<IPlayer> players) {
+  public Referee(List<IPlayer> players, IRules rules) {
     List<IBoard> proposedBoards = new ArrayList<>();
     List<Color> uniqueColors = this.generateUniqueColors(players.size());
 
@@ -108,6 +113,7 @@ public class Referee implements IReferee {
     }
     IState game = new State(board, playerAvatars);
     this.game = game;
+    this.rules = rules;
     this.playerAvatarToHandler = this.mapPlayerAvatarsToPlayerHandlers(game, players);
     this.playersCollectedTreasures = new ArrayList<>();
     this.observers = new ArrayList<>();
@@ -153,7 +159,7 @@ public class Referee implements IReferee {
     PlayerAvatar activePlayer = this.game.getActivePlayer();
     TurnWrapper turnWrapper = this.getPlanFromPlayer(activePlayer);
     if (turnWrapper.isException()) { // Player raised an exception when asked for a turn
-      this.kickPlayerInGameAndRef(activePlayer.getColor());
+      this.kickPlayerInGameAndRef(activePlayer);
       return;
     }
     Optional<Turn> turnPlan = turnWrapper.getTurnPlan();
@@ -167,13 +173,16 @@ public class Referee implements IReferee {
       // Perform Turn
       else {
 
-        Direction slideDirection = turnPlan.get().getSlideDirection();
-        int slideIndex = turnPlan.get().getSlideIndex();
-        int rotations = turnPlan.get().getSpareTileRotations();
-        Position moveDestination = turnPlan.get().getMoveDestination();
+        Turn turn = turnPlan.get();
 
-        this.game.slideAndInsert(slideDirection, slideIndex, rotations);
-        this.game.moveActivePlayer(moveDestination);
+        Position moveDestination = turnPlan.get().getMoveDestination();
+        if (this.rules.isValidSlideAndInsert(turn, this.game.getBoardWidth(), this.game.getBoardHeight())) {
+          this.game.slideAndInsert(turn);
+          this.game.moveActivePlayer(moveDestination);
+        } else {
+          this.kickPlayerInGameAndRef(activePlayer);
+        }
+
         this.remindPlayersReturnHome();
         this.informObserverOfState();
       }
@@ -206,15 +215,13 @@ public class Referee implements IReferee {
     if (turnPlan.isEmpty()) {
       return true;
     }
-    Direction slideDirection = turnPlan.get().getSlideDirection();
-    int slideIndex = turnPlan.get().getSlideIndex();
-    int rotations = turnPlan.get().getSpareTileRotations();
+
+    Turn turn = turnPlan.get();
     Position moveDestination = turnPlan.get().getMoveDestination();
 
     ExperimentationBoard expBoard = this.game.getBoard().getExperimentationBoard();
 
-    if (!this.game.getBoard().getRules()
-        .isValidSlideAndInsert(slideDirection, slideIndex, rotations)) {
+    if (!this.rules.isValidSlideAndInsert(turn, )) {
       return false;
     }
     return expBoard
@@ -352,7 +359,7 @@ public class Referee implements IReferee {
   }
 
   private Map<PlayerAvatar, IPlayer> mapPlayerAvatarsToPlayerClients(State state,
-                                                                     List<IPlayer> iPlayerInterfaces) {
+      List<IPlayer> iPlayerInterfaces) {
     Map<PlayerAvatar, IPlayer> map = new HashMap<>();
     if (iPlayerInterfaces.size() != state.getPlayerList().size()) {
       throw new IllegalArgumentException("Amount of clients and players do not match.");
@@ -378,7 +385,7 @@ public class Referee implements IReferee {
     for (PlayerAvatar player : this.game.getPlayerList()) {
       PlayerHandler playerHandler = this.playerAvatarToHandler.get(player);
       Optional<Boolean> outcome = playerHandler.setup(Optional.of(
-          new StateProjection(this.game, player, this.game.getPreviousSlideAndInsert())),
+              new StateProjection(this.game, player, this.game.getPreviousSlideAndInsert())),
           player.getGoal());
 
       if (outcome.isEmpty()) {
@@ -405,7 +412,7 @@ public class Referee implements IReferee {
   }
 
   private Map<PlayerAvatar, PlayerHandler> mapPlayerAvatarsToPlayerHandlers(IState game,
-                                                                            List<IPlayer> IPlayers) {
+      List<IPlayer> IPlayers) {
     if (IPlayers.size() != game.getPlayerList().size()) {
       throw new IllegalArgumentException("Amount of clients and players do not match.");
     }
@@ -430,29 +437,18 @@ public class Referee implements IReferee {
   }
 
 
-
   private List<Position> immovablePositionsForBoard(IBoard board) {
-    List<Integer> immovableRowIndices = new ArrayList<>();
-    List<Integer> immovableColIndices = new ArrayList<>();
-    // Iterate through immovable rows
-    for (int i = 0; i < board.getHeight(); i++) {
-      if (!board.getRules().isValidSlideAndInsert(Direction.RIGHT, i, 0)) {
-        immovableRowIndices.add(i);
-      }
-    }
-    for (int i = 0; i < board.getWidth(); i++) {
-      if (!board.getRules().isValidSlideAndInsert(Direction.DOWN, i, 0)) {
-        immovableColIndices.add(i);
-      }
-    }
 
     List<Position> immovablePositions = new ArrayList<>();
-    for (int row = 0; row < immovableRowIndices.size(); row++) {
-      for (int col = 0; col < immovableColIndices.size(); col++) {
-        immovablePositions.add(new Position(row, col));
+    // Iterate through immovable rows
+    for (int row = 0; row < board.getHeight(); row++) {
+      for (int col = 0; col < board.getWidth(); col++) {
+        Position currentPosition = new Position(row, col);
+        if (this.rules.immovablePosition(currentPosition)) {
+          immovablePositions.add(currentPosition);
+        }
       }
     }
-
     return immovablePositions;
   }
 
@@ -481,10 +477,10 @@ public class Referee implements IReferee {
   }
 
   /**
-   * Wrapper for the Client class, adding exception and timeout handling for any Client
-   * calls.
+   * Wrapper for the Client class, adding exception and timeout handling for any Client calls.
    */
   private class PlayerHandler {
+
     private final IPlayer player;
 
     public PlayerHandler(IPlayer player) {

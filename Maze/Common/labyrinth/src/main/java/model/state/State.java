@@ -3,6 +3,7 @@ package model.state;
 import static model.board.Direction.*;
 import static model.state.GameStatus.*;
 
+import java.awt.Dimension;
 import model.Exceptions.IllegalGameActionException;
 import model.board.Direction;
 import model.Position;
@@ -171,6 +172,17 @@ public class State implements IState {
   public PlayerAvatar getActivePlayer() {
     return this.playerList.get(this.activePlayer);
   }
+
+  @Override
+  public int getBoardWidth() {
+    return this.board.getWidth();
+  }
+
+  @Override
+  public int getBoardHeight() {
+    return this.board.getHeight();
+  }
+
 
   public IBoard getBoard() {
     return this.board;

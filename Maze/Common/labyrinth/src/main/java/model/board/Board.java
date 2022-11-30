@@ -22,9 +22,8 @@ public class Board implements IBoard {
 
   protected final int height;
 
-  protected final IRules rules;
 
-  public Board(int width, int height, Tile[][] tileGrid, Tile spareTile, IRules rules) {
+  public Board(int width, int height, Tile[][] tileGrid, Tile spareTile) {
 
     // TODO: fix exception messages
     this.width = width;
@@ -40,13 +39,11 @@ public class Board implements IBoard {
     }
     this.tileGrid = tileGrid;
     this.spareTile = spareTile;
-    this.rules = rules;
   }
 
   public Board(int width, int height) {
     this.width = width;
     this.height = height;
-    this.rules = new DefaultRules(width, height);
 
     Gem[] gemPoolArray = Gem.values();
     List<Gem> gemPool = List.of(gemPoolArray);
@@ -111,9 +108,6 @@ public class Board implements IBoard {
 
   @Override
   public void slideAndInsert(Direction direction, int index, int rotations) {
-    if (!this.rules.isValidSlideAndInsert(direction, index, rotations)) {
-      throw new IllegalGameActionException("Tried to perform an invalid slide and insert action.");
-    }
     Tile nextSpareTile = this.slide(direction, index);
     Position emptySpot = this.getEmptySpot(direction, index);
     this.insert(rotations, emptySpot, nextSpareTile);
@@ -194,10 +188,6 @@ public class Board implements IBoard {
     return builder.toString();
   }
 
-  @Override
-  public IRules getRules() {
-    return this.rules;
-  }
 
   public IBoard deepCopy() {
     Tile[][] newGrid = new Tile[this.getHeight()][this.getWidth()];
@@ -207,7 +197,7 @@ public class Board implements IBoard {
       }
     }
     return new Board(this.width,
-        this.height, newGrid, this.spareTile.deepCopy(), this.rules);
+        this.height, newGrid, this.spareTile.deepCopy());
   }
 
 

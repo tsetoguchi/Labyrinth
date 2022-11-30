@@ -16,7 +16,7 @@ public class ExperimentationBoard extends Board {
 
     public ExperimentationBoard(int width, int height, Tile[][] tileGrid, Tile spareTile,
                                 IRules rules) {
-        super(width, height, tileGrid, spareTile, rules);
+        super(width, height, tileGrid, spareTile);
     }
 
     public ExperimentationBoard(int width, int height) {

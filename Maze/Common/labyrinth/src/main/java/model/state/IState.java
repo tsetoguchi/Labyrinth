@@ -1,5 +1,6 @@
 package model.state;
 
+import java.awt.Dimension;
 import model.board.Direction;
 import model.Position;
 import model.board.IBoard;
@@ -32,6 +33,10 @@ public interface IState {
   Optional<SlideAndInsertRecord> getPreviousSlideAndInsert();
 
   PlayerAvatar getActivePlayer();
+
+  int getBoardWidth();
+
+  int getBoardHeight();
 
 
 }
