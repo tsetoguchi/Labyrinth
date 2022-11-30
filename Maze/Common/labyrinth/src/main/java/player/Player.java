@@ -1,6 +1,7 @@
 package player;
 
 import model.Position;
+import model.board.Board;
 import model.board.IBoard;
 import model.projections.StateProjection;
 import referee.Turn;
@@ -48,7 +49,7 @@ public class Player implements IPlayer {
 
     @Override
     public IBoard proposeBoard(int rows, int columns) {
-        return new FlexibleBoard(columns, rows);
+        return new Board(columns, rows);
     }
 
 }
