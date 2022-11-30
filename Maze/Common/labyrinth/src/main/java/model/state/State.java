@@ -50,13 +50,13 @@ public class State implements IState {
   private Set<PlayerAvatar> haveSkipped;
 
   /**
-   * Creates a new State representing a game in progress with the given properties. The turn order is
-   * defined by the Player list order. Throws an exception if a game is initialized with an illegal
-   * IBoard or set of Players.
+   * Creates a new State representing a game in progress with the given properties. The turn order
+   * is defined by the Player list order. Throws an exception if a game is initialized with an
+   * illegal IBoard or set of Players.
    */
   public State(IBoard board, List<PlayerAvatar> playerList, int activePlayer,
-               Optional<SlideAndInsertRecord> previousSlideAndInsert, int roundsElapsed,
-               GameStatus status, Set<PlayerAvatar> haveSkipped) {
+      Optional<SlideAndInsertRecord> previousSlideAndInsert, int roundsElapsed,
+      GameStatus status, Set<PlayerAvatar> haveSkipped) {
     this.board = board;
     this.playerList = new ArrayList<>();
     if (playerList == null) {
@@ -88,7 +88,7 @@ public class State implements IState {
    * active player.
    */
   public State(IBoard board, List<PlayerAvatar> playerList, int activePlayer,
-               Optional<SlideAndInsertRecord> previousSlideAndInsert) {
+      Optional<SlideAndInsertRecord> previousSlideAndInsert) {
     this(board, playerList, activePlayer, previousSlideAndInsert, 0, IN_PROGRESS, new HashSet<>());
   }
 
@@ -96,7 +96,6 @@ public class State implements IState {
    * Slides the row (for left or right slides) or column (for up or down slides) at the given index
    * in the specified direction, then inserts the spare tile after rotating it the given number of
    * times. If a Player is moved off the board, move the Player to the newly inserted tile.
-   *
    */
   public void slideAndInsert(Direction direction, int index, int rotations) {
     this.assertGameIsNotOver();
@@ -162,6 +161,16 @@ public class State implements IState {
 
     this.getActivePlayer().setCurrentPosition(destination);
     this.nextTurn();
+  }
+
+  @Override
+  public StateProjection getStateProjection() {
+    List<PlayerAvatar> playersDeepCopy = new ArrayList<>();
+    for (PlayerAvatar player : this.playerList) {
+      playersDeepCopy.add(player.deepCopy());
+    }
+    return new StateProjection(this.getBoard().getExperimentationBoard(), playersDeepCopy,
+        this.previousSlideAndInsert);
   }
 
 //    public boolean isValidSlideAndInsert(Direction direction, int index, int rotations) {
@@ -250,11 +259,6 @@ public class State implements IState {
     }
   }
 
-  private boolean activePlayerIsOnGoalTile() {
-    PlayerAvatar currentPlayer = this.getActivePlayer();
-    return currentPlayer.getCurrentPosition().equals(currentPlayer.getGoal());
-  }
-
   private void assertGameIsNotOver() {
     if (this.status != IN_PROGRESS) {
       throw new IllegalGameActionException(
@@ -322,14 +326,6 @@ public class State implements IState {
             playerPosition.addDeltaWithBoardWrap(0, 1, boardHeight, boardWidth));
       }
     }
-  }
-
-  public StateProjection getStateProjection() {
-
-
-
-    new StateProjection()
-
   }
 
 

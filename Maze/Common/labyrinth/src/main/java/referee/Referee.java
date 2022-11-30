@@ -70,7 +70,7 @@ public class Referee implements IReferee {
 
   public Referee(IState game, List<IPlayer> players) {
     this(game, players, List.of(),
-        new DefaultRules(game.getBoard().getWidth(), game.getBoard().getHeight()));
+        new DefaultRules());
   }
 
   /**
@@ -176,7 +176,8 @@ public class Referee implements IReferee {
         Turn turn = turnPlan.get();
 
         Position moveDestination = turnPlan.get().getMoveDestination();
-        if (this.rules.isValidSlideAndInsert(turn, this.game.getBoardWidth(), this.game.getBoardHeight())) {
+        if (this.rules.isValidSlideAndInsert(turn, this.game.getBoardWidth(),
+            this.game.getBoardHeight())) {
           this.game.slideAndInsert(turn);
           this.game.moveActivePlayer(moveDestination);
         } else {
@@ -221,7 +222,8 @@ public class Referee implements IReferee {
 
     ExperimentationBoard expBoard = this.game.getBoard().getExperimentationBoard();
 
-    if (!this.rules.isValidSlideAndInsert(turn, )) {
+    if (!this.rules.isValidSlideAndInsert(turn, this.game.getBoardWidth(),
+        this.game.getBoardHeight())) {
       return false;
     }
     return expBoard

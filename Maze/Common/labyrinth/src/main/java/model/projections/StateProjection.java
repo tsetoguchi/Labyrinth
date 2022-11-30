@@ -18,13 +18,9 @@ public class StateProjection {
     private final List<PlayerAvatar> players;
     private final Optional<SlideAndInsertRecord> previousSlideAndInsert;
 
-    public StateProjection(IState game, PlayerAvatar viewer, Optional<SlideAndInsertRecord> previousSlideAndInsert) {
-        this.board = game.getBoard().getExperimentationBoard();
-        List<PlayerAvatar> playerViews = new ArrayList<>();
-        for (PlayerAvatar player : game.getPlayerList()) {
-            playerViews.add(player);
-        }
-        this.players = playerViews;
+    public StateProjection(ExperimentationBoard board, List<PlayerAvatar> players, Optional<SlideAndInsertRecord> previousSlideAndInsert) {
+        this.board = board;
+        this.players = players;
         this.previousSlideAndInsert = previousSlideAndInsert;
     }
 

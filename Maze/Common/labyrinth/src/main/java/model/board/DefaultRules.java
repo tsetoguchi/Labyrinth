@@ -1,5 +1,6 @@
 package model.board;
 
+import model.Position;
 import referee.Turn;
 
 import static model.board.Direction.DOWN;
@@ -26,6 +27,11 @@ public class DefaultRules implements IRules {
     boolean isPositiveRotations = rotations >= 0;
 
     return isEvenIndex && isPositiveIndex && indexWithinBounds && isPositiveRotations;
+  }
+
+  @Override
+  public boolean immovablePosition(Position position) {
+    return position.getRow() % 2 != 0 && position.getColumn() % 2 != 0;
   }
 
 }

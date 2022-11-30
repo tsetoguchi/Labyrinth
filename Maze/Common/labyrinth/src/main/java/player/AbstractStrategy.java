@@ -6,7 +6,6 @@ import model.board.DefaultRules;
 import model.board.Direction;
 import model.board.IBoard;
 import model.board.IRules;
-import model.projections.PlayerAvatar;
 import model.projections.StateProjection;
 import model.state.PlayerAvatar;
 import model.state.SlideAndInsertRecord;
