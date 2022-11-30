@@ -219,6 +219,7 @@ public class Referee implements IReferee {
 
     Turn turn = turnPlan.get();
     Position moveDestination = turnPlan.get().getMoveDestination();
+    Position currentPosition = this.game.getActivePlayer().getCurrentPosition();
 
     ExperimentationBoard expBoard = this.game.getBoard().getExperimentationBoard();
 
@@ -227,7 +228,7 @@ public class Referee implements IReferee {
       return false;
     }
     return expBoard
-        .findReachableTilePositionsAfterSlideAndInsert(turn)
+        .findReachableTilePositionsAfterSlideAndInsert(turn, currentPosition)
         .contains(moveDestination);
   }
 

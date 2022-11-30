@@ -24,7 +24,7 @@ public class StateProjection {
         this.previousSlideAndInsert = previousSlideAndInsert;
     }
 
-    public IBoard getBoard() {
+    public ExperimentationBoard getBoard() {
         return this.board;
     }
 

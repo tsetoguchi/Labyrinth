@@ -30,13 +30,12 @@ public class ExperimentationBoard extends Board {
      * position (on the updated board) and their corresponding positions (on the updated board)
      */
 
-    public Set<Position> findReachableTilePositionsAfterSlideAndInsert(Turn turn) {
+    public Set<Position> findReachableTilePositionsAfterSlideAndInsert(Turn turn, Position current) {
         Direction direction = turn.getSlideDirection();
         int index = turn.getSlideIndex();
         int rotations = turn.getSpareTileRotations();
-        Position position = turn.getMoveDestination();
         this.slideAndInsert(direction, index, rotations);
-        Position avatarAfterSliding = this.getAvatarPositionAfterSliding(position,
+        Position avatarAfterSliding = this.getAvatarPositionAfterSliding(current,
                 this.getWidth(), this.getHeight(), direction, index);
         Set<Position> reachablePositions = this.getReachablePositions(avatarAfterSliding);
 

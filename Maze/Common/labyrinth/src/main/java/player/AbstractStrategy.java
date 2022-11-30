@@ -4,6 +4,7 @@ import model.Position;
 
 import model.board.DefaultRules;
 import model.board.Direction;
+import model.board.ExperimentationBoard;
 import model.board.IBoard;
 import model.board.IRules;
 import model.projections.StateProjection;
@@ -24,6 +25,7 @@ import static model.board.Direction.*;
 public abstract class AbstractStrategy implements IStrategy {
 
   private final IRules rules;
+  private StateProjection state;
 
   public AbstractStrategy(IRules rules) {
     this.rules = rules;
@@ -35,8 +37,7 @@ public abstract class AbstractStrategy implements IStrategy {
   /**
    * Gets all candidates to be considered in the desired order.
    */
-  abstract protected List<Position> getCandidatesInOrder(IBoard board,
-      Position goal);
+  abstract protected List<Position> getCandidatesInOrder(IBoard board, Position goal);
 
   /**
    * Given the current board, spare tile, and player information, produces a plan for the turn which
@@ -45,14 +46,13 @@ public abstract class AbstractStrategy implements IStrategy {
    */
   @Override
   public Optional<Turn> createTurnPlan(StateProjection state, Position goal) {
-    IBoard board = state.getBoard();
-    PlayerAvatar player = state.getSelf();
+    this.state = state;
+    ExperimentationBoard board = this.state.getBoard();
+    PlayerAvatar player = this.state.getSelf();
     Optional<Turn> planForCandidate = Optional.empty();
-    for (Position candidate : this.getCandidatesInOrder(board,
-        goal)) {
+    for (Position candidate : this.getCandidatesInOrder(board, goal)) {
       planForCandidate =
-          this.createTurnPlanForCandidate(player.getCurrentPosition(), board, candidate,
-              state.getPreviousSlideAndInsert());
+          this.createTurnPlanForCandidate(player.getCurrentPosition(), candidate);
       if (planForCandidate.isPresent()) {
         return planForCandidate;
       }
@@ -64,32 +64,28 @@ public abstract class AbstractStrategy implements IStrategy {
    * Returns a Turn which will result in reaching the given candidate Tile, or returns
    * Optional.empty() if it cannot find such a plan.
    */
-  private Optional<Turn> createTurnPlanForCandidate(Position currentPosition,
-      IBoard board, Position candidate,
-      Optional<SlideAndInsertRecord> previousSlide) {
+  private Optional<Turn> createTurnPlanForCandidate(Position currentPosition, Position candidate){
+    ExperimentationBoard board = this.state.getBoard();
     int boardHeight = board.getHeight();
     int boardWidth = board.getWidth();
 
-    for (int rowIndex = 0; rowIndex < boardHeight; rowIndex += 2) { // only check even rows
+    for (int rowIndex = 0; rowIndex < boardHeight; rowIndex++) {
       for (int rotations = 4; rotations >= 1; rotations--) {
         for (Direction direction : new Direction[]{LEFT, RIGHT}) {
-          Optional<Turn> leftOrRightPlan =
-              this.trySlide(board,
-                  currentPosition, previousSlide, );
-          if (leftOrRightPlan.isPresent()) {
-            return leftOrRightPlan;
+          Turn toTry = new Turn(direction, rowIndex, rotations, candidate);
+          if(this.validTurn(currentPosition, toTry)){
+            return Optional.of(toTry);
           }
         }
       }
     }
-    for (int colIndex = 0; colIndex < boardWidth; colIndex += 2) {
+
+    for (int colIndex = 0; colIndex < boardWidth; colIndex++) {
       for (int rotations = 4; rotations >= 1; rotations--) {
         for (Direction direction : new Direction[]{UP, DOWN}) {
-          Optional<Turn> upOrDownPlan =
-              this.trySlide(board,
-                  currentPosition, previousSlide, );
-          if (upOrDownPlan.isPresent()) {
-            return upOrDownPlan;
+          Turn toTry = new Turn(direction, colIndex, rotations, candidate);
+          if(this.validTurn(currentPosition, toTry)){
+            return Optional.of(toTry);
           }
         }
       }
@@ -98,34 +94,19 @@ public abstract class AbstractStrategy implements IStrategy {
     return Optional.empty();
   }
 
-  private Optional<Turn> trySlide(IBoard board,
-      Position currentPosition,
-      Optional<SlideAndInsertRecord> previousSlide, Turn turn) {
-
+  private boolean validTurn(Position current, Turn turn) {
+    ExperimentationBoard board = this.state.getBoard();
+    Optional<SlideAndInsertRecord> previousSlide = this.state.getPreviousSlideAndInsert();
     boolean slideValid = this.rules.isValidSlideAndInsert(turn, board.getWidth(), board.getHeight());
-
-    Direction direction = turn.getSlideDirection();
-    int index = turn.getSlideIndex();
-    int rotations = turn.getSpareTileRotations();
     Position candidate = turn.getMoveDestination();
-    boolean reversesPrevious =
-        previousSlide.isPresent() && this.reversesPreviousSlide(direction, index,
-            previousSlide.get());
+    boolean reversesPrevious = previousSlide.isPresent() && previousSlide.get().revertsCheck(turn);
 
     if (slideValid && !reversesPrevious) {
       Set<Position> reachableTilePositionsAfterSlide =
-          board.getExperimentationBoard()
-              .findReachableTilePositionsAfterSlideAndInsert(turn);
-      if (reachableTilePositionsAfterSlide.contains(candidate)) {
-        return Optional.of(new Turn(direction, index, rotations, candidate));
-      }
+          board.findReachableTilePositionsAfterSlideAndInsert(turn, current);
+      return reachableTilePositionsAfterSlide.contains(candidate);
     }
-    return Optional.empty();
+    return false;
   }
 
-  private boolean reversesPreviousSlide(Direction direction, int index,
-      SlideAndInsertRecord previousSlide) {
-    return index == previousSlide.getIndex()
-        && direction.equals(Direction.opposite(previousSlide.getDirection()));
-  }
 }
