@@ -2,11 +2,11 @@ package player;
 
 import model.Position;
 
-import model.board.DefaultRules;
+import referee.DefaultRules;
 import model.board.Direction;
 import model.board.ExperimentationBoard;
 import model.board.IBoard;
-import model.board.IRules;
+import referee.IRules;
 import model.projections.StateProjection;
 import model.state.PlayerAvatar;
 import model.state.SlideAndInsertRecord;

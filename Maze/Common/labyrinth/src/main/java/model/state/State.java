@@ -24,6 +24,8 @@ import java.util.Set;
  */
 public class State implements IState {
 
+  private static final int MAX_ROUNDS = 1000;
+
   private final IBoard board;
 
   /**
@@ -99,68 +101,6 @@ public class State implements IState {
     this(board, playerList, activePlayer, previousSlideAndInsert, 0, IN_PROGRESS, new HashSet<>());
   }
 
-
-
-  public boolean activePlayerCanReachPosition(Position positionToReach) {
-    Set<Position> reachableTiles = this.board.getReachablePositions(
-        this.getActivePlayer().getCurrentPosition());
-    return reachableTiles.contains(positionToReach);
-  }
-
-
-  /**
-   * Kicks the player with the specified color from the game
-   */
-  public void kickPlayer(PlayerAvatar player) {
-    if (this.playerList.size() == 0) {
-      throw new IllegalGameActionException("Tried to kick the active player when there were no" +
-          "players in the game.");
-    }
-
-    this.playerList.remove(player);
-    this.haveSkipped.remove(player);
-
-    if (this.playerList.size() == 0) {
-      this.status = NO_REMAINING_PLAYERS;
-    }
-  }
-
-  /**
-   * Skips the current player's turn.
-   */
-  public void skipTurn() {
-    this.assertGameIsNotOver();
-    this.haveSkipped.add(this.playerList.get(this.activePlayer));
-    if (this.haveSkipped.containsAll(this.playerList)) {
-      this.status = ALL_SKIPPED;
-    }
-    this.nextTurn();
-  }
-
-  @Override
-  public StateProjection getStateProjection() {
-    List<PlayerAvatar> playersDeepCopy = new ArrayList<>();
-    for (PlayerAvatar player : this.playerList) {
-      playersDeepCopy.add(player.deepCopy());
-    }
-    return new StateProjection(this.getBoard().getExperimentationBoard(), playersDeepCopy,
-        this.previousSlideAndInsert);
-  }
-
-//    public boolean isValidSlideAndInsert(Direction direction, int index, int rotations) {
-//        return !this.doesSlideUndoPrevious(direction, index) &&
-//                this.board.getRules().isValidSlideAndInsert(direction, index, rotations);
-//    }
-
-  public Optional<PlayerAvatar> getPlayer(Color color) {
-    for (PlayerAvatar player : this.playerList) {
-      if (player.getColor().equals(color)) {
-        return Optional.of(player);
-      }
-    }
-    return Optional.empty();
-  }
-
   /**
    * Verifies that all fields are non-null and enforces all game constraints
    */
@@ -197,22 +137,14 @@ public class State implements IState {
     }
 
     if (this.board == null || this.previousSlideAndInsert == null || this.status == null
-        || this.haveSkipped == null) {
+            || this.haveSkipped == null) {
       throw new IllegalArgumentException("Fields cannot be null.");
     }
   }
 
-  private void assertGameIsNotOver() {
-    if (this.status != IN_PROGRESS) {
-      throw new IllegalGameActionException(
-          "Tried to perform a game action after the game was over.");
-    }
-  }
-
-  private boolean activePlayerIsOnHomeTile() {
-    Position playerHome = this.getActivePlayer().getHome();
-    return this.getActivePlayer().getCurrentPosition().equals(playerHome);
-  }
+  /*
+  Turn Handling
+   */
 
   /**
    * Moves the game to the next turn by updating the active Player. Advances the round counter if
@@ -223,36 +155,66 @@ public class State implements IState {
       throw new IllegalStateException(String.format("The active Player index %d is " +
           "outside the bounds of the player List.", this.activePlayer));
     }
-    if (this.activePlayer == this.playerList.size() - 1) {
-      this.activePlayer = 0;
-    } else {
-      this.activePlayer++;
-    }
+
+    this.activePlayer = (this.activePlayer + 1) % this.playerList.size();
+
     if (this.activePlayer == 0) {
-      this.roundsElapsed += 1;
-      if (this.roundsElapsed > 1000) {
-        this.status = ROUND_LIMIT_REACHED;
-      }
+      this.roundHandler();
     }
   }
 
-  private boolean doesSlideUndoPrevious(Direction direction, int index) {
-    if (this.previousSlideAndInsert.isPresent()) {
-      return this.previousSlideAndInsert.get().getDirection() == Direction.opposite(direction)
-          && this.previousSlideAndInsert.get().getIndex() == index;
+  private void roundHandler(){
+    this.roundsElapsed += 1;
+
+    if (this.roundsElapsed > MAX_ROUNDS) {
+      this.status = ROUND_LIMIT_REACHED;
     }
-    return false;
+
+    if(this.haveSkipped.containsAll(this.playerList)){
+      this.status = ALL_SKIPPED;
+    }
+  }
+
+  /**
+   * Kicks the player with the specified color from the game
+   */
+  public void kickPlayer(PlayerAvatar player) {
+
+    int playerIndex = this.playerList.indexOf(player);
+
+    if(playerIndex < this.activePlayer && playerIndex != -1){
+      this.activePlayer--;
+    }
+
+    this.playerList.remove(player);
+    this.haveSkipped.remove(player);
+
+    if (this.playerList.size() == 0) {
+      this.status = NO_REMAINING_PLAYERS;
+    }
+  }
+
+  /**
+   * Skips the current player's turn.
+   */
+  public void skipTurn() {
+    this.haveSkipped.add(this.getActivePlayer());
+    this.nextTurn();
+  }
+
+  public boolean isGameOver() {
+    return this.status != IN_PROGRESS;
   }
 
   /*
-  Turn Logic:
+  Turn Execution:
    */
 
-  @Override
   public void executeTurn(Turn turn) {
     this.assertValidTurn(turn);
     this.slideAndInsert(turn);
-    this.moveActivePlayer(turn.getMoveDestination());
+    this.getActivePlayer().setCurrentPosition(turn.getMoveDestination());
+    this.nextTurn();
   }
 
   private void assertValidTurn(Turn turn) throws IllegalGameActionException{
@@ -268,8 +230,6 @@ public class State implements IState {
     int index = turn.getSlideIndex();
     int rotations = turn.getSpareTileRotations();
     Direction direction = turn.getSlideDirection();
-
-    this.assertGameIsNotOver();
     if (this.doesSlideUndoPrevious(direction, index)) {
       throw new IllegalGameActionException(
               "Attempted to perform a slide which undoes the previous slide.");
@@ -281,21 +241,6 @@ public class State implements IState {
             new SlideAndInsertRecord(direction, index, rotations));
 
     this.haveSkipped = new HashSet<>();
-  }
-
-  /**
-   * Moves the active player to the given destination, if it can be reached, and throws an exception
-   * if not.
-   */
-  private void moveActivePlayer(Position destination) {
-    this.assertGameIsNotOver();
-    if (!this.activePlayerCanReachPosition(destination)) {
-      throw new IllegalGameActionException(
-              "Tried to move the active player to an unreachable tile.");
-    }
-
-    this.getActivePlayer().setCurrentPosition(destination);
-    this.nextTurn();
   }
 
   /**
@@ -325,6 +270,13 @@ public class State implements IState {
     }
   }
 
+  private boolean doesSlideUndoPrevious(Direction direction, int index) {
+    if (this.previousSlideAndInsert.isPresent()) {
+      return this.previousSlideAndInsert.get().getDirection() == Direction.opposite(direction)
+              && this.previousSlideAndInsert.get().getIndex() == index;
+    }
+    return false;
+  }
 
   /*
   Getters:
@@ -334,12 +286,10 @@ public class State implements IState {
     return this.playerList.get(this.activePlayer);
   }
 
-  @Override
   public int getBoardWidth() {
     return this.board.getWidth();
   }
 
-  @Override
   public int getBoardHeight() {return this.board.getHeight();}
 
   public IBoard getBoard() {
@@ -356,6 +306,15 @@ public class State implements IState {
 
   public Optional<SlideAndInsertRecord> getPreviousSlideAndInsert() {
     return this.previousSlideAndInsert;
+  }
+
+  public StateProjection getStateProjection() {
+    List<PlayerAvatar> playersDeepCopy = new ArrayList<>();
+    for (PlayerAvatar player : this.playerList) {
+      playersDeepCopy.add(player.deepCopy());
+    }
+    return new StateProjection(this.getBoard().getExperimentationBoard(), playersDeepCopy,
+            this.previousSlideAndInsert);
   }
 
 }

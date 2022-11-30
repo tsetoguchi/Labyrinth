@@ -8,10 +8,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
-import model.board.DefaultRules;
 import model.board.ExperimentationBoard;
 import model.board.IBoard;
-import model.board.IRules;
 import model.projections.StateProjection;
 import model.state.GameResults;
 import model.state.GameStatus;
@@ -129,8 +127,7 @@ public class Referee implements IReferee {
     this.informObserverOfState();
     this.setupPlayers();
 
-    GameStatus gameStatus = this.game.getGameStatus();
-    while (gameStatus == IN_PROGRESS) {
+    while (this.isGameOver()) {
       this.handleTurn();
       gameStatus = this.game.getGameStatus();
     }
@@ -146,6 +143,12 @@ public class Referee implements IReferee {
     this.playerAvatarToHandler = this.mapPlayerAvatarsToPlayerHandlers(game, iPlayerInterfaces);
     this.game = game;
     this.runGame();
+  }
+
+  private boolean isGameOver(){
+    boolean status = this.game.isGameOver();
+    boolean homeReached = this.goalHandler.playerReachedHome();
+    return status || homeReached;
   }
 
   @Override
@@ -200,7 +203,7 @@ public class Referee implements IReferee {
     PlayerHandler playerHandler = this.playerAvatarToHandler.get(player);
     System.out.println(this.playerAvatarToHandler);
     Optional<Optional<Turn>> playerTurn = playerHandler.takeTurn(
-        new StateProjection(this.game, player, this.game.getPreviousSlideAndInsert()));
+        this.game.getStateProjection());
 
     if (playerTurn.isEmpty()) {
       // Player timed out or has an exception
@@ -236,17 +239,16 @@ public class Referee implements IReferee {
 
     for (PlayerAvatar player : this.game.getPlayerList()) {
       PlayerResult resultForPlayer = playerResults.get(player);
-      this.playerAvatarToHandler.get(player).informGameEnd(gameStatus, resultForPlayer);
 
       if (resultForPlayer.equals(PlayerResult.WINNER)) {
         Optional<Boolean> timeout = (this.playerAvatarToHandler.get(player).win(true));
         if (timeout.isEmpty()) {
-          this.kickPlayerInGameAndRef(player.getColor());
+          this.kickPlayerInGameAndRef(player);
         }
       } else {
         Optional<Boolean> timeout = this.playerAvatarToHandler.get(player).win(false);
         if (timeout.isEmpty()) {
-          this.kickPlayerInGameAndRef(player.getColor());
+          this.kickPlayerInGameAndRef(player);
         }
       }
     }
@@ -381,27 +383,27 @@ public class Referee implements IReferee {
   }
 
   private void setupPlayers() {
-    List<Color> playersToBeKicked = new ArrayList<>();
+    List<PlayerAvatar> playersToBeKicked = new ArrayList<>();
 
     for (PlayerAvatar player : this.game.getPlayerList()) {
       PlayerHandler playerHandler = this.playerAvatarToHandler.get(player);
       Optional<Boolean> outcome = playerHandler.setup(Optional.of(
-              new StateProjection(this.game, player, this.game.getPreviousSlideAndInsert())),
+              this.game.getStateProjection()),
           player.getGoal());
 
       if (outcome.isEmpty()) {
-        playersToBeKicked.add(player.getColor());
+        playersToBeKicked.add(player);
       }
     }
-    for (Color color : playersToBeKicked) {
-      System.out.println("Kick players in setup");
-      this.kickPlayerInGameAndRef(color);
+
+    for (PlayerAvatar player : playersToBeKicked) {
+      this.kickPlayerInGameAndRef(player);
     }
   }
 
   private void informObserverOfState() {
     for (IObserver observer : this.observers) {
-      observer.update(new StateProjection(this.game));
+      observer.update(this.game.getStateProjection());
     }
   }
 

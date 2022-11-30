@@ -1,6 +1,8 @@
-package model.board;
+package referee;
 
 import model.Position;
+import model.board.Direction;
+import referee.IRules;
 import referee.Turn;
 
 import static model.board.Direction.DOWN;

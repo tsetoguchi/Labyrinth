@@ -8,6 +8,7 @@ import static model.board.Direction.UP;
 import java.util.Set;
 
 import model.Position;
+import referee.IRules;
 import referee.Turn;
 
 /**

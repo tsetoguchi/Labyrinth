@@ -1,4 +1,4 @@
-package model.board;
+package referee;
 
 
 import model.Position;

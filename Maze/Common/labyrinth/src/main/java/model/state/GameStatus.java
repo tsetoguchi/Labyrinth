@@ -6,7 +6,6 @@ package model.state;
  */
 public enum GameStatus {
   IN_PROGRESS,
-  TREASURE_RETURNED,
   ALL_SKIPPED,
   ROUND_LIMIT_REACHED,
   NO_REMAINING_PLAYERS
