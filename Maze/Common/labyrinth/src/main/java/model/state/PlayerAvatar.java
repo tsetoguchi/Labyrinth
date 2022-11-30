@@ -1,7 +1,6 @@
 package model.state;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 import model.Position;
 
@@ -11,7 +10,6 @@ import model.Position;
 public class PlayerAvatar {
 
   private final Color color;
-
   private final Position home;
   private Position currentPosition;
 

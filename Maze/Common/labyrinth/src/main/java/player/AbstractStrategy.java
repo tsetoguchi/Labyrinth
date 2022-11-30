@@ -4,8 +4,9 @@ import model.Position;
 
 import model.board.Direction;
 import model.board.IBoard;
-import model.projections.PlayerProjection;
+import model.projections.PlayerAvatar;
 import model.projections.StateProjection;
+import model.state.PlayerAvatar;
 import model.state.SlideAndInsertRecord;
 import referee.Turn;
 
@@ -35,7 +36,7 @@ public abstract class AbstractStrategy implements IStrategy {
   @Override
   public Optional<Turn> createTurnPlan(StateProjection state, Position goal) {
     IBoard board = state.getBoard();
-    PlayerProjection player = state.getSelf();
+    PlayerAvatar player = state.getSelf();
     Optional<Turn> planForCandidate = Optional.empty();
     for (Position candidate : this.getCandidatesInOrder(board,
         goal)) {

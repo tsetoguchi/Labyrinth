@@ -32,11 +32,11 @@ public class StateProjection {
         return this.board;
     }
 
-    public List<PlayerProjection> getPlayers() {
+    public List<PlayerAvatar> getPlayers() {
         return this.players;
     }
 
-    public PlayerProjection getSelf() {
+    public PlayerAvatar getSelf() {
         return this.players.get(0);
     }
 

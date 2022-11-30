@@ -9,7 +9,7 @@ import model.board.Gem;
 import model.board.IBoard;
 import model.Position;
 import model.board.Tile;
-import model.projections.PlayerProjection;
+import model.projections.PlayerAvatar;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -48,7 +48,7 @@ public class GameCanvas extends JPanel {
     return this.states.get(this.currentState);
   }
 
-  private List<PlayerProjection> getPlayers() {
+  private List<PlayerAvatar> getPlayers() {
     return this.getCurrentState().getPlayers();
   }
 
@@ -56,23 +56,23 @@ public class GameCanvas extends JPanel {
   public void paint(Graphics g) {
     super.paint(g);
 
-    List<PlayerProjection> players = this.getPlayers();
+    List<PlayerAvatar> players = this.getPlayers();
 
     for (int row = 0; row < this.getCurrentState().getHeight(); row++) {
       for (int col = 0; col < this.getCurrentState().getWidth(); col++) {
         Position position = new Position(row, col);
 
-        List<PlayerProjection> homes = players.stream()
+        List<PlayerAvatar> homes = players.stream()
             .filter(p -> p.getHomePosition().equals(position)).collect(
                 Collectors.toList());
 
-        List<PlayerProjection> avatarPositions = players.stream()
+        List<PlayerAvatar> avatarPositions = players.stream()
             .filter(p -> p.getCurrentPosition().equals(position)).collect(
                 Collectors.toList());
 
         Tile tile = this.getCurrentState().getBoard().getTileAt(position);
         List<Color> playersTileIsHome = new ArrayList<>();
-        for (PlayerProjection player : homes) {
+        for (PlayerAvatar player : homes) {
           playersTileIsHome.add(player.getColor());
         }
 
@@ -87,7 +87,7 @@ public class GameCanvas extends JPanel {
   }
 
   private void drawTile(Graphics2D g, Parameters p, Tile tile,
-      List<PlayerProjection> homes, List<Color> homeColors) {
+                        List<PlayerAvatar> homes, List<Color> homeColors) {
     this.drawPathways(g, tile, p);
     this.drawGems(g, tile, p);
     this.drawAvatars(g, p);
@@ -144,7 +144,7 @@ public class GameCanvas extends JPanel {
   private void drawAvatars(Graphics g, Parameters p) {
     int i = 0;
     List<Color> avatars = new ArrayList<>();
-    for (PlayerProjection player : this.getPlayers()) {
+    for (PlayerAvatar player : this.getPlayers()) {
       avatars.add(player.getColor());
     }
     for (Color avatarColor : avatars) {

@@ -39,8 +39,7 @@ public class Referee implements IReferee {
 
   private Map<PlayerAvatar, Position> currentGoals;
   private Map<PlayerAvatar, Integer> goalCount;
-  private Set<Position> potentialGoals;
-
+  private Queue<Position> potentialGoals;
 
   // TODO: Make observer handler
   private final List<IObserver> observers;

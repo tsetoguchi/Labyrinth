@@ -22,7 +22,7 @@ public class Server implements Callable<GameResults> {
   private final int port;
   private final IState game;
   private ExecutorService service;
-
+  private static final int maxNumberOfPlayers = 6;
   private static final int minNumberOfPlayers = 2;
 
   public Server(IState game, int port) {
@@ -82,7 +82,7 @@ public class Server implements Callable<GameResults> {
       long waitTimeRemaining = endTime - System.currentTimeMillis();
 
       // 6 players signed up
-      if (this.proxyPlayers.size() >= 6) {
+      if (this.proxyPlayers.size() >= maxNumberOfPlayers) {
         break;
       }
 

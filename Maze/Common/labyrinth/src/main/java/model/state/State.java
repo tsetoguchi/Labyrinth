@@ -160,13 +160,6 @@ public class State implements IState {
     }
 
     this.getActivePlayer().setCurrentPosition(destination);
-
-    if (this.getActivePlayer().hasReachedGoal() && this.activePlayerIsOnHomeTile()) {
-      this.status = TREASURE_RETURNED;
-    }
-    if (this.activePlayerIsOnGoalTile()) {
-      this.getActivePlayer().setHasReachedGoal(true);
-    }
     this.nextTurn();
   }
 

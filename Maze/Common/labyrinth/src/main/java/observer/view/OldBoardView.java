@@ -2,7 +2,7 @@ package observer.view;
 
 import model.Position;
 import model.board.Tile;
-import model.projections.PlayerProjection;
+import model.projections.PlayerAvatar;
 import model.projections.BoardProjection;
 
 import javax.swing.*;
@@ -14,14 +14,14 @@ import java.util.List;
  */
 public class OldBoardView extends JPanel {
     private BoardProjection board;
-    private List<PlayerProjection> players;
+    private List<PlayerAvatar> players;
     private final OldTileView[][] tileGrid;
     private final int width;
     private final int height;
 
     private final int cellSideLen; // in pixels
 
-    public OldBoardView(BoardProjection board, List<PlayerProjection> players, int cellSideLen) {
+    public OldBoardView(BoardProjection board, List<PlayerAvatar> players, int cellSideLen) {
         this.board = board;
         this.width = board.getWidth();
         this.height = board.getHeight();
@@ -71,7 +71,7 @@ public class OldBoardView extends JPanel {
      * Adds the color of a player's avatar and a player's home for each player to their corresponding tile.
      */
     private void addPlayersToTiles() {
-        for (PlayerProjection player : this.players) {
+        for (PlayerAvatar player : this.players) {
             int avatarRow = player.getCurrentPosition().getRow();
             int avatarCol = player.getCurrentPosition().getColumn();
             int homeRow = player.getHomePosition().getRow();
