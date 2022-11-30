@@ -6,9 +6,10 @@
 4. Redesign *State*
 5. Build server-client architecture 
 6. Fix broken integration tests after redesign
-7. Remove arbitrary funcitonality that does not match the spec in *Server*.
-   8. "message client method".
+7. Remove arbitrary funcitonality that does not match the spec in *Server*
+   8. "message client method"
+9. Fix and create unit tests
 
 ### Completed:
-1. Fix IPlayer protocol to use setUp
+1. Fix *IPlayer* protocol to use *setUp*
 2. Redesign use of *Projections*
