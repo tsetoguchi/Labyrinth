@@ -33,6 +33,7 @@ public class Referee implements IReferee {
 
   private IState game;
 
+
   private final IRules rules;
   /**
    * Stores which client should be used to talk to each Player.
@@ -176,10 +177,8 @@ public class Referee implements IReferee {
         Turn turn = turnPlan.get();
 
         Position moveDestination = turnPlan.get().getMoveDestination();
-        if (this.rules.isValidSlideAndInsert(turn, this.game.getBoardWidth(),
-            this.game.getBoardHeight())) {
-          this.game.slideAndInsert(turn);
-          this.game.moveActivePlayer(moveDestination);
+        if (this.rules.isValidSlideAndInsert(turn, this.game.getBoardWidth(), this.game.getBoardHeight())) {
+          this.game.executeTurn(turn);
         } else {
           this.kickPlayerInGameAndRef(activePlayer);
         }

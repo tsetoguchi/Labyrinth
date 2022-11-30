@@ -5,6 +5,8 @@ import model.board.Direction;
 import model.Position;
 import model.board.IBoard;
 import model.projections.StateProjection;
+import referee.Turn;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -20,15 +22,13 @@ public interface IState {
 
   List<PlayerAvatar> getPlayerList();
 
-  void moveActivePlayer(Position destination);
-
   StateProjection getStateProjection();
 
   void kickPlayer(PlayerAvatar player);
 
   void skipTurn();
 
-  void slideAndInsert(Direction direction, int index, int rotations);
+  void executeTurn(Turn turn);
 
   Optional<SlideAndInsertRecord> getPreviousSlideAndInsert();
 

@@ -9,6 +9,8 @@ import model.board.Direction;
 import model.Position;
 import model.board.IBoard;
 import model.projections.StateProjection;
+import referee.Turn;
+
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -92,25 +94,7 @@ public class State implements IState {
     this(board, playerList, activePlayer, previousSlideAndInsert, 0, IN_PROGRESS, new HashSet<>());
   }
 
-  /**
-   * Slides the row (for left or right slides) or column (for up or down slides) at the given index
-   * in the specified direction, then inserts the spare tile after rotating it the given number of
-   * times. If a Player is moved off the board, move the Player to the newly inserted tile.
-   */
-  public void slideAndInsert(Direction direction, int index, int rotations) {
-    this.assertGameIsNotOver();
-    if (this.doesSlideUndoPrevious(direction, index)) {
-      throw new IllegalGameActionException(
-          "Attempted to perform a slide which undoes the previous slide.");
-    }
-    this.board.slideAndInsert(direction, index, rotations);
 
-    this.slidePlayers(direction, index);
-    this.previousSlideAndInsert = Optional.of(
-        new SlideAndInsertRecord(direction, index, rotations));
-
-    this.haveSkipped = new HashSet<>();
-  }
 
   public boolean activePlayerCanReachPosition(Position positionToReach) {
     Set<Position> reachableTiles = this.board.getReachablePositions(
@@ -148,11 +132,36 @@ public class State implements IState {
     this.nextTurn();
   }
 
+  @Override
+  public void executeTurn(Turn turn) {
+    this.slideAndInsert(turn);
+    this.moveActivePlayer(turn.getMoveDestination());
+  }
+
+  private void slideAndInsert(Turn turn) {
+    int index = turn.getSlideIndex();
+    int rotations = turn.getSpareTileRotations();
+    Direction direction = turn.getSlideDirection();
+
+    this.assertGameIsNotOver();
+    if (this.doesSlideUndoPrevious(direction, index)) {
+      throw new IllegalGameActionException(
+              "Attempted to perform a slide which undoes the previous slide.");
+    }
+    this.board.slideAndInsert(direction, index, rotations);
+
+    this.slidePlayers(direction, index);
+    this.previousSlideAndInsert = Optional.of(
+            new SlideAndInsertRecord(direction, index, rotations));
+
+    this.haveSkipped = new HashSet<>();
+  }
+
   /**
    * Moves the active player to the given destination, if it can be reached, and throws an exception
    * if not.
    */
-  public void moveActivePlayer(Position destination) {
+  private void moveActivePlayer(Position destination) {
     this.assertGameIsNotOver();
     if (!this.activePlayerCanReachPosition(destination)) {
       throw new IllegalGameActionException(
