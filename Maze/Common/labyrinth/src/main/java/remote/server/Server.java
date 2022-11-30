@@ -24,8 +24,8 @@ public class Server implements Callable<GameResults> {
   private final int port;
   private final IState game;
   private ExecutorService service;
-  private static final int maxNumberOfPlayers = 6;
-  private static final int minNumberOfPlayers = 2;
+  private static final int MAX_NUMBER_OF_PLAYERS = 6;
+  private static final int MIN_NUMBER_OF_PLAYERS = 2;
 
   public Server(IState game, int port) {
     this.game = game;
@@ -50,7 +50,7 @@ public class Server implements Callable<GameResults> {
 
     }
 
-    if (this.proxyPlayers.size() >= minNumberOfPlayers) {
+    if (this.proxyPlayers.size() >= MIN_NUMBER_OF_PLAYERS) {
 
       IReferee referee = new Referee(this.game, this.proxyPlayers);
       return referee.runGame();
@@ -62,7 +62,7 @@ public class Server implements Callable<GameResults> {
 
   private void beginSignUp(ServerSocket ss) {
 
-    for (int i = 0; i < NetUtil.numberOfWaitTimes && this.proxyPlayers.size() < minNumberOfPlayers;
+    for (int i = 0; i < NetUtil.NUMBER_OF_WAIT_TIMES && this.proxyPlayers.size() < MIN_NUMBER_OF_PLAYERS;
          i++) {
 
       this.signUpPlayers(ss);
@@ -73,10 +73,10 @@ public class Server implements Callable<GameResults> {
   }
 
   private void signUpPlayers(ServerSocket ss) {
-    long endTime = System.currentTimeMillis() + (NetUtil.defaultWaitPeriodSeconds * 1000);
+    long endTime = System.currentTimeMillis() + (NetUtil.DEFAULT_WAIT_PERIOD_SECONDS * 1000);
     while (true) {
 
-      // if the current time has exceeded the sign up period, leave the while loop
+      // if the current time has exceeded the sign-up period, leave the while loop
       if (System.currentTimeMillis() > endTime) {
         break;
       }
@@ -84,7 +84,7 @@ public class Server implements Callable<GameResults> {
       long waitTimeRemaining = endTime - System.currentTimeMillis();
 
       // 6 players signed up
-      if (this.proxyPlayers.size() >= maxNumberOfPlayers) {
+      if (this.proxyPlayers.size() >= MAX_NUMBER_OF_PLAYERS) {
         break;
       }
 
@@ -149,7 +149,7 @@ public class Server implements Callable<GameResults> {
 
     try {
       return Optional.of(this.service.submit(callableProxyPlayer)
-              .get(NetUtil.defaultPlayerSignUpSeconds, TimeUnit.SECONDS));
+              .get(NetUtil.DEFAULT_PLAYER_SIGN_UP_SECONDS, TimeUnit.SECONDS));
     } catch (Throwable throwable) {
       messageClient("close", out);
       client.close();
