@@ -24,12 +24,10 @@ public class ExperimentationBoard extends Board {
         super(width, height);
     }
 
-
     /**
      * Find all the Tiles that would be reachable after a given slide and insert from a given starting
      * position (on the updated board) and their corresponding positions (on the updated board)
      */
-
     public Set<Position> findReachableTilePositionsAfterSlideAndInsert(Turn turn, Position current) {
         Direction direction = turn.getSlideDirection();
         int index = turn.getSlideIndex();

@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import model.Exceptions.IllegalGameActionException;
 import model.board.Direction;
 import model.Position;
+import model.board.ExperimentationBoard;
 import model.board.IBoard;
 import model.projections.StateProjection;
 import referee.Turn;
@@ -50,6 +51,10 @@ public class State implements IState {
    * A set of all players who skipped during their last turn
    **/
   private Set<PlayerAvatar> haveSkipped;
+
+  /*
+  Constructors:
+   */
 
   /**
    * Creates a new State representing a game in progress with the given properties. The turn order
@@ -133,46 +138,6 @@ public class State implements IState {
   }
 
   @Override
-  public void executeTurn(Turn turn) {
-    this.slideAndInsert(turn);
-    this.moveActivePlayer(turn.getMoveDestination());
-  }
-
-  private void slideAndInsert(Turn turn) {
-    int index = turn.getSlideIndex();
-    int rotations = turn.getSpareTileRotations();
-    Direction direction = turn.getSlideDirection();
-
-    this.assertGameIsNotOver();
-    if (this.doesSlideUndoPrevious(direction, index)) {
-      throw new IllegalGameActionException(
-              "Attempted to perform a slide which undoes the previous slide.");
-    }
-    this.board.slideAndInsert(direction, index, rotations);
-
-    this.slidePlayers(direction, index);
-    this.previousSlideAndInsert = Optional.of(
-            new SlideAndInsertRecord(direction, index, rotations));
-
-    this.haveSkipped = new HashSet<>();
-  }
-
-  /**
-   * Moves the active player to the given destination, if it can be reached, and throws an exception
-   * if not.
-   */
-  private void moveActivePlayer(Position destination) {
-    this.assertGameIsNotOver();
-    if (!this.activePlayerCanReachPosition(destination)) {
-      throw new IllegalGameActionException(
-          "Tried to move the active player to an unreachable tile.");
-    }
-
-    this.getActivePlayer().setCurrentPosition(destination);
-    this.nextTurn();
-  }
-
-  @Override
   public StateProjection getStateProjection() {
     List<PlayerAvatar> playersDeepCopy = new ArrayList<>();
     for (PlayerAvatar player : this.playerList) {
@@ -186,37 +151,6 @@ public class State implements IState {
 //        return !this.doesSlideUndoPrevious(direction, index) &&
 //                this.board.getRules().isValidSlideAndInsert(direction, index, rotations);
 //    }
-
-  public PlayerAvatar getActivePlayer() {
-    return this.playerList.get(this.activePlayer);
-  }
-
-  @Override
-  public int getBoardWidth() {
-    return this.board.getWidth();
-  }
-
-  @Override
-  public int getBoardHeight() {
-    return this.board.getHeight();
-  }
-
-
-  public IBoard getBoard() {
-    return this.board;
-  }
-
-  public List<PlayerAvatar> getPlayerList() {
-    return this.playerList;
-  }
-
-  public GameStatus getGameStatus() {
-    return this.status;
-  }
-
-  public Optional<SlideAndInsertRecord> getPreviousSlideAndInsert() {
-    return this.previousSlideAndInsert;
-  }
 
   public Optional<PlayerAvatar> getPlayer(Color color) {
     for (PlayerAvatar player : this.playerList) {
@@ -310,6 +244,60 @@ public class State implements IState {
     return false;
   }
 
+  /*
+  Turn Logic:
+   */
+
+  @Override
+  public void executeTurn(Turn turn) {
+    this.assertValidTurn(turn);
+    this.slideAndInsert(turn);
+    this.moveActivePlayer(turn.getMoveDestination());
+  }
+
+  private void assertValidTurn(Turn turn) throws IllegalGameActionException{
+    Position current = this.getActivePlayer().getCurrentPosition();
+    ExperimentationBoard eBoard = this.board.getExperimentationBoard();
+    Set<Position> reachable = eBoard.findReachableTilePositionsAfterSlideAndInsert(turn, current);
+    if(reachable.contains(turn.getMoveDestination())){
+      throw new IllegalGameActionException("Illegal turn: " + turn.toString());
+    }
+  }
+
+  private void slideAndInsert(Turn turn) {
+    int index = turn.getSlideIndex();
+    int rotations = turn.getSpareTileRotations();
+    Direction direction = turn.getSlideDirection();
+
+    this.assertGameIsNotOver();
+    if (this.doesSlideUndoPrevious(direction, index)) {
+      throw new IllegalGameActionException(
+              "Attempted to perform a slide which undoes the previous slide.");
+    }
+    this.board.slideAndInsert(direction, index, rotations);
+
+    this.slidePlayers(direction, index);
+    this.previousSlideAndInsert = Optional.of(
+            new SlideAndInsertRecord(direction, index, rotations));
+
+    this.haveSkipped = new HashSet<>();
+  }
+
+  /**
+   * Moves the active player to the given destination, if it can be reached, and throws an exception
+   * if not.
+   */
+  private void moveActivePlayer(Position destination) {
+    this.assertGameIsNotOver();
+    if (!this.activePlayerCanReachPosition(destination)) {
+      throw new IllegalGameActionException(
+              "Tried to move the active player to an unreachable tile.");
+    }
+
+    this.getActivePlayer().setCurrentPosition(destination);
+    this.nextTurn();
+  }
+
   /**
    * Update the positions of each of the players who were on a tile that was moved during a Slide.
    */
@@ -337,5 +325,37 @@ public class State implements IState {
     }
   }
 
+
+  /*
+  Getters:
+   */
+
+  public PlayerAvatar getActivePlayer() {
+    return this.playerList.get(this.activePlayer);
+  }
+
+  @Override
+  public int getBoardWidth() {
+    return this.board.getWidth();
+  }
+
+  @Override
+  public int getBoardHeight() {return this.board.getHeight();}
+
+  public IBoard getBoard() {
+    return this.board;
+  }
+
+  public List<PlayerAvatar> getPlayerList() {
+    return this.playerList;
+  }
+
+  public GameStatus getGameStatus() {
+    return this.status;
+  }
+
+  public Optional<SlideAndInsertRecord> getPreviousSlideAndInsert() {
+    return this.previousSlideAndInsert;
+  }
 
 }
