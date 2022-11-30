@@ -19,7 +19,10 @@ public class XServer {
     JSONObject jsonGame = (JSONObject) jsonTokener.nextValue();
     IState game = JsonDeserializer.jsonToState(jsonGame);
 
-    Server server = new Server(game, port);
+    JsonObject jsonPlmt = jsonGame.getJsonArray();
+    List<Position> goals = JsonDeserializer.jsonToGoals(jsonPlmt);
+
+    Server server = new Server(game, goals, port);
     GameResults results = server.call();
     System.out.println(results.resultsJson());
   }

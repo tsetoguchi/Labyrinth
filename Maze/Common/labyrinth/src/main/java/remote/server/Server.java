@@ -1,5 +1,6 @@
 package remote.server;
 
+import model.Position;
 import model.state.GameResults;
 import model.state.IState;
 import referee.IReferee;
@@ -23,12 +24,14 @@ public class Server implements Callable<GameResults> {
   private final List<IPlayer> proxyPlayers = new ArrayList<>();
   private final int port;
   private final IState game;
+  private final List<Position> goals;
   private ExecutorService service;
   private static final int MAX_NUMBER_OF_PLAYERS = 6;
   private static final int MIN_NUMBER_OF_PLAYERS = 2;
 
-  public Server(IState game, int port) {
+  public Server(IState game, List<Position> goals,int port) {
     this.game = game;
+    this.goals = goals;
     this.port = port;
   }
 
@@ -52,7 +55,7 @@ public class Server implements Callable<GameResults> {
 
     if (this.proxyPlayers.size() >= MIN_NUMBER_OF_PLAYERS) {
 
-      IReferee referee = new Referee(this.game, this.proxyPlayers);
+      IReferee referee = new Referee(this.game, this.proxyPlayers, this.goals);
       return referee.runGame();
     } else {
       return new GameResults(List.of(), List.of());

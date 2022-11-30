@@ -20,7 +20,6 @@ import observer.Controller.IObserver;
 import player.IPlayer;
 import java.util.*;
 
-import static model.state.GameStatus.IN_PROGRESS;
 import static referee.PlayerResult.*;
 
 /**
@@ -33,20 +32,15 @@ public class Referee implements IReferee {
 
 
   private final IRules rules;
-  /**
-   * Stores which client should be used to talk to each Player.
-   **/
   private Map<PlayerAvatar, PlayerHandler> playerAvatarToHandler;
   private final List<PlayerAvatar> playersCollectedTreasures;
 
-  private Map<PlayerAvatar, Position> currentGoals;
-  private Map<PlayerAvatar, Integer> goalCount;
-  private Queue<Position> potentialGoals;
+  private final GoalHandler goalHandler;
 
   // TODO: Make observer handler
   private final List<IObserver> observers;
 
-  // the eliminated players so far, including cheaters.
+  // all eliminated players so far, including cheaters.
   private final List<IPlayer> eliminated;
 
   private static final int TIMEOUT = 20;
@@ -58,66 +52,67 @@ public class Referee implements IReferee {
    * progresses.
    */
   public Referee(IState game, List<IPlayer> players,
-      List<IObserver> observers, IRules rules) {
+      List<IObserver> observers, IRules rules, List<Position> goals) {
     this.game = game;
     this.rules = rules;
     this.playerAvatarToHandler = this.mapPlayerAvatarsToPlayerHandlers(game, players);
     this.playersCollectedTreasures = new ArrayList<>();
     this.observers = observers;
     this.eliminated = new ArrayList<>();
+    this.goalHandler = new GoalHandler(game.getPlayerList(), goals);
   }
 
-  public Referee(IState game, List<IPlayer> players) {
+  public Referee(IState game, List<IPlayer> players, List<Position> goals) {
     this(game, players, List.of(),
-        new DefaultRules());
+        new DefaultRules(), goals);
   }
 
   /**
    * Initialize a Referee with a just a set of proxy players, building a new randomized State from
    * scratch.
    */
-  public Referee(List<IPlayer> players, IRules rules) {
-    List<IBoard> proposedBoards = new ArrayList<>();
-    List<Color> uniqueColors = this.generateUniqueColors(players.size());
-
-    // get proposed board
-    List<PlayerHandler> playerHandlers = this.interfaceToHandlers(players, uniqueColors);
-    List<PlayerHandler> invalidProposals = new ArrayList<>();
-    for (PlayerHandler playerHandler : playerHandlers) {
-      Optional<IBoard> board = playerHandler
-          .proposeBoard(this.game.getBoard().getHeight(), this.game.getBoard().getWidth());
-      if (board.isPresent()) {
-        proposedBoards.add(board.get());
-      } else {
-        // proposal was invalid
-        invalidProposals.add(playerHandler);
-      }
-    }
-    for (PlayerHandler playerHandler : invalidProposals) {
-      playerHandlers.remove(playerHandler);
-    }
-    IBoard board = proposedBoards.get(new Random().nextInt(proposedBoards.size() - 1));
-
-    List<Position> immovablePositions = this.immovablePositionsForBoard(board);
-    Collections.shuffle(immovablePositions);
-
-    List<PlayerAvatar> playerAvatars = new ArrayList<>();
-    List<Position> homes = new ArrayList<>(immovablePositions);
-    Collections.shuffle(immovablePositions);
-
-    List<Position> goals = new ArrayList<>(immovablePositions);
-
-    for (int i = 0; i < uniqueColors.size(); i++) {
-      playerAvatars.add(new PlayerAvatar(uniqueColors.get(i), goals.get(i), homes.get(i)));
-    }
-    IState game = new State(board, playerAvatars);
-    this.game = game;
-    this.rules = rules;
-    this.playerAvatarToHandler = this.mapPlayerAvatarsToPlayerHandlers(game, players);
-    this.playersCollectedTreasures = new ArrayList<>();
-    this.observers = new ArrayList<>();
-    this.eliminated = new ArrayList<>();
-  }
+//  public Referee(List<IPlayer> players, IRules rules) {
+//    List<IBoard> proposedBoards = new ArrayList<>();
+//    List<Color> uniqueColors = this.generateUniqueColors(players.size());
+//
+//    // get proposed board
+//    List<PlayerHandler> playerHandlers = this.interfaceToHandlers(players, uniqueColors);
+//    List<PlayerHandler> invalidProposals = new ArrayList<>();
+//    for (PlayerHandler playerHandler : playerHandlers) {
+//      Optional<IBoard> board = playerHandler
+//          .proposeBoard(this.game.getBoard().getHeight(), this.game.getBoard().getWidth());
+//      if (board.isPresent()) {
+//        proposedBoards.add(board.get());
+//      } else {
+//        // proposal was invalid
+//        invalidProposals.add(playerHandler);
+//      }
+//    }
+//    for (PlayerHandler playerHandler : invalidProposals) {
+//      playerHandlers.remove(playerHandler);
+//    }
+//    IBoard board = proposedBoards.get(new Random().nextInt(proposedBoards.size() - 1));
+//
+//    List<Position> immovablePositions = this.immovablePositionsForBoard(board);
+//    Collections.shuffle(immovablePositions);
+//
+//    List<PlayerAvatar> playerAvatars = new ArrayList<>();
+//    List<Position> homes = new ArrayList<>(immovablePositions);
+//    Collections.shuffle(immovablePositions);
+//
+//    List<Position> goals = new ArrayList<>(immovablePositions);
+//
+//    for (int i = 0; i < uniqueColors.size(); i++) {
+//      playerAvatars.add(new PlayerAvatar(uniqueColors.get(i), goals.get(i), homes.get(i)));
+//    }
+//    IState game = new State(board, playerAvatars);
+//    this.game = game;
+//    this.rules = rules;
+//    this.playerAvatarToHandler = this.mapPlayerAvatarsToPlayerHandlers(game, players);
+//    this.playersCollectedTreasures = new ArrayList<>();
+//    this.observers = new ArrayList<>();
+//    this.eliminated = new ArrayList<>();
+//  }
 
   /**
    * Runs the game this referee is moderating to completion by interacting with the players via
