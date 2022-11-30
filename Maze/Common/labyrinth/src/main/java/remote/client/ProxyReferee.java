@@ -9,6 +9,8 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import player.IPlayer;
 import referee.clients.RefereePlayerInterface;
 import remote.json.JsonState;

@@ -1,5 +1,6 @@
 package referee;
 
+import java.io.PipedOutputStream;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,9 +15,13 @@ import player.Player;
  */
 public class GoalHandler {
 
-  private Map<PlayerAvatar, Position> currentGoals;
-  private Map<PlayerAvatar, Integer> goalCount;
-  private Queue<Position> potentialGoals;
+  private final Map<PlayerAvatar, Position> currentGoals;
+
+  // goal count of each player
+  private final Map<PlayerAvatar, Integer> goalCount;
+
+  // goals to distribute amongst players
+  private final Queue<Position> potentialGoals;
 
   public GoalHandler(List<PlayerAvatar> players, List<Position> allGoals) {
     this.potentialGoals = new LinkedList<>();
@@ -26,14 +31,50 @@ public class GoalHandler {
     this.initializePlayerData(players);
   }
 
-  private Position generatePotentialGoals() {
-    for (int i = 0; i < totalGoals; i++) {
-      Position currentPosition = Util.
+
+  /**
+   * Increments the goal count of the given player and assigns them the appropriate goal.
+   * This method is only called when a player reaches their current goal.
+   * @param player
+   */
+  private void nextGoal(PlayerAvatar player) {
+
+    int goalCount = this.goalCount.get(player);
+    goalCount++;
+    this.goalCount.put(player, goalCount);
+
+    if (this.potentialGoals.isEmpty()) {
+      Position home = player.getHome();
+      this.currentGoals.put(player, home);
     }
+
+    Position nextGoal = this.potentialGoals.poll();
+    this.currentGoals.put(player, nextGoal);
   }
 
-  private int goalCountFormula(int playerCount) {
-    return playerCount * 2;
+  public boolean playerReachedHome() {
+    boolean homeReached = false;
+    for (PlayerAvatar player : this.currentGoals.keySet()) {
+      if (player.getCurrentPosition().equals(player.getHome())) {
+        homeReached = true;
+        break;
+      }
+    }
+    return homeReached;
+  }
+
+  public boolean playerReachedGoal(PlayerAvatar player) {
+    Position goal = this.currentGoals.get(player);
+    return player.getCurrentPosition().equals(goal);
+  }
+
+  public Position getPlayerCurrentGoal(PlayerAvatar player) {
+    return this.currentGoals.get(player);
+  }
+
+
+  public int getPlayerGoalCount(PlayerAvatar player) {
+    return this.goalCount.get(player);
   }
 
   /**
@@ -47,5 +88,7 @@ public class GoalHandler {
       this.goalCount.put(player, 0);
     }
   }
+
+
 
 }

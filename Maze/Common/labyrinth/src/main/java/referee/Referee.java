@@ -122,12 +122,13 @@ public class Referee implements IReferee {
     this.informObserverOfState();
     this.setupPlayers();
 
+    GameStatus status = null;
     while (this.isGameOver()) {
       this.handleTurn();
-      gameStatus = this.game.getGameStatus();
+      status = this.game.getGameStatus();
     }
 
-    this.informPlayersOfGameEnd(gameStatus);
+    this.informPlayersOfGameEnd(status);
     this.informObserversOfGameEnd();
 
     return new GameResults(this.getNamesFromAvatars(this.getWinners()),
@@ -268,7 +269,7 @@ public class Referee implements IReferee {
 
     List<PlayerAvatar> playersThatReachedGoal = new ArrayList<>();
     for (PlayerAvatar player : this.game.getPlayerList()) {
-      if (player.hasReachedGoal()) {
+      if (this.goalHandler.playerReachedGoal(player)) {
         playersThatReachedGoal.add(player);
       }
     }
@@ -350,7 +351,7 @@ public class Referee implements IReferee {
     List<PlayerAvatar> playerList = this.game.getPlayerList();
     for (PlayerAvatar player : playerList) {
       Position playerPosition = player.getCurrentPosition();
-      Position goalPosition = player.getGoal();
+      Position goalPosition = this.goalHandler.getPlayerCurrentGoal(player);
       playerDistanceMap.put(player, Position.getEuclideanDistance(playerPosition, goalPosition));
     }
     return playerDistanceMap;
@@ -370,7 +371,7 @@ public class Referee implements IReferee {
 
   private void remindPlayersReturnHome() {
     for (PlayerAvatar player : this.game.getPlayerList()) {
-      if (player.hasReachedGoal() && !this.playersCollectedTreasures.contains(player)) {
+      if (this.goalHandler.playerReachedGoal(player) && !this.playersCollectedTreasures.contains(player)) {
         this.playerAvatarToHandler.get(player).setup(Optional.empty(), player.getHome());
         this.playersCollectedTreasures.add(player);
       }
@@ -384,7 +385,7 @@ public class Referee implements IReferee {
       PlayerHandler playerHandler = this.playerAvatarToHandler.get(player);
       Optional<Boolean> outcome = playerHandler.setup(Optional.of(
               this.game.getStateProjection()),
-          player.getGoal());
+          this.goalHandler.getPlayerCurrentGoal(player));
 
       if (outcome.isEmpty()) {
         playersToBeKicked.add(player);
