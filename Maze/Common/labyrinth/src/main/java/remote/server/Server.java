@@ -1,10 +1,12 @@
-package remote;
+package remote.server;
 
 import model.state.GameResults;
 import model.state.IState;
 import referee.IReferee;
 import referee.Referee;
 import player.IPlayer;
+import remote.NetUtil;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -91,11 +93,11 @@ public class Server implements Callable<GameResults> {
   }
 
 
-  private Optional<ProxyPlayerInterface> signUpClient(ServerSocket ss,
-                                                      long waitTimeRemaining) {
+  private Optional<ProxyPlayer> signUpClient(ServerSocket ss,
+                                             long waitTimeRemaining) {
 
     System.out.println("signUpClient()");
-    Optional<ProxyPlayerInterface> player;
+    Optional<ProxyPlayer> player;
 
     // If the client failed to connect
     try {
@@ -108,14 +110,14 @@ public class Server implements Callable<GameResults> {
   }
 
 
-  private void addPlayerIfPresent(Optional<ProxyPlayerInterface> proxyPlayer) {
+  private void addPlayerIfPresent(Optional<ProxyPlayer> proxyPlayer) {
     if (proxyPlayer.isPresent()) {
       this.proxyPlayers.add(proxyPlayer.get());
     }
   }
 
 
-  private Optional<ProxyPlayerInterface> awaitSignUp(ServerSocket ss, long waitTimeRemaining)
+  private Optional<ProxyPlayer> awaitSignUp(ServerSocket ss, long waitTimeRemaining)
           throws IOException {
 
     System.out.println("awaitSignUp()");
@@ -140,9 +142,9 @@ public class Server implements Callable<GameResults> {
 
     Socket finalClient = client;
 
-    Callable<ProxyPlayerInterface> callableProxyPlayer = () -> {
+    Callable<ProxyPlayer> callableProxyPlayer = () -> {
       String clientName = input.readLine();
-      return new ProxyPlayerInterface(finalClient, clientName);
+      return new ProxyPlayer(finalClient, clientName);
     };
 
     try {

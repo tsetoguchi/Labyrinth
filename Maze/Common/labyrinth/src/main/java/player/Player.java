@@ -42,7 +42,7 @@ public class Player implements IPlayer {
     }
 
     @Override
-    public String getPlayerName() {
+    public String getName() {
         return this.name;
     }
 

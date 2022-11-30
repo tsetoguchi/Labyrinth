@@ -1,4 +1,4 @@
-package remote;
+package remote.JSON;
 
 import java.io.IOException;
 

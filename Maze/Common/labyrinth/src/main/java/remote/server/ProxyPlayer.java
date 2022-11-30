@@ -1,21 +1,22 @@
-package remote;
+package remote.server;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import model.Exceptions.IllegalPlayerActionException;
 import model.Position;
 import model.board.IBoard;
-import model.projections.StateProjection;
+import model.projections.PlayerGameProjection;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
+import model.projections.StateProjection;
 import model.state.GameStatus;
-import player.IPlayer;
 import referee.Turn;
 import json.JsonSerializer;
 import referee.PlayerResult;
-import referee.clients.RefereePlayerInterface;
-import remote.JSON.MethodJsonSerializer;
+import player.IPlayer;
+import remote.JSON.JsonMethodSerializer;
 
 import java.net.Socket;
 import java.util.Optional;
@@ -30,6 +31,9 @@ public class ProxyPlayer implements IPlayer {
 
   private final Socket client;
   private String playerName;
+  private final JsonSerializer mazeSerializer;
+
+  private final JsonMethodSerializer serializer;
 
   private final PrintWriter out;
 
@@ -37,8 +41,11 @@ public class ProxyPlayer implements IPlayer {
 
 
   public ProxyPlayer(Socket client, String playerName) throws IOException {
+    //System.out.println("Proxy player: " + playerName);
     this.client = client;
     this.playerName = playerName;
+    this.mazeSerializer = new JsonSerializer();
+    this.serializer = new JsonMethodSerializer();
 
     this.out = new PrintWriter(client.getOutputStream(), true);
     this.input = new BufferedReader(new InputStreamReader(client.getInputStream()));
@@ -48,10 +55,15 @@ public class ProxyPlayer implements IPlayer {
   public Optional<Turn> takeTurn(StateProjection game) throws IllegalPlayerActionException {
 
     // Converts call into JSON and sends it to the client
-    String jsonState = JsonSerializer.stateProjectionToJson(game);
-    this.out.print(jsonState);
+    try {
+      String json = this.serializer.generateTakeTurnJson(game);
+      this.out.print(json);
+    } catch (JsonProcessingException e) {
+      ////
+    }
 
-    String response = this.input.read();
+
+
     String response;
     // Wait for a response
     while (true) {
@@ -73,7 +85,12 @@ public class ProxyPlayer implements IPlayer {
   @Override
   public boolean setup(Optional<StateProjection> game, Position goal) {
 
-    String json = this.serializer.generateSetupJson(game, goal);
+    String json = null;
+    try {
+      json = this.serializer.generateSetupJson(game, goal);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
     this.out.print(json);
 
     // Wait for a response to see if message was received
@@ -93,8 +110,13 @@ public class ProxyPlayer implements IPlayer {
   @Override
   public boolean win(boolean playerWon) {
 
-    String json = this.serializer.generateWinJson(playerWon);
-    this.out.print(json);
+    try {
+      String json = this.serializer.generateWinJson(playerWon);
+      this.out.print(json);
+    } catch (JsonProcessingException e) {
+
+    }
+
 
     // Wait for a response to see if message was received
     while (true) {
@@ -127,7 +149,7 @@ public class ProxyPlayer implements IPlayer {
   }
 
   @Override
-  public String getPlayerName() {
+  public String getName() {
     return this.playerName;
   }
 

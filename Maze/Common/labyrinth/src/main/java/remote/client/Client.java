@@ -1,13 +1,8 @@
 package remote.client;
 
 import player.IPlayer;
-import player.Player;
-import player.RiemannStrategy;
-import remote.ProxyReferee;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -17,20 +12,20 @@ import java.util.Optional;
 /**
  *
  */
-public class PlayerClient implements Runnable {
+public class Client implements Runnable {
     private final IPlayer player;
     private final InetAddress address;
     private final int port;
     PrintWriter out;
 
-    public PlayerClient(IPlayer player, InetAddress address, int port) {
+    public Client(IPlayer player, InetAddress address, int port) {
         this.player = player;
         this.address = address;
         this.port = port;
     }
 
     /**
-     * Starts the PlayerClient, creating and connecting to a Socket and sending this PlayerClient's name.
+     * Starts the Client, creating and connecting to a Socket and sending this Client's name.
      * Also initializes a ProxyReferee to be used as a translation layer.
      *
      * Must be called before any other method. A refactor could be done to place the socket within ProxyReferee,

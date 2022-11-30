@@ -307,7 +307,7 @@ public class Referee implements IReferee {
   public List<String> getEliminatedNames() {
     List<String> names = new ArrayList<>();
     for (IPlayer playerInterface : this.eliminated) {
-      names.add(playerInterface.getPlayerName());
+      names.add(playerInterface.getName());
     }
     Collections.sort(names);
     return names;
@@ -316,7 +316,7 @@ public class Referee implements IReferee {
   private List<String> getNamesFromRefereePlayerInterfaces(List<IPlayer> playerInterfaces) {
     List<String> names = new ArrayList<>();
     for (IPlayer playerInterface : playerInterfaces) {
-      names.add(playerInterface.getPlayerName());
+      names.add(playerInterface.getName());
     }
     return names;
   }
@@ -481,7 +481,7 @@ public class Referee implements IReferee {
   }
 
   /**
-   * Wrapper for the PlayerClient class, adding exception and timeout handling for any PlayerClient
+   * Wrapper for the Client class, adding exception and timeout handling for any Client
    * calls.
    */
   private class PlayerHandler {
@@ -527,7 +527,7 @@ public class Referee implements IReferee {
 
     // Should be stored locally in the ProxyPlayer - doesn't require a network call, and thus can't time out
     public String getPlayerName() {
-      return this.player.getPlayerName();
+      return this.player.getName();
     }
 
     public IPlayer getPlayerClient() {

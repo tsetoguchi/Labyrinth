@@ -1,4 +1,4 @@
-package remote;
+package remote.client;
 
 import model.model.PrivateGameState;
 
@@ -14,7 +14,7 @@ import referee.clients.RefereePlayerInterface;
 import remote.json.JsonState;
 
 /**
- * Represents the referee for a PlayerClient. Handles Json serialization and deserialization,
+ * Represents the referee for a Client. Handles Json serialization and deserialization,
  * interpreting which methods need to be called, and calling them on the client.
  * As the client never calls methods on the Referee, there are no other public methods relating to the referee here.
  */

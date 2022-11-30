@@ -205,14 +205,8 @@ public class State implements IState {
     Set<Color> existingPlayerColors = new HashSet<>();
     Set<Position> existingHomePositions = new HashSet<>();
     for (PlayerAvatar player : this.playerList) {
-      Position goalPosition = player.getGoal();
       Position homePosition = player.getHome();
 
-      if (goalPosition.getRow() % 2 == 0 || goalPosition.getColumn() % 2 == 0) {
-        throw new IllegalArgumentException(
-            String.format("Goal tile (%d, %d) is not on an immovable Tile.",
-                goalPosition.getRow(), goalPosition.getColumn()));
-      }
       if (homePosition.getRow() % 2 == 0 || homePosition.getColumn() % 2 == 0) {
         throw new IllegalArgumentException("Home tile is not on an immovable Tile.");
       }

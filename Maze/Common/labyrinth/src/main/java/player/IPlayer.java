@@ -18,6 +18,6 @@ public interface IPlayer {
 
   IBoard proposeBoard(int rows, int columns);
 
-  String getPlayerName();
+  String getName();
 
 }
