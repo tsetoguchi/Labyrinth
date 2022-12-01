@@ -21,7 +21,7 @@ public class Treasure {
     /**
      * Convenience constructor for testing which creates a new Treasure with the given two gems.
      */
-    Treasure(Gem gem1, Gem gem2) {
+    public Treasure(Gem gem1, Gem gem2) {
         this.gems = new ArrayList<>();
         this.gems.add(gem1);
         this.gems.add(gem2);

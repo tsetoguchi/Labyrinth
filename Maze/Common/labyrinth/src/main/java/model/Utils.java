@@ -32,28 +32,6 @@ public class Utils {
         }
     }
 
-    /**
-     * Creates a new Tile from a shape with the given Treasure.
-     */
-    public static Tile createTileFromShape(String pathShape, Treasure treasure) {
-        if (symbolToDirection.containsKey(pathShape)) {
-            Set<Direction> pathwayConnections = symbolToDirection.get(pathShape);
-            return new Tile(pathwayConnections, treasure);
-        } else {
-            throw new IllegalArgumentException("Invalid path shape given.");
-        }
-    }
-
-    public static Set<Direction> getDirectionsForSymbol(String pathShape) {
-        return symbolToDirection.get(pathShape);
-    }
-
-    /**
-     * Creates a new Tile from a shape.
-     */
-    public static Tile createTileFromShape(String pathShape) {
-        return createTileFromShape(pathShape, createTreasure(Gem.alexandrite, Gem.alexandrite));
-    }
 
     /**
      * Returns a String representation of the pathway connections within the Tile.

@@ -96,9 +96,9 @@ public class State implements IState {
    * Creates a new game with the given board, players, optional previous slide and insert, and
    * active player.
    */
-  public State(IBoard board, List<PlayerAvatar> playerList, int activePlayer,
-      Optional<SlideAndInsertRecord> previousSlideAndInsert) {
-    this(board, playerList, activePlayer, previousSlideAndInsert, 0, IN_PROGRESS, new HashSet<>());
+  public State(IBoard board, List<PlayerAvatar> playerList, SlideAndInsertRecord previousSlideAndInsert) {
+    this(board, playerList, 0, Optional.of(previousSlideAndInsert),
+            0, IN_PROGRESS, new HashSet<>());
   }
 
   /**
@@ -151,13 +151,7 @@ public class State implements IState {
    * the top of the turn order is reached.
    */
   private void nextTurn() {
-    if (this.activePlayer < 0 || this.activePlayer >= this.playerList.size()) {
-      throw new IllegalStateException(String.format("The active Player index %d is " +
-          "outside the bounds of the player List.", this.activePlayer));
-    }
-
     this.activePlayer = (this.activePlayer + 1) % this.playerList.size();
-
     if (this.activePlayer == 0) {
       this.roundHandler();
     }
