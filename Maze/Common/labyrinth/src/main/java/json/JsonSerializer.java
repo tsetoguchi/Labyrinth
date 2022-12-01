@@ -77,7 +77,7 @@ public class JsonSerializer {
       treasures.put(currentTreasureRow);
     }
 
-    result.put("connector", connectors);
+    result.put("connectors", connectors);
     result.put("treasures", treasures);
 
     return result;

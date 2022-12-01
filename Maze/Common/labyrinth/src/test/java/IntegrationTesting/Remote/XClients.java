@@ -1,7 +1,7 @@
-package java.IntegrationTests.Remote;
+package java.IntegrationTesting.Remote;
 
 import IntegrationTests.IntegrationUtils;
-import java.IntegrationTests.TestPlayer;
+import IntegrationTests.TestPlayer;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -10,7 +10,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONTokener;
 
-import json.JsonDeserializer;
 import player.IPlayer;
 import remote.client.Client;
 

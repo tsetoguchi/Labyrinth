@@ -7,6 +7,7 @@ import static model.board.Direction.UP;
 
 import model.Exceptions.IllegalGameActionException;
 import model.Position;
+import referee.IRules;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -169,8 +170,13 @@ public class Board implements IBoard {
    */
   @Override
   public ExperimentationBoard getExperimentationBoard() {
-    IBoard copy = this.deepCopy();
-    return (ExperimentationBoard) copy;
+      Tile[][] newGrid = new Tile[this.getHeight()][this.getWidth()];
+      for (int row = 0; row < newGrid.length; row++) {
+        for (int col = 0; col < newGrid[row].length; col++) {
+          newGrid[row][col] = (this.getTileAt(new Position(row, col)).deepCopy());
+        }
+      }
+      return new ExperimentationBoard(this.width, this.height, newGrid, this.spareTile.deepCopy());
   }
 
   @Override

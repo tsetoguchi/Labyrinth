@@ -16,8 +16,7 @@ import referee.Move;
  */
 public class ExperimentationBoard extends Board {
 
-    public ExperimentationBoard(int width, int height, Tile[][] tileGrid, Tile spareTile,
-                                IRules rules) {
+    public ExperimentationBoard(int width, int height, Tile[][] tileGrid, Tile spareTile) {
         super(width, height, tileGrid, spareTile);
     }
 

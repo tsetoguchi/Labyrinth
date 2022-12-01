@@ -1,10 +1,10 @@
-package java.IntegrationTests.Remote;
+package java.IntegrationTesting.Remote;
 
-import IntegrationTests.IntegrationUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import IntegrationTests.IntegrationUtils;
 import java.util.List;
 
 import json.JsonDeserializer;
