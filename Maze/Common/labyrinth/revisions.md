@@ -9,6 +9,7 @@
 7. Remove arbitrary funcitonality that does not match the spec in *Server*
    * "message client method"
 8. Fix and create unit tests
+9. Make ProxyReferee parse JSON scattered JSON
 
 ### Completed:
 1. Fix *IPlayer* protocol to use *setUp*

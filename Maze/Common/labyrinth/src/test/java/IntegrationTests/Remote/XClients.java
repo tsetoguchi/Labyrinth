@@ -1,6 +1,6 @@
-package IntegrationTests.Remote;
+package java.IntegrationTests.Remote;
 
-
+import java.IntegrationTests.IntegrationUtils;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -8,10 +8,10 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONTokener;
+
+import json.JsonDeserializer;
 import player.IPlayer;
-import protocol.serialization.JsonDeserializer;
-import remote.JSON.JsonUtil;
-import remote.client.PlayerClient;
+import remote.client.Client;
 
 
 /**
@@ -19,7 +19,7 @@ import remote.client.PlayerClient;
  */
 public class XClients {
 
-  public final static int clientWaitTimer = 3;
+  public final static int CLIENT_WAIT_TIMER = 3;
 
   public static void main(String[] args)
       throws JSONException, UnknownHostException, InterruptedException {
@@ -31,26 +31,27 @@ public class XClients {
       inetAddress = InetAddress.getByName(args[1]);
     }
 
-    JSONTokener jsonTokener = JsonUtil.getInput();
+    JSONTokener jsonTokener = IntegrationUtils.getInput();
     JSONArray playersSpecJson = (JSONArray) jsonTokener.nextValue();
     List<IPlayer> playerSpec = JsonDeserializer.jsonToPlayerSpec(playersSpecJson);
 
-    List<PlayerClient> clients = new ArrayList<>();
+    List<Client> clients = new ArrayList<>();
     for (IPlayer player : playerSpec) {
-      clients.add(new PlayerClient(player, inetAddress, port));
+      clients.add(new Client(player, inetAddress, port));
     }
 
     List<Thread> clientThreads = runClients(clients);
 
+
   }
 
-  private static List<Thread> runClients(List<PlayerClient> clients) throws InterruptedException {
+  private static List<Thread> runClients(List<Client> clients) throws InterruptedException {
 
     List<Thread> threads = new ArrayList<>();
 
     for (int i = 0; i < clients.size(); i++) {
       Thread current = new Thread(clients.get(i), Integer.toString(i));
-      current.wait((long) clientWaitTimer * 1000 * i);
+      current.wait((long) CLIENT_WAIT_TIMER * 1000 * i);
       current.start();
       threads.add(current);
     }

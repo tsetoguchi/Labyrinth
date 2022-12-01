@@ -1,61 +1,68 @@
 package remote.server;
 
-import model.Position;
-import model.state.GameResults;
-import model.state.IState;
-import referee.IReferee;
-import referee.Referee;
-import player.IPlayer;
-import remote.NetUtil;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
+import model.Position;
+import model.state.GameResults;
+import model.state.IState;
+import player.IPlayer;
+import referee.IReferee;
+import referee.Referee;
 
 public class Server implements Callable<GameResults> {
 
-  private final List<IPlayer> proxyPlayers = new ArrayList<>();
-  private final int port;
-  private final IState game;
-  private final List<Position> goals;
-  private ExecutorService service;
+  public static final int WAIT_PERIOD_SECONDS = 20;
+  public static final int PLAYER_SIGN_UP_SECONDS = 2;
+  public static final int NUMBER_OF_WAIT_TIMES = 2;
   private static final int MAX_NUMBER_OF_PLAYERS = 6;
   private static final int MIN_NUMBER_OF_PLAYERS = 2;
 
-  public Server(IState game, List<Position> goals,int port) {
+  private final IState game;
+  private final List<Position> goals;
+  private final List<IPlayer> players;
+
+  private final ServerSocket serverSocket;
+  private final ExecutorService service;
+
+  public Server(IState game, List<Position> goals, int port) {
     this.game = game;
     this.goals = goals;
-    this.port = port;
+    this.players = new ArrayList<>();
+    this.service = Executors.newCachedThreadPool();
+
+    try{
+      this.serverSocket = new ServerSocket(port);
+    } catch (IOException e){
+      throw new RuntimeException(e);
+    }
+
   }
 
 
   /**
-   * Computes a result, or throws an exception if unable to do so.
-   *
+   * Signs up players and runs a game to completion and returns the results of the game.
    * @return computed result
    */
   @Override
   public GameResults call() {
-    this.service = Executors.newCachedThreadPool();
 
     try {
-      ServerSocket ss = new ServerSocket(this.port);
-      System.out.println("Created server socket");
-      this.beginSignUp(ss);
-    } catch (Throwable throwable) {
+      this.beginSignUp();
+    } catch (Throwable ignore) {}
 
-    }
-
-    if (this.proxyPlayers.size() >= MIN_NUMBER_OF_PLAYERS) {
-
-      IReferee referee = new Referee(this.game, this.proxyPlayers, this.goals);
+    if (this.players.size() >= MIN_NUMBER_OF_PLAYERS) {
+      IReferee referee = new Referee(this.game, this.players, this.goals);
       return referee.runGame();
     } else {
       return new GameResults(List.of(), List.of());
@@ -63,108 +70,63 @@ public class Server implements Callable<GameResults> {
   }
 
 
-  private void beginSignUp(ServerSocket ss) {
-
-    for (int i = 0; i < NetUtil.NUMBER_OF_WAIT_TIMES && this.proxyPlayers.size() < MIN_NUMBER_OF_PLAYERS;
+  private void beginSignUp() {
+    for (int i = 0; i < NUMBER_OF_WAIT_TIMES && this.players.size() < MIN_NUMBER_OF_PLAYERS;
          i++) {
-
-      this.signUpPlayers(ss);
-
+      this.signUpPlayers();
     }
-
-
   }
 
-  private void signUpPlayers(ServerSocket ss) {
-    long endTime = System.currentTimeMillis() + (NetUtil.DEFAULT_WAIT_PERIOD_SECONDS * 1000);
-    while (true) {
-
-      // if the current time has exceeded the sign-up period, leave the while loop
-      if (System.currentTimeMillis() > endTime) {
-        break;
-      }
+  private void signUpPlayers() {
+    long endTime = System.currentTimeMillis() + (WAIT_PERIOD_SECONDS * 1000);
+    while (System.currentTimeMillis() < endTime && this.players.size() >= MAX_NUMBER_OF_PLAYERS) {
 
       long waitTimeRemaining = endTime - System.currentTimeMillis();
 
-      // 6 players signed up
-      if (this.proxyPlayers.size() >= MAX_NUMBER_OF_PLAYERS) {
-        break;
-      }
-
-      this.addPlayerIfPresent(this.signUpClient(ss, waitTimeRemaining));
+      this.signUpClient(waitTimeRemaining);
     }
   }
 
 
-  private Optional<ProxyPlayer> signUpClient(ServerSocket ss,
-                                             long waitTimeRemaining) {
+  private void signUpClient(long waitTimeRemaining) {
 
-    System.out.println("signUpClient()");
     Optional<ProxyPlayer> player;
-
-    // If the client failed to connect
     try {
-      player = this.awaitSignUp(ss, waitTimeRemaining);
-    } catch (IOException e) {
-      return Optional.empty();
-    }
+      player = this.awaitSignUp(waitTimeRemaining);
+      if (player.isPresent()) {
+        this.players.add(player.get());
+      }
+    } catch (IOException ignore) {}
 
-    return player;
   }
 
 
-  private void addPlayerIfPresent(Optional<ProxyPlayer> proxyPlayer) {
-    if (proxyPlayer.isPresent()) {
-      this.proxyPlayers.add(proxyPlayer.get());
-    }
-  }
+  private Optional<ProxyPlayer> awaitSignUp(long waitTimeRemaining) throws IOException {
 
-
-  private Optional<ProxyPlayer> awaitSignUp(ServerSocket ss, long waitTimeRemaining)
-          throws IOException {
-
-    System.out.println("awaitSignUp()");
-    Callable<Socket> acceptTimeOut = () -> {
-      Socket client = ss.accept();
-      return client;
+    Callable<Socket> acceptConnection = () -> {
+      return this.serverSocket.accept();
     };
 
-    Socket client = null;
+    Socket client;
     try {
-      client = this.service.submit(acceptTimeOut).get(waitTimeRemaining, TimeUnit.MILLISECONDS);
+      client = this.service.submit(acceptConnection).get(waitTimeRemaining, TimeUnit.MILLISECONDS);
     } catch (Throwable e) {
-      System.out.println("Accept timed out");
       return Optional.empty();
     }
-
-    System.out.println("Client connected");
-    PrintWriter out = new PrintWriter(client.getOutputStream(), true);
-    messageClient("Please choose a name: ", out);
 
     BufferedReader input = new BufferedReader(new InputStreamReader(client.getInputStream()));
 
-    Socket finalClient = client;
-
     Callable<ProxyPlayer> callableProxyPlayer = () -> {
       String clientName = input.readLine();
-      return new ProxyPlayer(finalClient, clientName);
+      return new ProxyPlayer(client, clientName);
     };
 
     try {
       return Optional.of(this.service.submit(callableProxyPlayer)
-              .get(NetUtil.DEFAULT_PLAYER_SIGN_UP_SECONDS, TimeUnit.SECONDS));
+              .get(PLAYER_SIGN_UP_SECONDS, TimeUnit.SECONDS));
     } catch (Throwable throwable) {
-      messageClient("close", out);
       client.close();
       return Optional.empty();
-    }
-  }
-
-  private static void messageClient(String message, PrintWriter out) {
-    try {
-      out.println(message);
-    } catch (Throwable throwable) {
-      System.out.println("Failed to message client.");
     }
   }
 

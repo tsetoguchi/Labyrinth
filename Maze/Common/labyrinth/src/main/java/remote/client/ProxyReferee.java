@@ -1,6 +1,7 @@
 package remote.client;
 
-import model.model.PrivateGameState;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,12 +9,15 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 
-import org.json.JSONArray;
-import org.json.JSONException;
+import json.JsonDeserializer;
+import json.JsonSerializer;
+import model.Position;
+import model.projections.StateProjection;
+import model.state.IState;
 import player.IPlayer;
-import referee.clients.RefereePlayerInterface;
-import remote.json.JsonState;
+import referee.ITurn;
 
 /**
  * Represents the referee for a Client. Handles Json serialization and deserialization,
@@ -39,22 +43,20 @@ public class ProxyReferee implements Runnable {
     this.out.write(toBytes("\"" + this.player.getName() + "\""));
   }
 
-  public static byte[] toBytes(String str){
+  private static byte[] toBytes(String str){
     return str.getBytes(StandardCharsets.UTF_8);
   }
-
 
 
   @Override
   public void run() {
     StringBuilder str = new StringBuilder();
-    while (!this.socket.isClosed()) {
 
+    while (!this.socket.isClosed()) {
       this.readNewInput(str);
 
       try{
-        JSONArray command = this.buildCommandFromInput(str.toString());
-        this.execute(command);
+        this.execute(new JSONArray(str.toString()));
         str = new StringBuilder();
       } catch (JSONException ignore){}
     }
@@ -72,66 +74,62 @@ public class ProxyReferee implements Runnable {
   }
 
 
-  private JSONArray buildCommandFromInput(String input) throws JSONException{
-    JSONArray command;
-    command = new JSONArray(input);
-    ApiOperation.fromString(command.getString(0));
-    command.getJSONArray(1);
-    return command;
-  }
-
-
-  private void execute(JSONArray command) throws JSONException {
-    ApiOperation method = ApiOperation.fromString(command.getString(0));
-    JSONArray args = command.getJSONArray(1);
+  private void execute(JSONArray methodCall) throws JSONException {
+    String methodName = methodCall.getString(0);
+    JSONArray args = methodCall.getJSONArray(1);
     try {
-      switch (method) {
-        case take_turn:
-          this.executeTakeTurn(args);
+      switch (methodName) {
+        case "take_turn":
+          this.handleTakeTurn(args);
           return;
-        case win:
-          this.executeWin(args);
+        case "win":
+          this.handleWin(args);
           return;
-        case setup:
-          this.executeSetup(args);
+        case "setup":
+          this.handleSetup(args);
       }
     }catch (IOException e){
       throw new RuntimeException(e);
     }
   }
 
-//
-//  private void executeSetup(JSONArray args) throws JSONException, IOException {
-//    Optional<State> maybeState = Optional.empty();
-//    try{
-//      State s = JSONConverter.stateFromJSON(args.getJSONObject(0));
-//      maybeState = Optional.of(s);
-//    } catch (JSONException ignore){}
-//
-//    Coordinate destination = JSONConverter.coordinateFromJSON(args.getJSONObject(1));
-//
-//    this.player.setup(maybeState, destination);
-//    this.out.write(Utils.toBytes("\"void\""));
-//  }
-//
-//
-//  private void executeWin(JSONArray args) throws JSONException, IOException {
-//    boolean didWin = args.getBoolean(0);
-//    this.player.won(didWin);
-//    this.gameOver = true;
-//    this.out.write(Utils.toBytes("\"void\""));
-//  }
-//
-//
-//  private void executeTakeTurn(JSONArray args) throws JSONException, IOException {
-//    State state = JSONConverter.stateFromJSON(args.getJSONObject(0));
-//    Action a = this.player.takeTurn(state);
-//    if(a.isMove()){
-//      this.out.write(Utils.toBytes(JSONConverter.moveActionToJSON(a.getMove()).toString()));
-//    } else{
-//      this.out.write(Utils.toBytes("\"PASS\""));
-//    }
-//  }
+
+  private void handleSetup(JSONArray args) throws JSONException, IOException {
+    Optional<StateProjection> maybeProjection;
+
+    try{
+      IState s = JsonDeserializer.jsonToState(args.getJSONObject(0));
+      StateProjection projection = s.getStateProjection();
+      maybeProjection = Optional.of(projection);
+    } catch (JSONException ignore){
+      maybeProjection = Optional.empty();
+    }
+
+    Position nextGoal = JsonDeserializer.jsonToPosition(args.getJSONObject(1));
+
+    this.player.setup(maybeProjection, nextGoal);
+    this.out.write(toBytes("\"void\""));
+  }
+
+
+  private void handleWin(JSONArray args) throws JSONException, IOException {
+    boolean didWin = args.getBoolean(0);
+    this.player.win(didWin);
+    this.out.write(toBytes("\"void\""));
+    this.socket.close();
+  }
+
+
+  private void handleTakeTurn(JSONArray args) throws JSONException, IOException {
+    IState state = JsonDeserializer.jsonToState(args.getJSONObject(0));
+    StateProjection projection = state.getStateProjection();
+    ITurn turn = this.player.takeTurn(projection);
+    if(turn.isMove()){
+      this.out.write(toBytes(JsonSerializer.moveToJson(turn.getMove()).toString()));
+    } else{
+      this.out.write(toBytes("\"PASS\""));
+    }
+  }
 
 
 

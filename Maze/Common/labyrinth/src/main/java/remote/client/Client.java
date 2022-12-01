@@ -16,7 +16,6 @@ public class Client implements Runnable {
     private final IPlayer player;
     private final InetAddress address;
     private final int port;
-    PrintWriter out;
 
     public Client(IPlayer player, InetAddress address, int port) {
         this.player = player;
@@ -32,13 +31,12 @@ public class Client implements Runnable {
      * making all communication take place within it.
      */
     public void run() {
-        InetSocketAddress socketAddress = new InetSocketAddress(this.address, this.port);
         Optional<Socket> socket = Optional.empty();
+
         while(socket.isEmpty()){
             try {
-                Socket trySock = new Socket();
-                trySock.connect(socketAddress);
-                socket = Optional.of(trySock);
+                Socket sock = new Socket(this.address, this.port);
+                socket = Optional.of(sock);
             } catch (IOException ignore){}
         }
 
