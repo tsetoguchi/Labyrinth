@@ -80,6 +80,9 @@ public class ProxyPlayer implements IPlayer {
 
   @Override
   public boolean setup(Optional<StateProjection> game, Position goal) {
+
+    System.out.println("Sending Setup");
+
     try{
       JSONArray toSend = JsonSerializer.setup(game, goal);
       this.out.print(toSend);

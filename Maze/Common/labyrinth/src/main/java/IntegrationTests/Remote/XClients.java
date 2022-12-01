@@ -26,6 +26,8 @@ public class XClients {
   public static void main(String[] args)
       throws JSONException, UnknownHostException, InterruptedException {
 
+    System.out.println("starting3");
+
     //int port = Integer.parseInt(args[0]);
     //JSONTokener jsonTokener = IntegrationUtils.getInput();
     int port = 5555;

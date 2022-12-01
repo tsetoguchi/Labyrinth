@@ -4,9 +4,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
@@ -41,7 +43,10 @@ public class ProxyReferee implements Runnable {
   }
 
   private void sendName() throws IOException{
-    this.out.write(toBytes("\"" + this.player.getName() + "\""));
+
+    DataOutputStream dOut = new DataOutputStream(this.socket.getOutputStream());
+    dOut.writeUTF(this.player.getName());
+    dOut.flush();
   }
 
   private static byte[] toBytes(String str){
@@ -55,6 +60,8 @@ public class ProxyReferee implements Runnable {
 
     while (!this.socket.isClosed()) {
       NetUtil.readNewInput(str, this.in);
+
+      System.out.print(str.toString());
 
       try{
         this.execute(new JSONArray(str.toString()));

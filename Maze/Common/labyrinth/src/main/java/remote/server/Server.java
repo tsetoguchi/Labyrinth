@@ -1,17 +1,22 @@
 package remote.server;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.Proxy;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import model.Position;
 import model.state.GameResults;
@@ -24,7 +29,7 @@ public class Server implements Callable<GameResults> {
 
   public static final int WAIT_PERIOD_SECONDS = 20;
   public static final int PLAYER_SIGN_UP_SECONDS = 2;
-  public static final int NUMBER_OF_WAIT_TIMES = 2;
+  public static final int NUMBER_OF_WAIT_TIMES = 1;
   private static final int MAX_NUMBER_OF_PLAYERS = 6;
   private static final int MIN_NUMBER_OF_PLAYERS = 2;
 
@@ -62,6 +67,7 @@ public class Server implements Callable<GameResults> {
     } catch (Throwable ignore) {}
 
     if (this.players.size() >= MIN_NUMBER_OF_PLAYERS) {
+      System.out.println(this.players);
       IReferee referee = new Referee(this.game, this.players, this.goals);
       return referee.runGame();
     } else {
@@ -70,65 +76,55 @@ public class Server implements Callable<GameResults> {
   }
 
 
-  private void beginSignUp() {
+  private void beginSignUp() throws IOException {
+    List<Socket> connections = new ArrayList<>();
+
     for (int i = 0; i < NUMBER_OF_WAIT_TIMES && this.players.size() < MIN_NUMBER_OF_PLAYERS;
          i++) {
-      this.signUpPlayers();
-    }
-  }
-
-  private void signUpPlayers() {
-    long endTime = System.currentTimeMillis() + (WAIT_PERIOD_SECONDS * 1000);
-    while (System.currentTimeMillis() < endTime && this.players.size() >= MAX_NUMBER_OF_PLAYERS) {
-
-      long waitTimeRemaining = endTime - System.currentTimeMillis();
-
-      this.signUpClient(waitTimeRemaining);
-    }
-  }
-
-
-  private void signUpClient(long waitTimeRemaining) {
-
-    Optional<ProxyPlayer> player;
-    try {
-      player = this.awaitSignUp(waitTimeRemaining);
-      if (player.isPresent()) {
-        this.players.add(player.get());
+      System.out.println("Begin signup period");
+      long endTime = System.currentTimeMillis() + (WAIT_PERIOD_SECONDS * 1000);
+      while (System.currentTimeMillis() < endTime && this.players.size() <= MAX_NUMBER_OF_PLAYERS) {
+        long waitTimeRemaining = endTime - System.currentTimeMillis();
+        connections.add(this.signUpClient(waitTimeRemaining));
       }
-    } catch (IOException ignore) {}
+    }
+
+    System.out.println(connections);
+
+
+
+    for(Socket s : connections){
+      Callable<ProxyPlayer> makePlayer = () -> {
+        DataInputStream in = new DataInputStream(s.getInputStream());
+        String name = in.readUTF();
+        return new ProxyPlayer(s, name);
+      };
+
+      try {
+        Future<ProxyPlayer> futurePlayer = this.service.submit(makePlayer);
+        this.players.add(futurePlayer.get(PLAYER_SIGN_UP_SECONDS, TimeUnit.MILLISECONDS));
+      }catch(Throwable t) {
+        try{
+          s.close();
+        } catch(Throwable ignore){}
+      }
+    }
 
   }
 
 
-  private Optional<ProxyPlayer> awaitSignUp(long waitTimeRemaining) throws IOException {
-
+  private Socket signUpClient(long waitTimeRemaining) {
     Callable<Socket> acceptConnection = () -> {
-      return this.serverSocket.accept();
-    };
-
-    Socket client;
-    try {
-      client = this.service.submit(acceptConnection).get(waitTimeRemaining, TimeUnit.MILLISECONDS);
-    } catch (Throwable e) {
-      return Optional.empty();
-    }
-
-    BufferedReader input = new BufferedReader(new InputStreamReader(client.getInputStream()));
-
-    Callable<ProxyPlayer> callableProxyPlayer = () -> {
-      String clientName = input.readLine();
-      return new ProxyPlayer(client, clientName);
+      Socket sock = this.serverSocket.accept();
+      return sock;
     };
 
     try {
-      return Optional.of(this.service.submit(callableProxyPlayer)
-              .get(PLAYER_SIGN_UP_SECONDS, TimeUnit.SECONDS));
-    } catch (Throwable throwable) {
-      client.close();
-      return Optional.empty();
+      Future<Socket> futurePlayer = this.service.submit(acceptConnection);
+      return futurePlayer.get(waitTimeRemaining, TimeUnit.MILLISECONDS);
+    }catch(Exception e){
     }
+    return null;
   }
-
 
 }

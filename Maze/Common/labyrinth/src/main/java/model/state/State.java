@@ -185,9 +185,10 @@ public class State implements IState {
 
     if (this.playerList.size() == 0) {
       this.status = NO_REMAINING_PLAYERS;
+    } else{
+      this.activePlayer = this.activePlayer % this.playerList.size();
     }
 
-    this.activePlayer = this.activePlayer % this.playerList.size();
 
   }
 
