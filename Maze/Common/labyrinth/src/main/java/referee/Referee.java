@@ -25,14 +25,15 @@ import java.util.*;
 public class Referee implements IReferee {
 
   private static final int TIMEOUT = 20;
+
+  private final IState game;
   private final IRules rules;
   private final GoalHandler goalHandler;
-  // TODO: Make observer handler
-  private final List<IObserver> observers;
-  // all eliminated players so far, including cheaters.
-  private final List<PlayerAvatar> eliminated;
-  private IState game;
+
   private Map<PlayerAvatar, PlayerHandler> playerAvatarToHandler;
+  private final List<PlayerAvatar> eliminated;
+
+  private final List<IObserver> observers;
 
   /**
    * Creates a referee and assigns it a game to moderate, as well as a list of clients which should
