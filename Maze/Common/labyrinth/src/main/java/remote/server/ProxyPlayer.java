@@ -40,7 +40,7 @@ public class ProxyPlayer implements IPlayer {
 
   private final String playerName;
   private final Socket client;
-  private final DataOutput out;
+  private final DataOutputStream out;
   private final DataInputStream in;
 
 
@@ -58,6 +58,7 @@ public class ProxyPlayer implements IPlayer {
     try {
       JSONArray toSend = JsonSerializer.takeTurn(game);
       this.out.writeUTF(toSend.toString());
+      this.out.flush();
     } catch (JSONException | IOException e) {
       throw new RuntimeException(e);
     }
@@ -88,6 +89,7 @@ public class ProxyPlayer implements IPlayer {
     try {
       JSONArray toSend = JsonSerializer.setup(game, goal);
       this.out.writeUTF(toSend.toString());
+      this.out.flush();
     } catch (JSONException | IOException e) {
       throw new RuntimeException(e);
     }
@@ -109,6 +111,7 @@ public class ProxyPlayer implements IPlayer {
     JSONArray toSend = JsonSerializer.win(won);
     try {
       this.out.writeUTF(toSend.toString());
+      this.out.flush();
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
