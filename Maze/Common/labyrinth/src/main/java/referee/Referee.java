@@ -30,7 +30,7 @@ public class Referee implements IReferee {
   private final IRules rules;
   private final GoalHandler goalHandler;
 
-  private Map<PlayerAvatar, PlayerHandler> playerAvatarToHandler;
+  private final Map<PlayerAvatar, PlayerHandler> playerAvatarToHandler;
   private final List<PlayerAvatar> eliminated;
 
   private final List<IObserver> observers;
