@@ -1,18 +1,23 @@
-package IntegrationTests.Remote;
+package java.IntegrationTests.Remote;
 
 import IntegrationTests.IntegrationUtils;
+import java.IntegrationTests.TestPlayer;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
-import json.JsonDeserializer;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONTokener;
+
+import json.JsonDeserializer;
 import player.IPlayer;
 import remote.client.Client;
 
 
+/**
+ *
+ */
 public class XClients {
 
   public final static int CLIENT_WAIT_TIMER = 3;
@@ -29,7 +34,7 @@ public class XClients {
 
     JSONTokener jsonTokener = IntegrationUtils.getInput();
     JSONArray playersSpecJson = (JSONArray) jsonTokener.nextValue();
-    List<IPlayer> playerSpec = JsonDeserializer.jsonToPlayerSpec(playersSpecJson);
+    List<IPlayer> playerSpec = TestPlayer.jsonToTestPlayers(playersSpecJson);
 
     List<Client> clients = new ArrayList<>();
     for (IPlayer player : playerSpec) {
@@ -37,6 +42,8 @@ public class XClients {
     }
 
     List<Thread> clientThreads = runClients(clients);
+
+
   }
 
   private static List<Thread> runClients(List<Client> clients) throws InterruptedException {

@@ -143,40 +143,7 @@ public class JsonDeserializer {
   }
 
 
-
-
-
-
-
-
-  //For XClients!
-  public static List<IPlayer> jsonToPlayerSpec(JSONArray players) throws JSONException {
-    List<IPlayer> result = new ArrayList<>();
-//
-//    for(int i=0; i<players.length(); i++){
-//      JSONArray player = players.getJSONArray(i);
-//      String name = player.getString(0);
-//      String strategy = player.getString(1);
-//      String bad = "none";
-//      int count = 1;
-//      boolean loop = false;
-//      if (player.length() > 2) {
-//        bad = player.getString(2);
-//      } else{
-//        IPlayer p = new TestPlayer(name, Strategy);
-//      }
-//
-//      if (player.length() == 4) {
-//        count = player.getInt(3);
-//        loop = true;
-//      }
-
-
-
-    return result;
-  }
-
-  public static List<Position> jsonToGoals(JSONArray jsonPlmt) throws JSONException {
+  public static List<Position> goals(JSONArray jsonPlmt) throws JSONException {
     List<Position> goals = new ArrayList<>();
     for(int i=0; i<jsonPlmt.length(); i++){
       JSONObject playerJSON = jsonPlmt.getJSONObject(i);
@@ -187,7 +154,12 @@ public class JsonDeserializer {
   }
 
 
-  public static Move move(JSONArray moveJSON) {
-    return null;
+  public static Move move(JSONArray moveJSON) throws JSONException {
+    int index = moveJSON.getInt(0);
+    Direction direction = Direction.valueOf(moveJSON.getString(1));
+    int degree = moveJSON.getInt(2) / 90;
+    degree = (4 - degree) % 4;
+    Position moveTo = JsonDeserializer.position(moveJSON.getJSONObject(3));
+    return new Move(direction, index, degree, moveTo);
   }
 }

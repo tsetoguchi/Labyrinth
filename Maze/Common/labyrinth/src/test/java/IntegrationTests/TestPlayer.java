@@ -1,73 +1,121 @@
-package IntegrationTests;
+package java.IntegrationTests;
 
-import model.Utils;
-import model.model.*;
-import model.board.Gem;
-import model.board.IBoard;
-import model.board.Tile;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.junit.Test;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import model.Position;
 import model.projections.StateProjection;
-import player.IStrategy;
-import player.Turn;
-
-import java.util.*;
+import player.EuclideanStrategy;
 import player.IPlayer;
+import player.IStrategy;
+import player.Player;
+import player.RiemannStrategy;
+import referee.ITurn;
 
-/**
- * A simple Player implementation for testing, which proposes a completely random (but valid) board.
- */
-public class TestPlayer implements IPlayer {
-    private final IStrategy strategy;
-    private final String name;
+public class TestPlayer extends Player {
 
-    public TestPlayer(String name, IStrategy strategy) {
-        this.name = name;
-        this.strategy = strategy;
+    private final String bad;
+    private final int count;
+    private int current;
+
+
+    public TestPlayer(String name, IStrategy strategy, String bad, int count){
+        super(name, strategy);
+        this.bad = bad;
+        this.count = count;
+        this.current = 0;
     }
 
     @Override
-    public boolean win(boolean w) {
-        return true;
+    public ITurn takeTurn(StateProjection game) {
+
+        if(this.bad.equals("takeTurn")){
+            this.current++;
+            this.loop();
+            this.errorOut();
+        }
+
+        return super.takeTurn(game);
     }
 
     @Override
-    public boolean setup(Optional<StateProjection> state, Position goal) {
-        return true;
+    public boolean setup(Optional<StateProjection> game, Position goal) {
+
+        if(this.bad.equals("setUp")){
+            this.current++;
+            this.loop();
+            this.errorOut();
+        }
+
+        return super.setup(game, goal);
+    }
+
+    @Override
+    public boolean win(boolean playerWon) {
+
+        if(this.bad.equals("win")){
+            this.current++;
+            this.loop();
+            this.errorOut();
+        }
+
+        return super.win(playerWon);
     }
 
 
-    public IBoard proposeBoard(int rows, int columns) {
-        Tile[][] tileGrid = Utils.generateRandomTileGrid();
-        Tile spareTile = Utils.generateRandomTile(Gem.hackmanite, Gem.hackmanite);
-        return new DefaultBoard(tileGrid, spareTile);
+    private void errorOut(){
+        if(this.count == -1){
+            int x = 1/0;
+        }
     }
 
-
-    public void returnHome(Position homeTile) {
-
+    private void loop(){
+        if(this.count == this.current){
+            while(true){
+            }
+        }
     }
 
+    public static List<IPlayer> jsonToTestPlayers(JSONArray playersSpecJson) throws JSONException {
+        List<IPlayer> players = new ArrayList<>();
 
-    public String getPlayerName() {
-        return null;
+        for(int i=0; i<playersSpecJson.length(); i++){
+            JSONArray playerJson = playersSpecJson.getJSONArray(i);
+            int length = playerJson.length();
+
+            String name = playerJson.getString(0);
+            String stratString = playerJson.getString(1);
+            IStrategy strategy = null;
+            if(stratString.equals("Euclid")){
+                strategy = new EuclideanStrategy();
+            } else if (stratString.equals("Riemann")){
+                strategy = new RiemannStrategy();
+            }
+
+            String bad = "none";
+            int count = -1;
+
+            switch(length){
+                case 4:
+                    count = playerJson.getInt(3);
+                case 3:
+                    bad = playerJson.getString(2);
+                    break;
+            }
+
+            players.add(new TestPlayer(name, strategy, bad, count));
+        }
+
+
+        return players;
     }
-
-
-    public Optional<Turn> takeTurn(StateProjection game) {
-        return this.strategy.createTurnPlan(, game.getBoard(),
-            this.goal);
-    }
-
-
-    public String getName() {
-        return this.name;
-    }
-
-
-    public boolean updateGoal(Position goal) {
-        return true;
-    }
-
-
 
 
 }

@@ -11,7 +11,6 @@ import model.Exceptions.IllegalPlayerActionException;
 import model.Position;
 import model.board.Board;
 import model.board.IBoard;
-import model.projections.PlayerGameProjection;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
