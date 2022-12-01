@@ -1,5 +1,16 @@
 package json;
 
+import static model.board.Direction.DOWN;
+import static model.board.Direction.LEFT;
+import static model.board.Direction.RIGHT;
+import static model.board.Direction.UP;
+
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import model.Position;
 import model.board.Board;
 import model.board.Direction;
@@ -8,29 +19,14 @@ import model.board.IBoard;
 import model.board.Tile;
 import model.board.Treasure;
 import model.state.IState;
-
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import model.state.PlayerAvatar;
 import model.state.SlideAndInsertRecord;
 import model.state.State;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import player.IPlayer;
-import referee.ITurn;
 import referee.Move;
-
-import static model.board.Direction.DOWN;
-import static model.board.Direction.LEFT;
-import static model.board.Direction.RIGHT;
-import static model.board.Direction.UP;
 
 public class JsonDeserializer {
 

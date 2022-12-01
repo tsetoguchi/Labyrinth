@@ -8,6 +8,7 @@ import model.projections.BoardProjection;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
+import model.state.PlayerAvatar;
 
 /**
  * The JFrame component which displays a board and the objects populating it. Does not include the spare tile.
