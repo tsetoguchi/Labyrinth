@@ -19,6 +19,7 @@ import model.state.State;
 import observer.Controller.IObserver;
 import player.IPlayer;
 import java.util.*;
+import player.Player;
 
 import static referee.PlayerResult.*;
 
@@ -33,7 +34,6 @@ public class Referee implements IReferee {
 
   private final IRules rules;
   private Map<PlayerAvatar, PlayerHandler> playerAvatarToHandler;
-  private final List<PlayerAvatar> playersCollectedTreasures;
 
   private final GoalHandler goalHandler;
 
@@ -56,15 +56,13 @@ public class Referee implements IReferee {
     this.game = game;
     this.rules = rules;
     this.playerAvatarToHandler = this.mapPlayerAvatarsToPlayerHandlers(game, players);
-    this.playersCollectedTreasures = new ArrayList<>();
     this.observers = observers;
     this.eliminated = new ArrayList<>();
     this.goalHandler = new GoalHandler(game.getPlayerList(), goals);
   }
 
   public Referee(IState game, List<IPlayer> players, List<Position> goals) {
-    this(game, players, List.of(),
-        new DefaultRules(), goals);
+    this(game, players, List.of(), new DefaultRules(), goals);
   }
 
   /**
@@ -182,7 +180,7 @@ public class Referee implements IReferee {
           this.kickPlayerInGameAndRef(activePlayer);
         }
 
-        this.remindPlayersReturnHome();
+        this.assignNextGoal(activePlayer);
         this.informObserverOfState();
       }
     } else {
@@ -357,24 +355,14 @@ public class Referee implements IReferee {
     return playerDistanceMap;
   }
 
-  private Map<PlayerAvatar, IPlayer> mapPlayerAvatarsToPlayerClients(State state,
-      List<IPlayer> iPlayerInterfaces) {
-    Map<PlayerAvatar, IPlayer> map = new HashMap<>();
-    if (iPlayerInterfaces.size() != state.getPlayerList().size()) {
-      throw new IllegalArgumentException("Amount of clients and players do not match.");
-    }
-    for (int i = 0; i < iPlayerInterfaces.size(); i++) {
-      map.put(state.getPlayerList().get(i), iPlayerInterfaces.get(i));
-    }
-    return map;
-  }
 
-  private void remindPlayersReturnHome() {
-    for (PlayerAvatar player : this.game.getPlayerList()) {
-      if (this.goalHandler.playerReachedGoal(player) && !this.playersCollectedTreasures.contains(player)) {
-        this.playerAvatarToHandler.get(player).setup(Optional.empty(), player.getHome());
-        this.playersCollectedTreasures.add(player);
-      }
+  private void assignNextGoal(PlayerAvatar player) {
+    if (this.goalHandler.playerReachedGoal(player)) {
+
+      this.goalHandler.nextGoal(player);
+
+      this.playerAvatarToHandler.get(player).setup(Optional.empty(),
+          this.goalHandler.getPlayerCurrentGoal(player));
     }
   }
 

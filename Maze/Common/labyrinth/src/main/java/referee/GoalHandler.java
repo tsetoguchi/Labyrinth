@@ -33,34 +33,36 @@ public class GoalHandler {
 
 
   /**
-   * Increments the goal count of the given player and assigns them the appropriate goal.
-   * This method is only called when a player reaches their current goal.
+   * Increments the goal count of the given player and assigns them the appropriate goal. This
+   * method is only called when a player reaches their current goal.
+   *
    * @param player
    */
-  private void nextGoal(PlayerAvatar player) {
+  public void nextGoal(PlayerAvatar player) {
 
     int goalCount = this.goalCount.get(player);
     goalCount++;
-    this.goalCount.put(player, goalCount);
+    this.goalCount.replace(player, goalCount);
 
-    if (this.potentialGoals.isEmpty()) {
-      Position home = player.getHome();
-      this.currentGoals.put(player, home);
+    Position nextGoal;
+    if (!this.goalsLeft()) {
+      nextGoal = player.getHome();
+    } else {
+      nextGoal = this.potentialGoals.poll();
     }
 
-    Position nextGoal = this.potentialGoals.poll();
-    this.currentGoals.put(player, nextGoal);
+
+    this.currentGoals.replace(player, nextGoal);
   }
 
   public boolean playerReachedHome() {
-    boolean homeReached = false;
     for (PlayerAvatar player : this.currentGoals.keySet()) {
-      if (player.getCurrentPosition().equals(player.getHome())) {
-        homeReached = true;
-        break;
+      if (this.playerReachedGoal(player) && player.getCurrentPosition().equals(player.getHome())
+          && !this.goalsLeft()) {
+        return true;
       }
     }
-    return homeReached;
+    return false;
   }
 
   public boolean playerReachedGoal(PlayerAvatar player) {
@@ -77,8 +79,13 @@ public class GoalHandler {
     return this.goalCount.get(player);
   }
 
+  private boolean goalsLeft() {
+    return !this.potentialGoals.isEmpty();
+  }
+
   /**
    * Assigns each player an intiial goal and sets their goal counts to 0
+   *
    * @param players
    */
   private void initializePlayerData(List<PlayerAvatar> players) {
@@ -88,7 +95,6 @@ public class GoalHandler {
       this.goalCount.put(player, 0);
     }
   }
-
 
 
 }
