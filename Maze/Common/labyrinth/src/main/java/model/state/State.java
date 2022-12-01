@@ -179,12 +179,16 @@ public class State implements IState {
       this.activePlayer--;
     }
 
+
     this.playerList.remove(player);
     this.haveSkipped.remove(player);
 
     if (this.playerList.size() == 0) {
       this.status = NO_REMAINING_PLAYERS;
     }
+
+    this.activePlayer = this.activePlayer % this.playerList.size();
+
   }
 
   /**

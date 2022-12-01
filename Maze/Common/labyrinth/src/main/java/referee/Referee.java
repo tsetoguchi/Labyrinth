@@ -346,11 +346,11 @@ public class Referee implements IReferee {
 
     public Optional<ITurn> takeTurn(StateProjection game) {
       //TODO debug
-//      return this.timeoutExceptionHandler(() -> {
-//        return this.player.takeTurn(game);
-//      });
-      ITurn t = this.player.takeTurn(game);
-      return Optional.of(t);
+      return this.timeoutExceptionHandler(() -> {
+        return this.player.takeTurn(game);
+      });
+//      ITurn t = this.player.takeTurn(game);
+//      return Optional.of(t);
     }
 
     public Optional<Boolean> setup(Optional<StateProjection> state, Position goal) {
