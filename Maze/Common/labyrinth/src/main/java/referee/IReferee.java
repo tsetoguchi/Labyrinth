@@ -11,8 +11,6 @@ public interface IReferee {
 
     GameResults runGame();
 
-    void resume(IState game, List<IPlayer> players);
-
     void addObserver(IObserver observer);
 
 }

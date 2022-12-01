@@ -2,10 +2,14 @@ package model;
 
 import model.board.Direction;
 import model.board.Gem;
+import model.board.IBoard;
 import model.board.Tile;
 import model.board.Treasure;
+import referee.IRules;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 import static model.board.Direction.*;
 
@@ -89,4 +93,29 @@ public class Utils {
         }
         return new Tile(directions, new Treasure(List.of(firstGem, secondGem)));
     }
+
+    private static List<Position> immovablePositionsForBoard(IBoard board, IRules rules) {
+        List<Position> immovablePositions = new ArrayList<>();
+        // Iterate through immovable rows
+        for (int row = 0; row < board.getHeight(); row++) {
+            for (int col = 0; col < board.getWidth(); col++) {
+                Position currentPosition = new Position(row, col);
+                if (rules.immovablePosition(currentPosition)) {
+                    immovablePositions.add(currentPosition);
+                }
+            }
+        }
+        return immovablePositions;
+    }
+
+    private static List<Color> generateUniqueColors(int numberOfColors) {
+        Set<Color> colors = new HashSet<>();
+        Random random = new Random();
+        while (colors.size() < numberOfColors) {
+            colors.add(new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256)));
+        }
+
+        return new ArrayList<>(colors);
+    }
+
 }
