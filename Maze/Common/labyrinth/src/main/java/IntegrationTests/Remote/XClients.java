@@ -1,4 +1,4 @@
-package java.IntegrationTesting.Remote;
+package IntegrationTests.Remote;
 
 import IntegrationTests.IntegrationUtils;
 import IntegrationTests.TestPlayer;

@@ -1,4 +1,4 @@
-package java.IntegrationTesting.Remote;
+package IntegrationTests.Remote;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
