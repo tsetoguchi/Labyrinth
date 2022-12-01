@@ -32,13 +32,14 @@ public class Client implements Runnable {
      */
     public void run() {
         Optional<Socket> socket = Optional.empty();
-
+        System.out.println("hello world");
         while(socket.isEmpty()){
             try {
                 Socket sock = new Socket(this.address, this.port);
                 socket = Optional.of(sock);
             } catch (IOException ignore){}
         }
+        System.out.println("Connected!");
 
         try {
             ProxyReferee proxyRef = new ProxyReferee(socket.get(), this.player);

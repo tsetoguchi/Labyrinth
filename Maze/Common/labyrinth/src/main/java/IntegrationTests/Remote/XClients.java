@@ -6,6 +6,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONTokener;
@@ -24,16 +26,19 @@ public class XClients {
   public static void main(String[] args)
       throws JSONException, UnknownHostException, InterruptedException {
 
-    int port = Integer.parseInt(args[0]);
+    //int port = Integer.parseInt(args[0]);
+    //JSONTokener jsonTokener = IntegrationUtils.getInput();
+    int port = 5555;
+    JSONTokener jsonTokener = new JSONTokener("[[\"eadam\",\"Euclid\"],[\"ebob\",\"Euclid\"],[\"ecarl\",\"Euclid\"]]");
 
     InetAddress inetAddress = InetAddress.getLocalHost();
     if (args.length > 1) {
       inetAddress = InetAddress.getByName(args[1]);
     }
 
-    JSONTokener jsonTokener = IntegrationUtils.getInput();
-    JSONArray playersSpecJson = (JSONArray) jsonTokener.nextValue();
-    List<IPlayer> playerSpec = TestPlayer.jsonToTestPlayers(playersSpecJson);
+
+    JSONArray playersJSON = (JSONArray) jsonTokener.nextValue();
+    List<IPlayer> playerSpec = TestPlayer.jsonToTestPlayers(playersJSON);
 
     List<Client> clients = new ArrayList<>();
     for (IPlayer player : playerSpec) {
@@ -51,8 +56,8 @@ public class XClients {
 
     for (int i = 0; i < clients.size(); i++) {
       Thread current = new Thread(clients.get(i), Integer.toString(i));
-      current.wait((long) CLIENT_WAIT_TIMER * 1000 * i);
       current.start();
+      TimeUnit.SECONDS.sleep(3);
       threads.add(current);
     }
     return threads;
