@@ -1,10 +1,10 @@
 package java.IntegrationTests.Remote;
 
+import IntegrationTests.IntegrationUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import java.IntegrationTests.IntegrationUtils;
 import java.util.List;
 
 import json.JsonDeserializer;
@@ -30,7 +30,6 @@ public class XServer {
     Server server = new Server(game, goals, port);
     GameResults results = server.call();
     System.out.println(JsonSerializer.gameResults(results));
-
   }
 
 }

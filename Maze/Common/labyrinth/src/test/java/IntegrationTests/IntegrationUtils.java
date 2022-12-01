@@ -1,4 +1,4 @@
-package java.IntegrationTests;
+package IntegrationTests;
 
 import org.json.JSONTokener;
 
