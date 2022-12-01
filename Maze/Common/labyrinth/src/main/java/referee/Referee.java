@@ -24,11 +24,11 @@ import java.util.*;
  */
 public class Referee implements IReferee {
 
-  private static final int TIMEOUT = 2;
+  private static final int TIMEOUT = 4;
 
   private final IState game;
   private final IRules rules;
-  private final GoalHandler goalHandler;
+  protected final GoalHandler goalHandler;
 
   private final Map<PlayerAvatar, PlayerHandler> playerAvatarToHandler;
   private final List<PlayerAvatar> eliminated;
@@ -146,11 +146,6 @@ public class Referee implements IReferee {
    */
   private void handleTurn() {
     PlayerAvatar activePlayer = this.game.getActivePlayer();
-
-    // ToDo debug
-    if(activePlayer.getHome().equals(new Position(5, 3))){
-      int x = 8;
-    }
 
     Optional<ITurn> potentialTurn = this.getTurn(activePlayer);
 

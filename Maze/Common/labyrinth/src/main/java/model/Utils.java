@@ -94,7 +94,7 @@ public class Utils {
         return new Tile(directions, new Treasure(List.of(firstGem, secondGem)));
     }
 
-    private static List<Position> immovablePositionsForBoard(IBoard board, IRules rules) {
+    public static List<Position> immovablePositionsForBoard(IBoard board, IRules rules) {
         List<Position> immovablePositions = new ArrayList<>();
         // Iterate through immovable rows
         for (int row = 0; row < board.getHeight(); row++) {

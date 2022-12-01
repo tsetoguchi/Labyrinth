@@ -10,6 +10,7 @@
    * "message client method"
 8. Fix and create unit tests
 9. Make ProxyReferee parse JSON scattered JSON
+10. Ensure we enforce unique homes for *Players*
 
 ### Completed:
 1. Fix *IPlayer* protocol to use *setUp*
