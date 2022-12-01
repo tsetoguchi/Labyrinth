@@ -3,14 +3,13 @@ package model.state;
 import static model.board.Direction.*;
 import static model.state.GameStatus.*;
 
-import java.awt.Dimension;
 import model.Exceptions.IllegalGameActionException;
 import model.board.Direction;
 import model.Position;
 import model.board.ExperimentationBoard;
 import model.board.IBoard;
 import model.projections.StateProjection;
-import referee.Turn;
+import referee.Move;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -143,7 +142,7 @@ public class State implements IState {
   }
 
   /*
-  Turn Handling
+  Move Handling
    */
 
   /**
@@ -201,29 +200,29 @@ public class State implements IState {
   }
 
   /*
-  Turn Execution:
+  Move Execution:
    */
 
-  public void executeTurn(Turn turn) {
-    this.assertValidTurn(turn);
-    this.slideAndInsert(turn);
-    this.getActivePlayer().setCurrentPosition(turn.getMoveDestination());
+  public void executeTurn(Move move) {
+    this.assertValidTurn(move);
+    this.slideAndInsert(move);
+    this.getActivePlayer().setCurrentPosition(move.getMoveDestination());
     this.nextTurn();
   }
 
-  private void assertValidTurn(Turn turn) throws IllegalGameActionException{
+  private void assertValidTurn(Move move) throws IllegalGameActionException{
     Position current = this.getActivePlayer().getCurrentPosition();
     ExperimentationBoard eBoard = this.board.getExperimentationBoard();
-    Set<Position> reachable = eBoard.findReachableTilePositionsAfterSlideAndInsert(turn, current);
-    if(reachable.contains(turn.getMoveDestination())){
-      throw new IllegalGameActionException("Illegal turn: " + turn.toString());
+    Set<Position> reachable = eBoard.findReachableTilePositionsAfterSlideAndInsert(move, current);
+    if(reachable.contains(move.getMoveDestination())){
+      throw new IllegalGameActionException("Illegal move: " + move.toString());
     }
   }
 
-  private void slideAndInsert(Turn turn) {
-    int index = turn.getSlideIndex();
-    int rotations = turn.getSpareTileRotations();
-    Direction direction = turn.getSlideDirection();
+  private void slideAndInsert(Move move) {
+    int index = move.getSlideIndex();
+    int rotations = move.getSpareTileRotations();
+    Direction direction = move.getSlideDirection();
     if (this.doesSlideUndoPrevious(direction, index)) {
       throw new IllegalGameActionException(
               "Attempted to perform a slide which undoes the previous slide.");

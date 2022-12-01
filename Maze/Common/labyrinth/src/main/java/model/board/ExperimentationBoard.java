@@ -9,7 +9,7 @@ import java.util.Set;
 
 import model.Position;
 import referee.IRules;
-import referee.Turn;
+import referee.Move;
 
 /**
  * A deep copy of the Board that can be experimented with.
@@ -29,10 +29,10 @@ public class ExperimentationBoard extends Board {
      * Find all the Tiles that would be reachable after a given slide and insert from a given starting
      * position (on the updated board) and their corresponding positions (on the updated board)
      */
-    public Set<Position> findReachableTilePositionsAfterSlideAndInsert(Turn turn, Position current) {
-        Direction direction = turn.getSlideDirection();
-        int index = turn.getSlideIndex();
-        int rotations = turn.getSpareTileRotations();
+    public Set<Position> findReachableTilePositionsAfterSlideAndInsert(Move move, Position current) {
+        Direction direction = move.getSlideDirection();
+        int index = move.getSlideIndex();
+        int rotations = move.getSpareTileRotations();
         this.slideAndInsert(direction, index, rotations);
         Position avatarAfterSliding = this.getAvatarPositionAfterSliding(current,
                 this.getWidth(), this.getHeight(), direction, index);

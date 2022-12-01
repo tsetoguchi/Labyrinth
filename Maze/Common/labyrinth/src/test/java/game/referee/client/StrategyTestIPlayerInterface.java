@@ -5,7 +5,7 @@
 //import game.projections.PlayerStateProjection;
 //import game.projections.PublicPlayerAvatar;
 //import player.IStrategy;
-//import referee.Turn;
+//import referee.Move;
 //
 //import java.util.Optional;
 //
@@ -20,7 +20,7 @@
 //    }
 //
 //    @Override
-//    public Optional<Turn> takeTurn(PlayerStateProjection game) {
+//    public Optional<Move> takeTurn(PlayerStateProjection game) {
 //        return this.strategy.createTurnPlan(game.getBoard(), game.getSelf(),
 //                game.getPreviousSlideAndInsert(), this.getGoalPosition(game));
 //    }

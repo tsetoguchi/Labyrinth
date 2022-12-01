@@ -10,7 +10,9 @@ import referee.IRules;
 import model.projections.StateProjection;
 import model.state.PlayerAvatar;
 import model.state.SlideAndInsertRecord;
-import referee.Turn;
+import referee.ITurn;
+import referee.Move;
+import referee.Pass;
 
 import java.util.List;
 import java.util.Optional;
@@ -43,28 +45,29 @@ public abstract class AbstractStrategy implements IStrategy {
    * Given the current board, spare tile, and player information, produces a plan for the turn which
    * includes all the actions the player wishes to take, prioritizing getting to the given goal if
    * possible. Returns Optional.empty() if the player wishes to pass.
+   * @return
    */
   @Override
-  public Optional<Turn> createTurnPlan(StateProjection state, Position goal) {
+  public ITurn createTurnPlan(StateProjection state, Position goal) {
     this.state = state;
     ExperimentationBoard board = this.state.getBoard();
     PlayerAvatar player = this.state.getSelf();
-    Optional<Turn> planForCandidate = Optional.empty();
+    ITurn planForCandidate;
     for (Position candidate : this.getCandidatesInOrder(board, goal)) {
       planForCandidate =
           this.createTurnPlanForCandidate(player.getCurrentPosition(), candidate);
-      if (planForCandidate.isPresent()) {
+      if (planForCandidate.isMove()) {
         return planForCandidate;
       }
     }
-    return planForCandidate;
+    return new Pass();
   }
 
   /**
-   * Returns a Turn which will result in reaching the given candidate Tile, or returns
+   * Returns a Move which will result in reaching the given candidate Tile, or returns
    * Optional.empty() if it cannot find such a plan.
    */
-  private Optional<Turn> createTurnPlanForCandidate(Position currentPosition, Position candidate){
+  private ITurn createTurnPlanForCandidate(Position currentPosition, Position candidate){
     ExperimentationBoard board = this.state.getBoard();
     int boardHeight = board.getHeight();
     int boardWidth = board.getWidth();
@@ -72,9 +75,9 @@ public abstract class AbstractStrategy implements IStrategy {
     for (int rowIndex = 0; rowIndex < boardHeight; rowIndex++) {
       for (int rotations = 4; rotations >= 1; rotations--) {
         for (Direction direction : new Direction[]{LEFT, RIGHT}) {
-          Turn toTry = new Turn(direction, rowIndex, rotations, candidate);
+          Move toTry = new Move(direction, rowIndex, rotations, candidate);
           if(this.validTurn(currentPosition, toTry)){
-            return Optional.of(toTry);
+            return toTry;
           }
         }
       }
@@ -83,27 +86,27 @@ public abstract class AbstractStrategy implements IStrategy {
     for (int colIndex = 0; colIndex < boardWidth; colIndex++) {
       for (int rotations = 4; rotations >= 1; rotations--) {
         for (Direction direction : new Direction[]{UP, DOWN}) {
-          Turn toTry = new Turn(direction, colIndex, rotations, candidate);
+          Move toTry = new Move(direction, colIndex, rotations, candidate);
           if(this.validTurn(currentPosition, toTry)){
-            return Optional.of(toTry);
+            return toTry;
           }
         }
       }
     }
 
-    return Optional.empty();
+    return new Pass();
   }
 
-  private boolean validTurn(Position current, Turn turn) {
+  private boolean validTurn(Position current, Move move) {
     ExperimentationBoard board = this.state.getBoard();
     Optional<SlideAndInsertRecord> previousSlide = this.state.getPreviousSlideAndInsert();
-    boolean slideValid = this.rules.isValidSlideAndInsert(turn, board.getWidth(), board.getHeight());
-    Position candidate = turn.getMoveDestination();
-    boolean reversesPrevious = previousSlide.isPresent() && previousSlide.get().revertsCheck(turn);
+    boolean slideValid = this.rules.isValidSlideAndInsert(move, board.getWidth(), board.getHeight());
+    Position candidate = move.getMoveDestination();
+    boolean reversesPrevious = previousSlide.isPresent() && previousSlide.get().revertsCheck(move);
 
     if (slideValid && !reversesPrevious) {
       Set<Position> reachableTilePositionsAfterSlide =
-          board.findReachableTilePositionsAfterSlideAndInsert(turn, current);
+          board.findReachableTilePositionsAfterSlideAndInsert(move, current);
       return reachableTilePositionsAfterSlide.contains(candidate);
     }
     return false;

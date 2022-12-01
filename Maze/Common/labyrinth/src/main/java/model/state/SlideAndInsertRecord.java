@@ -1,7 +1,7 @@
 package model.state;
 
 import model.board.Direction;
-import referee.Turn;
+import referee.Move;
 
 /**
  * A record of the slide and insert action taken on a turn.
@@ -29,8 +29,8 @@ public class SlideAndInsertRecord {
         return this.rotations;
     }
 
-    public boolean revertsCheck(Turn turn){
-        return turn.getSlideIndex() == this.index
-                && this.direction.equals(Direction.opposite(turn.getSlideDirection()));
+    public boolean revertsCheck(Move move){
+        return move.getSlideIndex() == this.index
+                && this.direction.equals(Direction.opposite(move.getSlideDirection()));
     }
 }

@@ -6,14 +6,14 @@ import model.Position;
 /**
  * The set of actions that a player intends to perform on its turn.
  */
-public class Turn {
+public class Move implements ITurn{
 
   private final Direction slideDirection;
   private final int slideIndex;
   private final int spareTileRotations;
   private final Position moveDestination;
 
-  public Turn(Direction slideDirection, int slideIndex, int spareTileRotations,
+  public Move(Direction slideDirection, int slideIndex, int spareTileRotations,
               Position moveDestination) {
     this.slideDirection = slideDirection;
     this.slideIndex = slideIndex;
@@ -35,5 +35,15 @@ public class Turn {
 
   public Position getMoveDestination() {
     return this.moveDestination;
+  }
+
+  @Override
+  public boolean isMove() {
+    return true;
+  }
+
+  @Override
+  public Move getMove() {
+    return null;
   }
 }

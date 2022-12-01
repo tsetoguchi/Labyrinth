@@ -12,14 +12,11 @@ import model.board.ExperimentationBoard;
 import model.board.IBoard;
 import model.projections.StateProjection;
 import model.state.GameResults;
-import model.state.GameStatus;
 import model.state.IState;
 import model.state.PlayerAvatar;
-import model.state.State;
 import observer.Controller.IObserver;
 import player.IPlayer;
 import java.util.*;
-import player.Player;
 
 import static referee.PlayerResult.*;
 
@@ -41,7 +38,7 @@ public class Referee implements IReferee {
   private final List<IObserver> observers;
 
   // all eliminated players so far, including cheaters.
-  private final List<IPlayer> eliminated;
+  private final List<PlayerAvatar> eliminated;
 
   private static final int TIMEOUT = 20;
 
@@ -120,17 +117,30 @@ public class Referee implements IReferee {
     this.informObserverOfState();
     this.setupPlayers();
 
-    GameStatus status = null;
     while (this.isGameOver()) {
       this.handleTurn();
-      status = this.game.getGameStatus();
     }
 
-    this.informPlayersOfGameEnd(status);
+    this.informPlayersOfGameEnd();
     this.informObserversOfGameEnd();
 
-    return new GameResults(this.getNamesFromAvatars(this.getWinners()),
-        this.getNamesFromRefereePlayerInterfaces(this.eliminated));
+    return this.createGameResults();
+
+  }
+
+  private GameResults createGameResults() {
+    List<String> winners = this.getNamesFromAvatars(this.getWinners());
+    List<String> kicked = this.getNamesFromAvatars(this.eliminated);
+    return new GameResults(winners, kicked);
+  }
+
+  private List<String> getNamesFromAvatars(List<PlayerAvatar> playerAvatars) {
+    List<String> names = new ArrayList<>();
+    for (PlayerAvatar player : playerAvatars) {
+      names.add(this.playerAvatarToHandler.get(player).getPlayerName());
+    }
+    Collections.sort(names);
+    return names;
   }
 
   public void resume(IState game, List<IPlayer> iPlayerInterfaces) {
@@ -155,12 +165,12 @@ public class Referee implements IReferee {
    */
   private void handleTurn() {
     PlayerAvatar activePlayer = this.game.getActivePlayer();
-    TurnWrapper turnWrapper = this.getPlanFromPlayer(activePlayer);
+    Optional turnWrapper = this.getPlanFromPlayer(activePlayer);
     if (turnWrapper.isException()) { // Player raised an exception when asked for a turn
       this.kickPlayerInGameAndRef(activePlayer);
       return;
     }
-    Optional<Turn> turnPlan = turnWrapper.getTurnPlan();
+    Optional<Move> turnPlan = turnWrapper.getTurnPlan();
     if (this.isValidTurnPlan(turnPlan)) {
 
       // Pass
@@ -168,14 +178,14 @@ public class Referee implements IReferee {
         this.game.skipTurn();
       }
 
-      // Perform Turn
+      // Perform Move
       else {
 
-        Turn turn = turnPlan.get();
+        Move move = turnPlan.get();
 
         Position moveDestination = turnPlan.get().getMoveDestination();
-        if (this.rules.isValidSlideAndInsert(turn, this.game.getBoardWidth(), this.game.getBoardHeight())) {
-          this.game.executeTurn(turn);
+        if (this.rules.isValidSlideAndInsert(move, this.game.getBoardWidth(), this.game.getBoardHeight())) {
+          this.game.executeTurn(move);
         } else {
           this.kickPlayerInGameAndRef(activePlayer);
         }
@@ -185,50 +195,45 @@ public class Referee implements IReferee {
       }
     } else {
 
-      PlayerAvatar toBeKickedPlayer = this.game.getActivePlayer();
-      this.eliminated.add(this.playerAvatarToHandler.get(toBeKickedPlayer).getPlayerClient());
-      this.playerAvatarToHandler.remove(toBeKickedPlayer);
-      this.game.kickPlayer(toBeKickedPlayer);
+      this.kickPlayerInGameAndRef(activePlayer);
     }
   }
 
   private TurnWrapper getPlanFromPlayer(PlayerAvatar player) {
-    System.out.println(player);
     PlayerHandler playerHandler = this.playerAvatarToHandler.get(player);
-    System.out.println(this.playerAvatarToHandler);
-    Optional<Optional<Turn>> playerTurn = playerHandler.takeTurn(
+    Optional<ITurn> playerTurn = playerHandler.takeTurn(
         this.game.getStateProjection());
 
     if (playerTurn.isEmpty()) {
       // Player timed out or has an exception
       return new TurnWrapper(Optional.empty(), true);
     } else {
-      // Player plans to Pass for their Turn
+      // Player plans to Pass for their Move
       return new TurnWrapper(playerTurn.get(), false);
     }
   }
 
-  private boolean isValidTurnPlan(Optional<Turn> turnPlan) {
+  private boolean isValidTurnPlan(Optional<Move> turnPlan) {
     if (turnPlan.isEmpty()) {
       return true;
     }
 
-    Turn turn = turnPlan.get();
+    Move move = turnPlan.get();
     Position moveDestination = turnPlan.get().getMoveDestination();
     Position currentPosition = this.game.getActivePlayer().getCurrentPosition();
 
     ExperimentationBoard expBoard = this.game.getBoard().getExperimentationBoard();
 
-    if (!this.rules.isValidSlideAndInsert(turn, this.game.getBoardWidth(),
+    if (!this.rules.isValidSlideAndInsert(move, this.game.getBoardWidth(),
         this.game.getBoardHeight())) {
       return false;
     }
     return expBoard
-        .findReachableTilePositionsAfterSlideAndInsert(turn, currentPosition)
+        .findReachableTilePositionsAfterSlideAndInsert(move, currentPosition)
         .contains(moveDestination);
   }
 
-  private void informPlayersOfGameEnd(GameStatus gameStatus) {
+  private void informPlayersOfGameEnd() {
     Map<PlayerAvatar, PlayerResult> playerResults = this.getResultsForPlayers();
 
     for (PlayerAvatar player : this.game.getPlayerList()) {
@@ -263,66 +268,35 @@ public class Referee implements IReferee {
   }
 
   private List<PlayerAvatar> getWinners() {
+    List<PlayerAvatar> candidates = new ArrayList<>();
+    int maxGoals = 0;
+    for(PlayerAvatar player : this.game.getPlayerList()){
+      int goalsReached = this.goalHandler.getPlayerGoalCount(player);
+      if(goalsReached > maxGoals){
+        maxGoals = goalsReached;
+        candidates.clear();
+        candidates.add(player);
+      } else if(goalsReached == maxGoals){
+        candidates.add(player);
+      }
+    }
+
     List<PlayerAvatar> winners = new ArrayList<>();
-
-    List<PlayerAvatar> playersThatReachedGoal = new ArrayList<>();
-    for (PlayerAvatar player : this.game.getPlayerList()) {
-      if (this.goalHandler.playerReachedGoal(player)) {
-        playersThatReachedGoal.add(player);
-      }
-    }
-
-    Map<PlayerAvatar, Double> distancesToCompare;
-    List<PlayerAvatar> contenders;
-
-    if (playersThatReachedGoal.size() > 0) {
-      distancesToCompare = this.mapPlayersToDistanceFromHome();
-      contenders = playersThatReachedGoal;
-    } else {
-      distancesToCompare = this.mapPlayersToDistanceFromGoal();
-      contenders = this.game.getPlayerList();
-    }
     double minDistance = Double.MAX_VALUE;
-
-    for (PlayerAvatar contender : contenders) {
-      double contenderDistanceFromHome = distancesToCompare.get(contender);
-      if (contenderDistanceFromHome < minDistance) {
-        winners = new ArrayList<>(); // clear previous winners who were further
-        winners.add(contender);
-        minDistance = contenderDistanceFromHome;
-      }
-      if (contenderDistanceFromHome == minDistance) {
-        winners.add(contender);
+    for(PlayerAvatar player : candidates){
+      Position goal = this.goalHandler.getPlayerCurrentGoal(player);
+      Position current = player.getCurrentPosition();
+      double distance = Position.getEuclideanDistance(current, goal);
+      if(distance < minDistance){
+        minDistance = distance;
+        winners.clear();
+        winners.add(player);
+      } else if(distance == minDistance){
+        winners.add(player);
       }
     }
+
     return winners;
-  }
-
-  public List<String> getNamesFromAvatars(List<PlayerAvatar> playerAvatars) {
-    List<String> names = new ArrayList<>();
-    for (PlayerAvatar player : playerAvatars) {
-      names.add(this.playerAvatarToHandler.get(player).getPlayerName());
-    }
-
-    Collections.sort(names);
-    return names;
-  }
-
-  public List<String> getEliminatedNames() {
-    List<String> names = new ArrayList<>();
-    for (IPlayer playerInterface : this.eliminated) {
-      names.add(playerInterface.getName());
-    }
-    Collections.sort(names);
-    return names;
-  }
-
-  private List<String> getNamesFromRefereePlayerInterfaces(List<IPlayer> playerInterfaces) {
-    List<String> names = new ArrayList<>();
-    for (IPlayer playerInterface : playerInterfaces) {
-      names.add(playerInterface.getName());
-    }
-    return names;
   }
 
 
@@ -418,9 +392,9 @@ public class Referee implements IReferee {
    * Removes the player with the specified color from the State and Referee
    */
   private void kickPlayerInGameAndRef(PlayerAvatar player) {
-    System.out.println("Kicked Player: ");
     this.playerAvatarToHandler.remove(player);
     this.game.kickPlayer(player);
+    this.eliminated.add(player);
   }
 
 
@@ -490,7 +464,7 @@ public class Referee implements IReferee {
       });
     }
 
-    public Optional<Optional<Turn>> takeTurn(StateProjection game) {
+    public Optional<ITurn> takeTurn(StateProjection game) {
       return this.timeoutExceptionHandler(() -> {
         return this.player.takeTurn(game);
       });

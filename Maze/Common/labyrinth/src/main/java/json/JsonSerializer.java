@@ -2,8 +2,12 @@ package json;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.json.JSONArray;
+
 import model.Position;
-import referee.Turn;
+import model.state.GameResults;
+import referee.Move;
 
 import java.io.IOException;
 import java.util.List;
@@ -23,11 +27,11 @@ public class JsonSerializer {
         return this.mapper.writeValueAsString(reachablePositionsList);
     }
 
-    public String turnPlanToJson(Optional<Turn> turnPlan) throws JsonProcessingException {
+    public String turnPlanToJson(Optional<Move> turnPlan) throws JsonProcessingException {
         if (turnPlan.isEmpty()) {
             return "PASS";
         }
-        Turn actions = turnPlan.get();
+        Move actions = turnPlan.get();
 
         Object[] resultArray = new Object[4];
 
@@ -60,5 +64,14 @@ public class JsonSerializer {
         int netClockwiseRotations = spareTileRotations % 4;
         int netCounterclockwiseRotations = (4 - netClockwiseRotations) % 4;
         return 90 * netCounterclockwiseRotations;
+    }
+
+    public JSONArray gameResultsToJSON(GameResults results) throws JsonProcessingException {
+        JSONArray winnersJSON = new JSONArray(results.getWinners());
+        JSONArray eliminatedJSON = new JSONArray(results.getEliminated());
+        JSONArray result = new JSONArray();
+        result.put(winnersJSON);
+        result.put(eliminatedJSON);
+        return result;
     }
 }

@@ -2,8 +2,6 @@ package referee;
 
 import model.Position;
 import model.board.Direction;
-import referee.IRules;
-import referee.Turn;
 
 import static model.board.Direction.DOWN;
 import static model.board.Direction.LEFT;
@@ -17,10 +15,10 @@ public class DefaultRules implements IRules {
   public DefaultRules() {
   }
 
-  public boolean isValidSlideAndInsert(Turn turn, int width, int height) {
-    int index = turn.getSlideIndex();
-    Direction direction = turn.getSlideDirection();
-    int rotations = turn.getSpareTileRotations();
+  public boolean isValidSlideAndInsert(Move move, int width, int height) {
+    int index = move.getSlideIndex();
+    Direction direction = move.getSlideDirection();
+    int rotations = move.getSpareTileRotations();
 
     boolean isEvenIndex = index % 2 == 0;
     boolean isPositiveIndex = index >= 0;

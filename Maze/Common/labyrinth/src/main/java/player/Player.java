@@ -4,7 +4,7 @@ import model.Position;
 import model.board.Board;
 import model.board.IBoard;
 import model.projections.StateProjection;
-import referee.Turn;
+import referee.ITurn;
 
 import java.util.Optional;
 
@@ -38,7 +38,7 @@ public class Player implements IPlayer {
   }
 
   @Override
-  public Optional<Turn> takeTurn(StateProjection game) {
+  public ITurn takeTurn(StateProjection game) {
     return this.strategy.createTurnPlan(game, this.destination);
   }
 

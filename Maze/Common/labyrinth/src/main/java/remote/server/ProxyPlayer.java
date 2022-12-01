@@ -12,8 +12,8 @@ import java.io.PrintWriter;
 
 import model.projections.StateProjection;
 import model.state.GameStatus;
-import referee.Turn;
 import json.JsonSerializer;
+import referee.ITurn;
 import referee.PlayerResult;
 import player.IPlayer;
 import remote.JSON.JsonMethodSerializer;
@@ -52,7 +52,7 @@ public class ProxyPlayer implements IPlayer {
   }
 
   @Override
-  public Optional<Turn> takeTurn(StateProjection game) throws IllegalPlayerActionException {
+  public ITurn takeTurn(StateProjection game) throws IllegalPlayerActionException {
 
     // Converts call into JSON and sends it to the client
     try {
@@ -75,8 +75,8 @@ public class ProxyPlayer implements IPlayer {
       }
     }
 
-    // Deserialize response into a Turn
-    //Optional<Turn> turnPlan = Serializer.getTurnPlan(response);
+    // Deserialize response into a Move
+    //Optional<Move> turnPlan = Serializer.getTurnPlan(response);
 
     // return to send back to real Ref in Optional
     return Optional.empty();

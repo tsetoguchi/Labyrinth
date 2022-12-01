@@ -3,14 +3,14 @@ package player;
 import model.board.IBoard;
 import model.Position;
 import model.projections.StateProjection;
-import referee.Turn;
+import referee.ITurn;
 
 import java.util.Optional;
 
 
 public interface IPlayer {
 
-  Optional<Turn> takeTurn(StateProjection game);
+  ITurn takeTurn(StateProjection game);
 
   boolean setup(Optional<StateProjection> game, Position goal);
 

@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import model.board.IBoard;
 import model.projections.StateProjection;
-import referee.Turn;
+import referee.Move;
 
 /**
  * Represents a game state with a full set of functionality that is needed to manage a State.
@@ -17,7 +17,7 @@ public interface IState {
 
   void skipTurn();
 
-  void executeTurn(Turn turn);
+  void executeTurn(Move move);
 
   boolean isGameOver();
 

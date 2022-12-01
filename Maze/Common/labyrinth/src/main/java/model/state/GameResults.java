@@ -14,7 +14,7 @@ public class GameResults {
     this.eliminated = eliminated;
   }
 
-  public List<String> getWinner() {
+  public List<String> getWinners() {
     return this.winners;
   }
 
@@ -22,15 +22,5 @@ public class GameResults {
     return this.eliminated;
   }
 
-
-
-  public String resultsJson() throws JsonProcessingException {
-
-    Object[] output = new Object[]{
-        this.winners,
-        this.eliminated
-    };
-    return new ObjectMapper().writeValueAsString(output);
-  }
   
 }
