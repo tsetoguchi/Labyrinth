@@ -24,7 +24,7 @@ import java.util.*;
  */
 public class Referee implements IReferee {
 
-  private static final int TIMEOUT = 20;
+  private static final int TIMEOUT = 2;
 
   private final IState game;
   private final IRules rules;
@@ -130,7 +130,7 @@ public class Referee implements IReferee {
     this.sendInitialSetup();
     this.informObserverOfState();
 
-    while (this.isGameOver()) {
+    while (!this.isGameOver()) {
       this.handleTurn();
       this.informObserverOfState();
     }
@@ -146,7 +146,14 @@ public class Referee implements IReferee {
    */
   private void handleTurn() {
     PlayerAvatar activePlayer = this.game.getActivePlayer();
+
+    // ToDo debug
+    if(activePlayer.getHome().equals(new Position(5, 3))){
+      int x = 8;
+    }
+
     Optional<ITurn> potentialTurn = this.getTurn(activePlayer);
+
 
     if (potentialTurn.isEmpty()) {
       this.kickPlayerInAll(activePlayer);
@@ -156,8 +163,9 @@ public class Referee implements IReferee {
     ITurn turn = potentialTurn.get();
 
     if (turn.isMove()) {
-
       Move move = turn.getMove();
+      System.out.println("\n\n\n" + this.game.getBoard().toString());
+      System.out.println(move.toString());
       if (this.isValidMove(move, activePlayer)) {
         this.game.executeTurn(move);
         this.assignNextGoal(activePlayer);
@@ -199,7 +207,7 @@ public class Referee implements IReferee {
    * Removes the player from the State and Referee
    */
   private void kickPlayerInAll(PlayerAvatar player) {
-    this.playerAvatarToHandler.remove(player);
+    //this.playerAvatarToHandler.remove(player);
     this.game.kickPlayer(player);
     this.eliminated.add(player);
   }
@@ -284,7 +292,7 @@ public class Referee implements IReferee {
   }
 
   private void sendInitialSetup() {
-    List<PlayerAvatar> players = this.game.getPlayerList();
+    List<PlayerAvatar> players = new ArrayList<>(this.game.getPlayerList());
 
     for (PlayerAvatar player : players) {
       Position firstGoal = this.goalHandler.getPlayerCurrentGoal(player);
@@ -337,9 +345,12 @@ public class Referee implements IReferee {
     }
 
     public Optional<ITurn> takeTurn(StateProjection game) {
-      return this.timeoutExceptionHandler(() -> {
-        return this.player.takeTurn(game);
-      });
+      //TODO debug
+//      return this.timeoutExceptionHandler(() -> {
+//        return this.player.takeTurn(game);
+//      });
+      ITurn t = this.player.takeTurn(game);
+      return Optional.of(t);
     }
 
     public Optional<Boolean> setup(Optional<StateProjection> state, Position goal) {

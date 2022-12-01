@@ -68,6 +68,9 @@ public abstract class AbstractStrategy implements IStrategy {
    * Optional.empty() if it cannot find such a plan.
    */
   private ITurn createTurnPlanForCandidate(Position currentPosition, Position candidate){
+    if(currentPosition.equals(new Position(0, 3))){
+      int x = 8;
+    }
     ExperimentationBoard board = this.state.getBoard();
     int boardHeight = board.getHeight();
     int boardWidth = board.getWidth();

@@ -355,4 +355,15 @@ public class Board implements IBoard {
     }
   }
 
+  public String toString(){
+    String result = "";
+    for (int row = 0; row < this.getHeight(); row++) {
+      for (int col = 0; col < this.getWidth(); col++) {
+        result += this.tileGrid[row][col].toSymbol();
+      }
+      result += "\n";
+    }
+    return result;
+  }
+
 }

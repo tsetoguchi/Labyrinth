@@ -214,7 +214,7 @@ public class State implements IState {
     Position current = this.getActivePlayer().getCurrentPosition();
     ExperimentationBoard eBoard = this.board.getExperimentationBoard();
     Set<Position> reachable = eBoard.findReachableTilePositionsAfterSlideAndInsert(move, current);
-    if(reachable.contains(move.getMoveDestination())){
+    if(!reachable.contains(move.getMoveDestination())){
       throw new IllegalGameActionException("Illegal move: " + move.toString());
     }
   }
@@ -290,7 +290,13 @@ public class State implements IState {
   }
 
   public List<PlayerAvatar> getPlayerList() {
-    return this.playerList;
+    List<PlayerAvatar> players = new ArrayList<>();
+    int size = this.playerList.size();
+    for(int i=0; i<size; i++){
+      PlayerAvatar p = this.playerList.get((this.activePlayer + i) % size);
+      players.add(p);
+    }
+    return players;
   }
 
   public GameStatus getGameStatus() {
@@ -302,11 +308,7 @@ public class State implements IState {
   }
 
   public StateProjection getStateProjection() {
-    List<PlayerAvatar> playersDeepCopy = new ArrayList<>();
-    for (PlayerAvatar player : this.playerList) {
-      playersDeepCopy.add(player.deepCopy());
-    }
-    return new StateProjection(this.getBoard().getExperimentationBoard(), playersDeepCopy,
+    return new StateProjection(this.getBoard().getExperimentationBoard(), this.getPlayerList(),
             this.previousSlideAndInsert);
   }
 

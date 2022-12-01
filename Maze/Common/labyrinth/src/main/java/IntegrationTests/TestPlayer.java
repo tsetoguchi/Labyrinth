@@ -47,8 +47,10 @@ public class TestPlayer extends Player {
 
         if(this.bad.equals("setUp")){
             this.current++;
+            System.out.println(this.current);
             this.loop();
             this.errorOut();
+            System.out.println(this.current);
         }
 
         return super.setup(game, goal);

@@ -8,7 +8,6 @@ import static model.board.Direction.UP;
 import java.util.Set;
 
 import model.Position;
-import referee.IRules;
 import referee.Move;
 
 /**
@@ -20,25 +19,29 @@ public class ExperimentationBoard extends Board {
         super(width, height, tileGrid, spareTile);
     }
 
-    public ExperimentationBoard(int width, int height) {
-        super(width, height);
-    }
-
     /**
      * Find all the Tiles that would be reachable after a given slide and insert from a given starting
      * position (on the updated board) and their corresponding positions (on the updated board)
      */
     public Set<Position> findReachableTilePositionsAfterSlideAndInsert(Move move, Position current) {
+        ExperimentationBoard copy = this.getExperimentationBoard();
         Direction direction = move.getSlideDirection();
         int index = move.getSlideIndex();
         int rotations = move.getSpareTileRotations();
-        this.slideAndInsert(direction, index, rotations);
-        Position avatarAfterSliding = this.getAvatarPositionAfterSliding(current,
-                this.getWidth(), this.getHeight(), direction, index);
-        Set<Position> reachablePositions = this.getReachablePositions(avatarAfterSliding);
-
+        copy.slideAndInsert(direction, index, rotations);
+        Position avatarAfterSliding = copy.getAvatarPositionAfterSliding(current,
+                copy.getWidth(), copy.getHeight(), direction, index);
+        Set<Position> reachablePositions = copy.getReachablePositions(avatarAfterSliding);
+//        if(current.equals(new Position(0,3))) {
+//            for (Position p : reachablePositions) {
+//                System.out.println(p.toString());
+//            }
+//        }
+        /*
         this.slideAndInsert(Direction.opposite(direction), index, 0);
         this.getSpareTile().rotate(4 - rotations);
+         */
+
         return reachablePositions;
     }
 
