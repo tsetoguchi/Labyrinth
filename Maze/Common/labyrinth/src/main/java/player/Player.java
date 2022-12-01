@@ -39,7 +39,7 @@ public class Player implements IPlayer {
 
   @Override
   public ITurn takeTurn(StateProjection game) {
-    return this.strategy.createTurnPlan(game, this.destination);
+    return this.strategy.createTurn(game, this.destination);
   }
 
   @Override

@@ -71,7 +71,7 @@ public class GoalHandler {
         && !this.goalsLeft()) {
       this.playerReachedHome = true;
     }
-    
+
     return this.playerReachedHome;
   }
 

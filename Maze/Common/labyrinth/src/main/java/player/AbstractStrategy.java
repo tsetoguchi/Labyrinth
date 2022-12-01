@@ -45,32 +45,27 @@ public abstract class AbstractStrategy implements IStrategy {
    * Given the current board, spare tile, and player information, produces a plan for the turn which
    * includes all the actions the player wishes to take, prioritizing getting to the given goal if
    * possible. Returns Optional.empty() if the player wishes to pass.
-   * @return
    */
   @Override
-  public ITurn createTurnPlan(StateProjection state, Position goal) {
+  public ITurn createTurn(StateProjection state, Position goal) {
     this.state = state;
     ExperimentationBoard board = this.state.getBoard();
     PlayerAvatar player = this.state.getSelf();
-    ITurn planForCandidate;
+    ITurn turn;
     for (Position candidate : this.getCandidatesInOrder(board, goal)) {
-      planForCandidate =
-          this.createTurnPlanForCandidate(player.getCurrentPosition(), candidate);
-      if (planForCandidate.isMove()) {
-        return planForCandidate;
+      turn =
+          this.createTurnForCandidate(player.getCurrentPosition(), candidate);
+      if (turn.isMove()) {
+        return turn;
       }
     }
     return new Pass();
   }
 
   /**
-   * Returns a Move which will result in reaching the given candidate Tile, or returns
-   * Optional.empty() if it cannot find such a plan.
+   * Returns an ITurn which will result in reaching the given candidate Tile, or a Pass.
    */
-  private ITurn createTurnPlanForCandidate(Position currentPosition, Position candidate){
-    if(currentPosition.equals(new Position(0, 3))){
-      int x = 8;
-    }
+  private ITurn createTurnForCandidate(Position currentPosition, Position candidate){
     ExperimentationBoard board = this.state.getBoard();
     int boardHeight = board.getHeight();
     int boardWidth = board.getWidth();

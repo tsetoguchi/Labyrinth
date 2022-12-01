@@ -17,5 +17,5 @@ public interface IStrategy {
    * possible.
    * @return
    */
-  ITurn createTurnPlan(StateProjection state, Position goal);
+  ITurn createTurn(StateProjection state, Position goal);
 }
