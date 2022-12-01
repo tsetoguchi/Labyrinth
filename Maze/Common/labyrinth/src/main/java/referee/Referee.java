@@ -165,6 +165,7 @@ public class Referee implements IReferee {
     if (turn.isMove()) {
       Move move = turn.getMove();
       System.out.println("\n\n\n" + this.game.getBoard().toString());
+      System.out.println(activePlayer + " " + this.goalHandler.getPlayerCurrentGoal(activePlayer).toString());
       System.out.println(move.toString());
       if (this.isValidMove(move, activePlayer)) {
         this.game.executeTurn(move);
@@ -217,7 +218,7 @@ public class Referee implements IReferee {
    */
   private boolean isGameOver() {
     boolean status = this.game.isGameOver();
-    boolean homeReached = this.goalHandler.playerReachedHome();
+    boolean homeReached = this.goalHandler.anyPlayersHome();
     return status || homeReached;
   }
 

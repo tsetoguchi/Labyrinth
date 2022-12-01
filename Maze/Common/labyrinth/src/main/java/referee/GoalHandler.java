@@ -1,14 +1,15 @@
 package referee;
 
-import java.io.PipedOutputStream;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Set;
+
 import model.Position;
 import model.state.PlayerAvatar;
-import player.Player;
 
 /**
  * Distributes and manages goals for the given players
@@ -16,21 +17,21 @@ import player.Player;
 public class GoalHandler {
 
   private final Map<PlayerAvatar, Position> currentGoals;
-
-  // goal count of each player
   private final Map<PlayerAvatar, Integer> goalCount;
 
   // goals to distribute amongst players
   private final Queue<Position> potentialGoals;
 
-  private boolean playerReachedHome;
+  private final Set<PlayerAvatar> playersGoingHome;
+  private boolean anyPlayersHome;
 
   public GoalHandler(List<PlayerAvatar> players, List<Position> allGoals) {
     this.potentialGoals = new LinkedList<>();
     this.potentialGoals.addAll(allGoals);
     this.goalCount = new HashMap<>();
     this.currentGoals = new HashMap<>();
-    this.playerReachedHome = false;
+    this.anyPlayersHome = false;
+    this.playersGoingHome = new HashSet<>();
     this.initializePlayerData(players);
   }
 
@@ -38,47 +39,40 @@ public class GoalHandler {
   /**
    * Increments the goal count of the given player and assigns them the appropriate goal. This
    * method is only called when a player reaches their current goal.
-   *
-   * @param player
    */
   public void nextGoal(PlayerAvatar player) {
 
     Position nextGoal;
     if (!this.goalsLeft()) {
       nextGoal = player.getHome();
+      this.playersGoingHome.add(player);
     } else {
       nextGoal = this.potentialGoals.poll();
-
-      int goalCount = this.goalCount.get(player);
-      goalCount++;
-      this.goalCount.replace(player, goalCount);
+      this.goalCount.replace(player, this.goalCount.get(player) + 1);
     }
 
-
     this.currentGoals.replace(player, nextGoal);
-  }
-
-  public boolean playerReachedHome() {
-    return this.playerReachedHome;
   }
 
 
   public boolean playerReachedGoal(PlayerAvatar player) {
     Position goal = this.currentGoals.get(player);
-    boolean currentPositionIsGoal = player.getCurrentPosition().equals(goal);
+    boolean onGoal = player.getCurrentPosition().equals(goal);
 
-    if (currentPositionIsGoal && player.getCurrentPosition().equals(player.getHome())
-        && !this.goalsLeft()) {
-      this.playerReachedHome = true;
+    if(onGoal && this.playersGoingHome.contains(player)){
+      this.anyPlayersHome = true;
     }
 
-    return this.playerReachedHome;
+    return onGoal;
   }
 
   public Position getPlayerCurrentGoal(PlayerAvatar player) {
     return this.currentGoals.get(player);
   }
 
+  public boolean anyPlayersHome() {
+    return this.anyPlayersHome;
+  }
 
   public int getPlayerGoalCount(PlayerAvatar player) {
     return this.goalCount.get(player);
