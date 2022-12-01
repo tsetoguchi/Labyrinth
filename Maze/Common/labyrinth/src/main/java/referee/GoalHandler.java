@@ -23,11 +23,14 @@ public class GoalHandler {
   // goals to distribute amongst players
   private final Queue<Position> potentialGoals;
 
+  private boolean playerReachedHome;
+
   public GoalHandler(List<PlayerAvatar> players, List<Position> allGoals) {
     this.potentialGoals = new LinkedList<>();
     this.potentialGoals.addAll(allGoals);
     this.goalCount = new HashMap<>();
     this.currentGoals = new HashMap<>();
+    this.playerReachedHome = false;
     this.initializePlayerData(players);
   }
 
@@ -40,15 +43,15 @@ public class GoalHandler {
    */
   public void nextGoal(PlayerAvatar player) {
 
-    int goalCount = this.goalCount.get(player);
-    goalCount++;
-    this.goalCount.replace(player, goalCount);
-
     Position nextGoal;
     if (!this.goalsLeft()) {
       nextGoal = player.getHome();
     } else {
       nextGoal = this.potentialGoals.poll();
+
+      int goalCount = this.goalCount.get(player);
+      goalCount++;
+      this.goalCount.replace(player, goalCount);
     }
 
 
@@ -56,18 +59,20 @@ public class GoalHandler {
   }
 
   public boolean playerReachedHome() {
-    for (PlayerAvatar player : this.currentGoals.keySet()) {
-      if (this.playerReachedGoal(player) && player.getCurrentPosition().equals(player.getHome())
-          && !this.goalsLeft()) {
-        return true;
-      }
-    }
-    return false;
+    return this.playerReachedHome;
   }
+
 
   public boolean playerReachedGoal(PlayerAvatar player) {
     Position goal = this.currentGoals.get(player);
-    return player.getCurrentPosition().equals(goal);
+    boolean currentPositionIsGoal = player.getCurrentPosition().equals(goal);
+
+    if (currentPositionIsGoal && player.getCurrentPosition().equals(player.getHome())
+        && !this.goalsLeft()) {
+      this.playerReachedHome = true;
+    }
+    
+    return this.playerReachedHome;
   }
 
   public Position getPlayerCurrentGoal(PlayerAvatar player) {
