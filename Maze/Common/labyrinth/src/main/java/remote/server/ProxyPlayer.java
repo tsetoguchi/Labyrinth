@@ -1,8 +1,15 @@
 package remote.server;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import json.JsonDeserializer;
+import json.JsonSerializer;
 import model.Exceptions.IllegalPlayerActionException;
 import model.Position;
+import model.board.Board;
 import model.board.IBoard;
 import model.projections.PlayerGameProjection;
 import java.io.BufferedReader;
@@ -12,11 +19,11 @@ import java.io.PrintWriter;
 
 import model.projections.StateProjection;
 import model.state.GameStatus;
-import json.JsonSerializer;
 import referee.ITurn;
+import referee.Pass;
 import referee.PlayerResult;
 import player.IPlayer;
-import remote.JSON.JsonMethodSerializer;
+import remote.NetUtil;
 
 import java.net.Socket;
 import java.util.Optional;
@@ -29,123 +36,85 @@ import java.util.Optional;
  */
 public class ProxyPlayer implements IPlayer {
 
+  private final String playerName;
   private final Socket client;
-  private String playerName;
-  private final JsonSerializer mazeSerializer;
-
-  private final JsonMethodSerializer serializer;
-
   private final PrintWriter out;
-
-  private final BufferedReader input;
+  private final BufferedReader in;
 
 
   public ProxyPlayer(Socket client, String playerName) throws IOException {
-    //System.out.println("Proxy player: " + playerName);
     this.client = client;
     this.playerName = playerName;
-    this.mazeSerializer = new JsonSerializer();
-    this.serializer = new JsonMethodSerializer();
-
     this.out = new PrintWriter(client.getOutputStream(), true);
-    this.input = new BufferedReader(new InputStreamReader(client.getInputStream()));
+    this.in = new BufferedReader(new InputStreamReader(client.getInputStream()));
   }
+
+
 
   @Override
   public ITurn takeTurn(StateProjection game) throws IllegalPlayerActionException {
 
-    // Converts call into JSON and sends it to the client
-    try {
-      String json = this.serializer.generateTakeTurnJson(game);
-      this.out.print(json);
-    } catch (JsonProcessingException e) {
-      ////
+    try{
+      JSONArray toSend = JsonSerializer.takeTurn(game);
+      this.out.print(toSend);
+    } catch(JSONException e){
+      throw new RuntimeException(e);
     }
 
 
-
-    String response;
-    // Wait for a response
+    StringBuilder response = new StringBuilder();
     while (true) {
-      try {
-        response = this.input.readLine();
-        break;
-      } catch (Exception e) {
-        this.out.println("takeTurn threw IOException");
+      NetUtil.readNewInput(response, this.in);
+
+      try{
+        JSONArray moveJSON = new JSONArray(response.toString());
+        return JsonDeserializer.move(moveJSON);
+      } catch (JSONException ignore){}
+
+      if(response.toString().equals("\"PASS\"")){
+        return new Pass();
       }
+
     }
-
-    // Deserialize response into a Move
-    //Optional<Move> turnPlan = Serializer.getTurnPlan(response);
-
-    // return to send back to real Ref in Optional
-    return Optional.empty();
   }
+
 
   @Override
   public boolean setup(Optional<StateProjection> game, Position goal) {
-
-    String json = null;
-    try {
-      json = this.serializer.generateSetupJson(game, goal);
-    } catch (JsonProcessingException e) {
+    try{
+      JSONArray toSend = JsonSerializer.setup(game, goal);
+      this.out.print(toSend);
+    } catch(JSONException e){
       throw new RuntimeException(e);
     }
-    this.out.print(json);
 
-    // Wait for a response to see if message was received
+
+    StringBuilder response = new StringBuilder();
     while (true) {
-      try {
-        String response = this.input.readLine();
-        break;
-      } catch (Exception e) {
-        this.out.println("takeTurn threw IOException");
-      }
-    }
+      NetUtil.readNewInput(response, this.in);
 
-    // Return ACK of true signalling success
-    return true;
+      if(response.toString().equals("\"void\"")){
+        return true;
+      }
+
+    }
   }
 
   @Override
-  public boolean win(boolean playerWon) {
+  public boolean win(boolean won) {
 
-    try {
-      String json = this.serializer.generateWinJson(playerWon);
-      this.out.print(json);
-    } catch (JsonProcessingException e) {
+    JSONArray toSend = JsonSerializer.win(won);
+    this.out.print(toSend);
 
-    }
-
-
-    // Wait for a response to see if message was received
+    StringBuilder response = new StringBuilder();
     while (true) {
-      try {
-        String response = this.input.readLine();
-        break;
-      } catch (Exception e) {
-        this.out.println("takeTurn threw IOException");
+      NetUtil.readNewInput(response, this.in);
+
+      if(response.toString().equals("\"void\"")){
+        return true;
       }
+
     }
-
-    // Return ACK of true signalling success
-    return true;
-  }
-
-  /**
-   * Legacy call for when a player has reached their goal and should return home.
-   */
-  @Override
-  public void returnHome(Position homeTile) {
-
-  }
-
-  /**
-   * Legacy call from old design to give game results to Player.
-   */
-  @Override
-  public void informGameEnd(GameStatus status, PlayerResult result) {
-
   }
 
   @Override
@@ -153,32 +122,9 @@ public class ProxyPlayer implements IPlayer {
     return this.playerName;
   }
 
-  /**
-   * Legacy method used for testing in other interface implementations.
-   */
-  @Override
-  public boolean updateGoal(Position goal) {
-    return false;
-  }
-
-  public Socket getSocket() {
-    return this.client;
-  }
-
   @Override
   public IBoard proposeBoard(int rows, int columns) {
-    return new FlexibleBoard(columns, rows);
+    return new Board(columns, rows);
   }
 
-  private boolean parseTrueOrFalse(String in) {
-    if (in.equals("true")) {
-      return true;
-    }
-    else if (in.equals("false")) {
-      return false;
-    }
-    else {
-      throw new IllegalArgumentException("Bad return");
-    }
-  }
 }

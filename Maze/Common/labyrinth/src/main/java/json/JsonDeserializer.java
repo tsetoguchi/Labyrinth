@@ -24,7 +24,8 @@ import model.state.PlayerAvatar;
 import model.state.SlideAndInsertRecord;
 import model.state.State;
 import player.IPlayer;
-import player.Player;
+import referee.ITurn;
+import referee.Move;
 
 import static model.board.Direction.DOWN;
 import static model.board.Direction.LEFT;
@@ -66,47 +67,47 @@ public class JsonDeserializer {
     colors.put("black", Color.BLACK);
   }
 
-  public static IState jsonToState(JSONObject game) throws JSONException {
-    IBoard board = jsonToBoard(game.getJSONObject("board"), game.getJSONObject("spare"));
-    List<PlayerAvatar> playerAvatars = jsonToPlayerAvatars(game.getJSONArray("plmt"));
+  public static IState state(JSONObject game) throws JSONException {
+    IBoard board = board(game.getJSONObject("board"), game.getJSONObject("spare"));
+    List<PlayerAvatar> playerAvatars = playerAvatars(game.getJSONArray("plmt"));
 
     if(!game.isNull("last")){
-      SlideAndInsertRecord previousTurn = jsonToLastTurn(game.getJSONArray("last"));
+      SlideAndInsertRecord previousTurn = lastTurn(game.getJSONArray("last"));
       return new State(board, playerAvatars, previousTurn);
     }
     return new State(board, playerAvatars);
   }
 
-  private static SlideAndInsertRecord jsonToLastTurn(JSONArray last) throws JSONException {
+  private static SlideAndInsertRecord lastTurn(JSONArray last) throws JSONException {
     int index = last.getInt(0);
     Direction direction = Direction.valueOf(last.getString(1));
     return new SlideAndInsertRecord(direction, index, 0);
   }
 
-  private static List<PlayerAvatar> jsonToPlayerAvatars(JSONArray plmt) throws JSONException {
+  private static List<PlayerAvatar> playerAvatars(JSONArray plmt) throws JSONException {
     List<PlayerAvatar> players = new ArrayList<>();
     for(int i=0; i<plmt.length(); i++){
-      players.add(jsonToPlayerAvatar(plmt.getJSONObject(i)));
+      players.add(playerAvatar(plmt.getJSONObject(i)));
     }
     return players;
   }
 
-  private static PlayerAvatar jsonToPlayerAvatar(JSONObject jsonPlayer) throws JSONException {
+  private static PlayerAvatar playerAvatar(JSONObject jsonPlayer) throws JSONException {
     Color color = colors.get(jsonPlayer.getString("color"));
-    Position current = jsonToPosition(jsonPlayer.getJSONObject("current"));
-    Position home = jsonToPosition(jsonPlayer.getJSONObject("home"));
+    Position current = position(jsonPlayer.getJSONObject("current"));
+    Position home = position(jsonPlayer.getJSONObject("home"));
     return new PlayerAvatar(color, home, current);
   }
 
-  public static Position jsonToPosition(JSONObject jsonPosition) throws JSONException {
+  public static Position position(JSONObject jsonPosition) throws JSONException {
     int row = jsonPosition.getInt("row#");
     int col = jsonPosition.getInt("column#");
     return new Position(row, col);
   }
 
 
-  private static IBoard jsonToBoard(JSONObject boardJSON, JSONObject spareJSON) throws JSONException {
-    Tile spare = jsonToSpare(spareJSON);
+  private static IBoard board(JSONObject boardJSON, JSONObject spareJSON) throws JSONException {
+    Tile spare = spare(spareJSON);
 
     JSONArray rowsJSON = boardJSON.getJSONArray("connectors");
     JSONArray rowsGemJSON = boardJSON.getJSONArray("treasures");
@@ -134,7 +135,7 @@ public class JsonDeserializer {
     return new Board(width, height, tiles, spare);
   }
 
-  public static Tile jsonToSpare(JSONObject spareJSON) throws JSONException {
+  public static Tile spare(JSONObject spareJSON) throws JSONException {
     String connector = spareJSON.getString("connector");
     Set<Direction> pathwayConnections = symbolToDirection.get(connector);
 //    Gem gem1 = Gem.valueOf(spareJSON.getString("1-image"));
@@ -183,11 +184,14 @@ public class JsonDeserializer {
     List<Position> goals = new ArrayList<>();
     for(int i=0; i<jsonPlmt.length(); i++){
       JSONObject playerJSON = jsonPlmt.getJSONObject(i);
-      Position goal = jsonToPosition(playerJSON.getJSONObject("goto"));
+      Position goal = position(playerJSON.getJSONObject("goto"));
       goals.add(goal);
     }
     return goals;
   }
 
 
+  public static Move move(JSONArray moveJSON) {
+    return null;
+  }
 }

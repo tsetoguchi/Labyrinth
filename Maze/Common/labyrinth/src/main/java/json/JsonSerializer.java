@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import model.Position;
@@ -26,11 +27,7 @@ public class JsonSerializer {
         this.mapper = new ObjectMapper();
     }
 
-    public String reachablePositionsToJson(List<Position> reachablePositionsList) throws JsonProcessingException {
-        return this.mapper.writeValueAsString(reachablePositionsList);
-    }
-
-    public static JSONArray moveToJson(Move move) {
+    public static JSONArray move(Move move) {
         JSONArray resultArray = new JSONArray();
         resultArray.put(move.getSlideIndex());
         resultArray.put(move.getSlideDirection());
@@ -40,7 +37,7 @@ public class JsonSerializer {
     }
 
 
-    public JSONObject stateProjectionToJson(StateProjection game) throws JsonProcessingException {
+    public static JSONObject stateProjection(StateProjection game) throws JSONException{
         JSONObject result = new JSONObject();
 
         return result;
@@ -52,7 +49,7 @@ public class JsonSerializer {
         return 90 * netCounterclockwiseRotations;
     }
 
-    public static JSONArray gameResultsToJSON(GameResults results) throws JsonProcessingException {
+    public static JSONArray gameResults(GameResults results) {
         JSONArray winnersJSON = new JSONArray(results.getWinners());
         JSONArray eliminatedJSON = new JSONArray(results.getEliminated());
         JSONArray result = new JSONArray();
@@ -60,4 +57,51 @@ public class JsonSerializer {
         result.put(eliminatedJSON);
         return result;
     }
+
+    public static JSONObject position(Position goal) throws JSONException {
+        JSONObject result = new JSONObject();
+        result.put("row#", goal.getRow());
+        result.put("column#", goal.getColumn());
+        return result;
+    }
+
+
+
+
+    public static JSONArray takeTurn(StateProjection game) throws JSONException {
+        JSONArray result = new JSONArray();
+        result.put("take-turn");
+        JSONArray args = new JSONArray();
+        args.put(JsonSerializer.stateProjection(game));
+        result.put(args);
+        return result;
+    }
+
+    public static JSONArray win(boolean won) {
+        JSONArray result = new JSONArray();
+        result.put("win");
+        JSONArray args = new JSONArray();
+        args.put(won);
+        result.put(args);
+        return result;
+    }
+
+    public static JSONArray setup(Optional<StateProjection> game, Position goal) throws JSONException{
+        JSONArray result = new JSONArray();
+        result.put("setup");
+        JSONArray args = new JSONArray();
+
+
+        if(game.isPresent()){
+            args.put(JsonSerializer.stateProjection(game.get()));
+        } else{
+            args.put(false);
+        }
+
+        args.put(JsonSerializer.position(goal));
+
+        result.put(args);
+        return result;
+    }
+
 }

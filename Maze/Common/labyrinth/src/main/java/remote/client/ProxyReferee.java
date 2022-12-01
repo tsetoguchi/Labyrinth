@@ -18,6 +18,7 @@ import model.projections.StateProjection;
 import model.state.IState;
 import player.IPlayer;
 import referee.ITurn;
+import remote.NetUtil;
 
 /**
  * Represents the referee for a Client. Handles Json serialization and deserialization,
@@ -53,23 +54,12 @@ public class ProxyReferee implements Runnable {
     StringBuilder str = new StringBuilder();
 
     while (!this.socket.isClosed()) {
-      this.readNewInput(str);
+      NetUtil.readNewInput(str, this.in);
 
       try{
         this.execute(new JSONArray(str.toString()));
         str = new StringBuilder();
       } catch (JSONException ignore){}
-    }
-  }
-
-  private void readNewInput(StringBuilder str){
-    try {
-      String toAdd = this.in.readLine();
-      if(toAdd != null){
-        str.append(toAdd);
-      }
-    } catch (IOException e){
-      throw new RuntimeException(e);
     }
   }
 
@@ -98,14 +88,14 @@ public class ProxyReferee implements Runnable {
     Optional<StateProjection> maybeProjection;
 
     try{
-      IState s = JsonDeserializer.jsonToState(args.getJSONObject(0));
+      IState s = JsonDeserializer.state(args.getJSONObject(0));
       StateProjection projection = s.getStateProjection();
       maybeProjection = Optional.of(projection);
     } catch (JSONException ignore){
       maybeProjection = Optional.empty();
     }
 
-    Position nextGoal = JsonDeserializer.jsonToPosition(args.getJSONObject(1));
+    Position nextGoal = JsonDeserializer.position(args.getJSONObject(1));
 
     this.player.setup(maybeProjection, nextGoal);
     this.out.write(toBytes("\"void\""));
@@ -121,11 +111,11 @@ public class ProxyReferee implements Runnable {
 
 
   private void handleTakeTurn(JSONArray args) throws JSONException, IOException {
-    IState state = JsonDeserializer.jsonToState(args.getJSONObject(0));
+    IState state = JsonDeserializer.state(args.getJSONObject(0));
     StateProjection projection = state.getStateProjection();
     ITurn turn = this.player.takeTurn(projection);
     if(turn.isMove()){
-      this.out.write(toBytes(JsonSerializer.moveToJson(turn.getMove()).toString()));
+      this.out.write(toBytes(JsonSerializer.move(turn.getMove()).toString()));
     } else{
       this.out.write(toBytes("\"PASS\""));
     }

@@ -22,14 +22,14 @@ public class XServer {
     JSONTokener jsonTokener = IntegrationUtils.getInput();
 
     JSONObject jsonGame = (JSONObject) jsonTokener.nextValue();
-    IState game = JsonDeserializer.jsonToState(jsonGame);
+    IState game = JsonDeserializer.state(jsonGame);
 
     JSONArray jsonPlmt = jsonGame.getJSONArray("plmt");
     List<Position> goals = JsonDeserializer.jsonToGoals(jsonPlmt);
 
     Server server = new Server(game, goals, port);
     GameResults results = server.call();
-    System.out.println(JsonSerializer.gameResultsToJSON(results));
+    System.out.println(JsonSerializer.gameResults(results));
 
   }
 
