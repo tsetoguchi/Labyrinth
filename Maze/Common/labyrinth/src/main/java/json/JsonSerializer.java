@@ -26,12 +26,12 @@ public class JsonSerializer {
     this.mapper = new ObjectMapper();
   }
 
-  public static JSONArray move(Move move) {
+  public static JSONArray move(Move move) throws JSONException {
     JSONArray resultArray = new JSONArray();
     resultArray.put(move.getSlideIndex());
     resultArray.put(move.getSlideDirection());
     resultArray.put(rotationsToDegrees(move.getSpareTileRotations()));
-    resultArray.put(move.getMoveDestination());
+    resultArray.put(JsonSerializer.coordinate(move.getMoveDestination()));
     return resultArray;
   }
 

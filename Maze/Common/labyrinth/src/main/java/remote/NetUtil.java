@@ -20,6 +20,8 @@ public class NetUtil {
 
       str.append(in.readUTF());
 
+      //sock.shutdownInput();
+
     } catch(Exception e){
       e.printStackTrace();
     }
@@ -34,6 +36,8 @@ public class NetUtil {
 
       out.writeUTF(str);
       out.flush();
+
+      //sock.shutdownOutput();
 
     } catch(Exception e){
       e.printStackTrace();

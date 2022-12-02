@@ -72,18 +72,19 @@ public class ProxyReferee implements Runnable {
         this.execute(new JSONArray(str.toString()));
         str = new StringBuilder();
       } catch (JSONException e){
-        e.printStackTrace();
+        //e.printStackTrace();
       }
     }
   }
 
 
   private void execute(JSONArray methodCall) throws JSONException {
+    System.out.println("1");
     String methodName = methodCall.getString(0);
     JSONArray args = methodCall.getJSONArray(1);
     try {
       switch (methodName) {
-        case "take_turn":
+        case "take-turn":
           this.handleTakeTurn(args);
           return;
         case "win":
@@ -128,6 +129,7 @@ public class ProxyReferee implements Runnable {
     IState state = JsonDeserializer.state(args.getJSONObject(0));
     StateProjection projection = state.getStateProjection();
     ITurn turn = this.player.takeTurn(projection);
+
     String toSend;
     if(turn.isMove()){
       toSend = JsonSerializer.move(turn.getMove()).toString();
@@ -136,6 +138,7 @@ public class ProxyReferee implements Runnable {
     }
 
     NetUtil.sendOutput(toSend, this.socket);
+
   }
 
 
