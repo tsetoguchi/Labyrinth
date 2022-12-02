@@ -1,9 +1,6 @@
 package remote.server;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import java.io.DataInputStream;
-import java.io.DataOutput;
 import java.io.DataOutputStream;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,16 +11,12 @@ import model.Exceptions.IllegalPlayerActionException;
 import model.Position;
 import model.board.Board;
 import model.board.IBoard;
-import java.io.BufferedReader;
+
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 
 import model.projections.StateProjection;
-import model.state.GameStatus;
 import referee.ITurn;
 import referee.Pass;
-import referee.PlayerResult;
 import player.IPlayer;
 import remote.NetUtil;
 
@@ -40,14 +33,12 @@ public class ProxyPlayer implements IPlayer {
 
   private final String playerName;
   private final Socket client;
-  private final DataOutputStream out;
   private final DataInputStream in;
 
 
   public ProxyPlayer(Socket client, String playerName) throws IOException {
     this.client = client;
     this.playerName = playerName;
-    this.out = new DataOutputStream(client.getOutputStream());
     this.in = new DataInputStream(client.getInputStream());
   }
 
@@ -58,15 +49,15 @@ public class ProxyPlayer implements IPlayer {
     try {
       JSONArray toSend = JsonSerializer.takeTurn(game);
       DataOutputStream out = new DataOutputStream(this.client.getOutputStream());
-      out.write(toSend.toString().getBytes());
-      this.client.shutdownOutput();
+      out.writeUTF(toSend.toString());
+      //this.client.shutdownOutput();
     } catch (JSONException | IOException e) {
       throw new RuntimeException(e);
     }
 
     StringBuilder response = new StringBuilder();
     while (true) {
-      NetUtil.readNewInput(response, this.in);
+      NetUtil.readInput(response, this.client);
 
       try {
         JSONArray moveJSON = new JSONArray(response.toString());
@@ -85,20 +76,19 @@ public class ProxyPlayer implements IPlayer {
   @Override
   public boolean setup(Optional<StateProjection> game, Position goal) {
 
-    System.out.println("Sending Setup");
-
     try {
       JSONArray toSend = JsonSerializer.setup(game, goal);
+      System.out.println("Sending now!");
       DataOutputStream out = new DataOutputStream(this.client.getOutputStream());
-      out.write(toSend.toString().getBytes());
-      this.client.shutdownOutput();
+      out.writeUTF(toSend.toString());
+
     } catch (JSONException | IOException e) {
-      throw new RuntimeException(e);
+      e.printStackTrace();
     }
 
     StringBuilder response = new StringBuilder();
     while (true) {
-      NetUtil.readNewInput(response, this.in);
+      NetUtil.readInput(response, this.client);
       System.out.println(response);
 
       if (response.toString().equals("\"void\"")) {
@@ -122,7 +112,7 @@ public class ProxyPlayer implements IPlayer {
 
     StringBuilder response = new StringBuilder();
     while (true) {
-      NetUtil.readNewInput(response, this.in);
+      NetUtil.readInput(response, this.client);
 
       if (response.toString().equals("\"void\"")) {
         return true;

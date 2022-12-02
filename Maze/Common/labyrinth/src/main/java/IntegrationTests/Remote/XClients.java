@@ -26,12 +26,12 @@ public class XClients {
   public static void main(String[] args)
       throws JSONException, UnknownHostException, InterruptedException {
 
-    System.out.println("starting3");
+    System.out.println("starting4");
 
     //int port = Integer.parseInt(args[0]);
     //JSONTokener jsonTokener = IntegrationUtils.getInput();
     int port = 5555;
-    JSONTokener jsonTokener = new JSONTokener("[[\"eadam\",\"Euclid\"],[\"ebob\",\"Euclid\"],[\"ecarl\",\"Euclid\"]]");
+    JSONTokener jsonTokener = new JSONTokener("[[\"eadam\",\"Euclid\"]]");
 
     InetAddress inetAddress = InetAddress.getLocalHost();
     if (args.length > 1) {

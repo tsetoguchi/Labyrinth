@@ -38,7 +38,6 @@ public class JsonSerializer {
 
   public static JSONObject stateProjection(StateProjection game) throws JSONException {
     JSONObject result = new JSONObject();
-
     JSONObject board = board(game.getBoard());
     JSONObject spare = tile(game.getBoard().getSpareTile());
     JSONArray plmt = plmt(game.getPlayers());
@@ -68,7 +67,10 @@ public class JsonSerializer {
         Tile currentTile = board.getTileAt(currentPosition);
 
         String currentConnectors = currentTile.toSymbol();
-        String[] currentTreasure = currentTile.getTreasure().toStringArray();
+        String[] currentTreasure = new String[2];//currentTile.getTreasure().toStringArray();
+        currentTreasure[0] = "aplite";
+        currentTreasure[1] = "aplite";
+
 
         currentConnectorsRow.put(currentConnectors);
         currentTreasureRow.put(currentTreasure);
@@ -86,8 +88,8 @@ public class JsonSerializer {
   public static JSONObject tile(Tile tile) throws JSONException {
     JSONObject result = new JSONObject();
     result.put("tilekey", tile.toSymbol());
-    result.put("1-image", tile.getTreasure().getGems().get(0).toString());
-    result.put("2-image", tile.getTreasure().getGems().get(1).toString());
+    result.put("1-image", "aplite");//tile.getTreasure().getGems().get(0).toString());
+    result.put("2-image", "aplite");//tile.getTreasure().getGems().get(1).toString());
     return result;
   }
 
@@ -137,13 +139,11 @@ public class JsonSerializer {
     JSONArray result = new JSONArray();
     result.put("setup");
     JSONArray args = new JSONArray();
-
     if (game.isPresent()) {
       args.put(JsonSerializer.stateProjection(game.get()));
     } else {
       args.put(false);
     }
-
     args.put(JsonSerializer.coordinate(goal));
 
     result.put(args);

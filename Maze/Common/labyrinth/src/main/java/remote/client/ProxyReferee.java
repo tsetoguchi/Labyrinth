@@ -13,6 +13,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
+import java.util.Scanner;
 
 import json.JsonDeserializer;
 import json.JsonSerializer;
@@ -63,14 +64,16 @@ public class ProxyReferee implements Runnable {
     StringBuilder str = new StringBuilder();
 
     while (!this.socket.isClosed()) {
-      NetUtil.readNewInput(str, this.in);
 
-      System.out.print("input " + str);
+      NetUtil.readInput(str, this.socket);
+      System.out.println(str);
 
       try{
         this.execute(new JSONArray(str.toString()));
         str = new StringBuilder();
-      } catch (JSONException ignore){}
+      } catch (JSONException e){
+        e.printStackTrace();
+      }
     }
   }
 
@@ -109,16 +112,14 @@ public class ProxyReferee implements Runnable {
     Position nextGoal = JsonDeserializer.position(args.getJSONObject(1));
 
     this.player.setup(maybeProjection, nextGoal);
-    this.out.writeUTF("\"void\"");
-    this.out.flush();
+    NetUtil.sendOutput("\"void\"", this.socket);
   }
 
 
   private void handleWin(JSONArray args) throws JSONException, IOException {
     boolean didWin = args.getBoolean(0);
     this.player.win(didWin);
-    this.out.writeUTF("\"void\"");
-    this.out.flush();
+    NetUtil.sendOutput("\"void\"", this.socket);
     this.socket.close();
   }
 
@@ -127,12 +128,14 @@ public class ProxyReferee implements Runnable {
     IState state = JsonDeserializer.state(args.getJSONObject(0));
     StateProjection projection = state.getStateProjection();
     ITurn turn = this.player.takeTurn(projection);
+    String toSend;
     if(turn.isMove()){
-      this.out.writeUTF(JsonSerializer.move(turn.getMove()).toString());
+      toSend = JsonSerializer.move(turn.getMove()).toString();
     } else{
-      this.out.writeUTF("\"PASS\"");
+      toSend = "\"PASS\"";
     }
-    this.out.flush();
+
+    NetUtil.sendOutput(toSend, this.socket);
   }
 
 
