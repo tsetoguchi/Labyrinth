@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.DataInputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
+import java.io.OutputStream;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -40,15 +41,11 @@ public class ProxyPlayer implements IPlayer {
 
   private final String playerName;
   private final Socket client;
-  private final DataOutputStream out;
-  private final DataInputStream in;
 
 
   public ProxyPlayer(Socket client, String playerName) throws IOException {
     this.client = client;
     this.playerName = playerName;
-    this.out = new DataOutputStream(client.getOutputStream());
-    this.in = new DataInputStream(client.getInputStream());
   }
 
 
@@ -57,7 +54,7 @@ public class ProxyPlayer implements IPlayer {
 
     try {
       JSONArray toSend = JsonSerializer.takeTurn(game);
-      DataOutputStream out = new DataOutputStream(this.client.getOutputStream());
+      OutputStream out = this.client.getOutputStream();
       out.write(toSend.toString().getBytes());
       this.client.shutdownOutput();
     } catch (JSONException | IOException e) {
@@ -89,7 +86,7 @@ public class ProxyPlayer implements IPlayer {
 
     try {
       JSONArray toSend = JsonSerializer.setup(game, goal);
-      DataOutputStream out = new DataOutputStream(this.client.getOutputStream());
+      OutputStream out = this.client.getOutputStream();
       out.write(toSend.toString().getBytes());
       this.client.shutdownOutput();
     } catch (JSONException | IOException e) {
@@ -113,7 +110,7 @@ public class ProxyPlayer implements IPlayer {
 
     JSONArray toSend = JsonSerializer.win(won);
     try {
-      DataOutputStream out = new DataOutputStream(this.client.getOutputStream());
+      OutputStream out = this.client.getOutputStream();
       out.write(toSend.toString().getBytes());
       this.client.shutdownOutput();
     } catch (IOException e) {
