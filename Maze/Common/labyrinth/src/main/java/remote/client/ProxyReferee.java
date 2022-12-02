@@ -66,7 +66,6 @@ public class ProxyReferee implements Runnable {
     while (!this.socket.isClosed()) {
 
       NetUtil.readInput(str, this.socket);
-      System.out.println(str);
 
       try{
         this.execute(new JSONArray(str.toString()));
