@@ -79,7 +79,6 @@ public class ProxyReferee implements Runnable {
 
 
   private void execute(JSONArray methodCall) throws JSONException {
-    System.out.println("1");
     String methodName = methodCall.getString(0);
     JSONArray args = methodCall.getJSONArray(1);
     try {
@@ -126,9 +125,14 @@ public class ProxyReferee implements Runnable {
 
 
   private void handleTakeTurn(JSONArray args) throws JSONException, IOException {
+    System.out.println("1");
     IState state = JsonDeserializer.state(args.getJSONObject(0));
+    System.out.println("1");
     StateProjection projection = state.getStateProjection();
+    System.out.println("1");
     ITurn turn = this.player.takeTurn(projection);
+    System.out.println("1");
+
 
     String toSend;
     if(turn.isMove()){
@@ -136,6 +140,7 @@ public class ProxyReferee implements Runnable {
     } else{
       toSend = "\"PASS\"";
     }
+    System.out.println("1");
 
     NetUtil.sendOutput(toSend, this.socket);
 

@@ -168,14 +168,13 @@ public class JsonSerializer {
 
   public static JSONArray last(Optional<SlideAndInsertRecord> last) throws JSONException {
 
-    JSONArray action = null;
-
     if (last.isEmpty()) {
-      return action;
+      return null;
     }
 
-    action = new JSONArray();
-    action.put(last.get().getIndex(), last.get().getDirection());
+    JSONArray action = new JSONArray();
+    action.put(last.get().getIndex());
+    action.put(last.get().getDirection());
     return action;
   }
 
