@@ -120,11 +120,11 @@ public class State implements IState {
         existingHomePositions.add(homePosition);
       }
 
-      if (existingPlayerColors.contains(player.getColor())) {
-        throw new IllegalArgumentException("Duplicate player colors are not allowed.");
-      } else {
+//      if (existingPlayerColors.contains(player.getColor())) {
+//        throw new IllegalArgumentException("Duplicate player colors are not allowed.");
+//      } else {
         existingPlayerColors.add(player.getColor());
-      }
+//      }
 
       if (this.activePlayer < 0 || this.activePlayer >= this.playerList.size()) {
         throw new IllegalArgumentException("Invalid active player index given.");
