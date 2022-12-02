@@ -125,13 +125,13 @@ public class ProxyReferee implements Runnable {
 
 
   private void handleTakeTurn(JSONArray args) throws JSONException, IOException {
-    System.out.println("1");
+
     IState state = JsonDeserializer.state(args.getJSONObject(0));
-    System.out.println("1");
+
     StateProjection projection = state.getStateProjection();
-    System.out.println("1");
+
     ITurn turn = this.player.takeTurn(projection);
-    System.out.println("1");
+
 
 
     String toSend;
@@ -140,7 +140,7 @@ public class ProxyReferee implements Runnable {
     } else{
       toSend = "\"PASS\"";
     }
-    System.out.println("1");
+
 
     NetUtil.sendOutput(toSend, this.socket);
 

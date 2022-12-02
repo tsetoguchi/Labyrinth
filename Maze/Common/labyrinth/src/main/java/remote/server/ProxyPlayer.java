@@ -53,11 +53,11 @@ public class ProxyPlayer implements IPlayer {
       throw new RuntimeException(e);
     }
 
-    System.out.println("Awaiting Response");
+
     StringBuilder response = new StringBuilder();
     while (true) {
       NetUtil.readInput(response, this.client);
-      System.out.println("input " + response);
+
 
       try {
         JSONArray moveJSON = new JSONArray(response.toString());
@@ -87,7 +87,7 @@ public class ProxyPlayer implements IPlayer {
     StringBuilder response = new StringBuilder();
     while (true) {
       NetUtil.readInput(response, this.client);
-      System.out.println(response);
+
 
       if (response.toString().equals("\"void\"")) {
         return true;

@@ -27,11 +27,11 @@ import referee.Referee;
 
 public class Server implements Callable<GameResults> {
 
-  public static final int WAIT_PERIOD_SECONDS = 10;
+  public static final int WAIT_PERIOD_SECONDS = 20;
   public static final int PLAYER_SIGN_UP_SECONDS = 2;
-  public static final int NUMBER_OF_WAIT_TIMES = 1;
+  public static final int NUMBER_OF_WAIT_TIMES = 2;
   private static final int MAX_NUMBER_OF_PLAYERS = 6;
-  private static final int MIN_NUMBER_OF_PLAYERS = 1;
+  private static final int MIN_NUMBER_OF_PLAYERS = 2;
 
   private final IState game;
   private final List<Position> goals;
@@ -67,7 +67,6 @@ public class Server implements Callable<GameResults> {
     } catch (Throwable ignore) {}
 
     if (this.players.size() >= MIN_NUMBER_OF_PLAYERS) {
-      System.out.println(this.players);
       IReferee referee = new Referee(this.game, this.players, this.goals);
       return referee.runGame();
     } else {

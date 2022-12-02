@@ -38,7 +38,6 @@ public class Client implements Runnable {
                 socket = Optional.of(sock);
             } catch (IOException ignore){}
         }
-        System.out.println("Connected!");
 
         try {
             ProxyReferee proxyRef = new ProxyReferee(socket.get(), this.player);
