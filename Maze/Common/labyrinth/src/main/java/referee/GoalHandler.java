@@ -25,6 +25,11 @@ public class GoalHandler {
   private final Set<PlayerAvatar> playersGoingHome;
   private boolean anyPlayersHome;
 
+  /**
+   * Creates a goal handler
+   * @param players the players of the game
+   * @param allGoals the sequence of goals that the referee will hand out
+   */
   public GoalHandler(List<PlayerAvatar> players, List<Position> allGoals) {
     this.potentialGoals = new LinkedList<>();
     this.potentialGoals.addAll(allGoals);
@@ -55,6 +60,9 @@ public class GoalHandler {
   }
 
 
+  /**
+   * Returns true if the given player is on their goal
+   */
   public boolean playerReachedGoal(PlayerAvatar player) {
     Position goal = this.currentGoals.get(player);
     boolean onGoal = player.getCurrentPosition().equals(goal);
@@ -66,26 +74,36 @@ public class GoalHandler {
     return onGoal;
   }
 
+  /**
+   * Gets the given player's current goal
+   */
   public Position getPlayerCurrentGoal(PlayerAvatar player) {
     return this.currentGoals.get(player);
   }
 
+  /**
+   * Returns true if any players have returned home after getting all potential goals
+   */
   public boolean anyPlayersHome() {
     return this.anyPlayersHome;
   }
 
+  /**
+   * Returns the number of goals this player has reached
+   */
   public int getPlayerGoalCount(PlayerAvatar player) {
     return this.goalCount.get(player);
   }
 
+  /**
+   * Returns true if there are goals left to be handed out
+   */
   private boolean goalsLeft() {
     return !this.potentialGoals.isEmpty();
   }
 
   /**
-   * Assigns each player an intiial goal and sets their goal counts to 0
-   *
-   * @param players
+   * Assigns each player an initial goal and sets their goal counts to 0
    */
   private void initializePlayerData(List<PlayerAvatar> players) {
     for (PlayerAvatar player : players) {

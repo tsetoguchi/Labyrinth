@@ -159,9 +159,6 @@ public class Referee implements IReferee {
 
     if (turn.isMove()) {
       Move move = turn.getMove();
-      System.out.println("\n\n\n" + this.game.getBoard().toString());
-      System.out.println(activePlayer + " " + this.goalHandler.getPlayerCurrentGoal(activePlayer).toString());
-      System.out.println(move.toString());
       if (this.isValidMove(move, activePlayer)) {
         this.game.executeTurn(move);
         this.assignNextGoal(activePlayer);
@@ -203,7 +200,6 @@ public class Referee implements IReferee {
    * Removes the player from the State and Referee
    */
   private void kickPlayerInAll(PlayerAvatar player) {
-    //this.playerAvatarToHandler.remove(player);
     this.game.kickPlayer(player);
     this.eliminated.add(player);
   }
@@ -341,12 +337,9 @@ public class Referee implements IReferee {
     }
 
     public Optional<ITurn> takeTurn(StateProjection game) {
-      //TODO debug
       return this.timeoutExceptionHandler(() -> {
         return this.player.takeTurn(game);
       });
-//      ITurn t = this.player.takeTurn(game);
-//      return Optional.of(t);
     }
 
     public Optional<Boolean> setup(Optional<StateProjection> state, Position goal) {
