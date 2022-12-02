@@ -57,8 +57,10 @@ public class ProxyPlayer implements IPlayer {
 
     try {
       JSONArray toSend = JsonSerializer.takeTurn(game);
-      this.out.writeUTF(toSend.toString());
-      this.out.flush();
+      DataOutputStream out = new DataOutputStream(this.client.getOutputStream());
+      out.writeUTF(toSend.toString());
+      out.flush();
+      this.client.shutdownOutput();
     } catch (JSONException | IOException e) {
       throw new RuntimeException(e);
     }
@@ -88,8 +90,10 @@ public class ProxyPlayer implements IPlayer {
 
     try {
       JSONArray toSend = JsonSerializer.setup(game, goal);
-      this.out.writeUTF(toSend.toString());
-      this.out.flush();
+      DataOutputStream out = new DataOutputStream(this.client.getOutputStream());
+      out.writeUTF(toSend.toString());
+      out.flush();
+      this.client.shutdownOutput();
     } catch (JSONException | IOException e) {
       throw new RuntimeException(e);
     }
@@ -97,7 +101,6 @@ public class ProxyPlayer implements IPlayer {
     StringBuilder response = new StringBuilder();
     while (true) {
       NetUtil.readNewInput(response, this.in);
-
       System.out.println(response);
 
       if (response.toString().equals("\"void\"")) {
@@ -112,8 +115,10 @@ public class ProxyPlayer implements IPlayer {
 
     JSONArray toSend = JsonSerializer.win(won);
     try {
-      this.out.writeUTF(toSend.toString());
-      this.out.flush();
+      DataOutputStream out = new DataOutputStream(this.client.getOutputStream());
+      out.writeUTF(toSend.toString());
+      out.flush();
+      this.client.shutdownOutput();
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
@@ -138,5 +143,6 @@ public class ProxyPlayer implements IPlayer {
   public IBoard proposeBoard(int rows, int columns) {
     return new Board(columns, rows);
   }
+
 
 }
