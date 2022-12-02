@@ -31,6 +31,7 @@ public class XServer {
     Server server = new Server(game, goals, port);
     GameResults results = server.call();
     System.out.println(JsonSerializer.gameResults(results));
+    System.exit(0);
   }
 
 }
