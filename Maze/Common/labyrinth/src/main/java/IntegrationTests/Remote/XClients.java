@@ -21,7 +21,7 @@ import remote.client.Client;
  */
 public class XClients {
 
-  public final static int CLIENT_WAIT_TIMER = 3;
+  public final static int CLIENT_WAIT_TIMER = 2;
 
   public static void main(String[] args)
       throws JSONException, UnknownHostException, InterruptedException {
@@ -55,7 +55,7 @@ public class XClients {
     for (int i = 0; i < clients.size(); i++) {
       Thread current = new Thread(clients.get(i), Integer.toString(i));
       current.start();
-      TimeUnit.SECONDS.sleep(1);
+      TimeUnit.SECONDS.sleep(CLIENT_WAIT_TIMER);
       threads.add(current);
     }
     return threads;
