@@ -48,16 +48,16 @@ public class ProxyPlayer implements IPlayer {
 
     try {
       JSONArray toSend = JsonSerializer.takeTurn(game);
-      DataOutputStream out = new DataOutputStream(this.client.getOutputStream());
-      out.writeUTF(toSend.toString());
-      //this.client.shutdownOutput();
-    } catch (JSONException | IOException e) {
+      NetUtil.sendOutput(toSend.toString(), this.client);
+    } catch (JSONException e) {
       throw new RuntimeException(e);
     }
 
+    System.out.println("Awaiting Response");
     StringBuilder response = new StringBuilder();
     while (true) {
       NetUtil.readInput(response, this.client);
+      System.out.println("input " + response);
 
       try {
         JSONArray moveJSON = new JSONArray(response.toString());
@@ -78,11 +78,9 @@ public class ProxyPlayer implements IPlayer {
 
     try {
       JSONArray toSend = JsonSerializer.setup(game, goal);
-      System.out.println("Sending now!");
-      DataOutputStream out = new DataOutputStream(this.client.getOutputStream());
-      out.writeUTF(toSend.toString());
+      NetUtil.sendOutput(toSend.toString(), this.client);
 
-    } catch (JSONException | IOException e) {
+    } catch (JSONException e) {
       e.printStackTrace();
     }
 
@@ -102,13 +100,7 @@ public class ProxyPlayer implements IPlayer {
   public boolean win(boolean won) {
 
     JSONArray toSend = JsonSerializer.win(won);
-    try {
-      DataOutputStream out = new DataOutputStream(this.client.getOutputStream());
-      out.write(toSend.toString().getBytes());
-      this.client.shutdownOutput();
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
+    NetUtil.sendOutput(toSend.toString(), this.client);
 
     StringBuilder response = new StringBuilder();
     while (true) {
