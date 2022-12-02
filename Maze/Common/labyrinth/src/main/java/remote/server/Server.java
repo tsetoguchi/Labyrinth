@@ -27,7 +27,7 @@ import referee.Referee;
 
 public class Server implements Callable<GameResults> {
 
-  public static final int WAIT_PERIOD_SECONDS = 20;
+  public static final int WAIT_PERIOD_SECONDS = 10;
   public static final int PLAYER_SIGN_UP_SECONDS = 2;
   public static final int NUMBER_OF_WAIT_TIMES = 1;
   private static final int MAX_NUMBER_OF_PLAYERS = 6;
@@ -76,21 +76,17 @@ public class Server implements Callable<GameResults> {
   }
 
 
-  private void beginSignUp() throws IOException {
+  private void beginSignUp() {
     List<Socket> connections = new ArrayList<>();
 
     for (int i = 0; i < NUMBER_OF_WAIT_TIMES && this.players.size() < MIN_NUMBER_OF_PLAYERS;
          i++) {
-      System.out.println("Begin signup period");
       long endTime = System.currentTimeMillis() + (WAIT_PERIOD_SECONDS * 1000);
       while (System.currentTimeMillis() < endTime && this.players.size() <= MAX_NUMBER_OF_PLAYERS) {
         long waitTimeRemaining = endTime - System.currentTimeMillis();
         connections.add(this.signUpClient(waitTimeRemaining));
       }
     }
-
-    System.out.println(connections);
-
 
 
     for(Socket s : connections){

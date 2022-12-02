@@ -59,7 +59,7 @@ public class XClients {
     for (int i = 0; i < clients.size(); i++) {
       Thread current = new Thread(clients.get(i), Integer.toString(i));
       current.start();
-      TimeUnit.SECONDS.sleep(3);
+      TimeUnit.SECONDS.sleep(1);
       threads.add(current);
     }
     return threads;

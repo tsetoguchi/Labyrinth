@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -30,23 +31,20 @@ import remote.NetUtil;
 public class ProxyReferee implements Runnable {
 
   private final Socket socket;
-  private final OutputStream out;
-  private final BufferedReader in;
+  private final DataOutputStream out;
+  private final DataInputStream in;
   private final IPlayer player;
 
   public ProxyReferee(Socket socket, IPlayer p) throws IOException {
     this.socket = socket;
-    this.out = socket.getOutputStream();
-    this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+    this.out = new DataOutputStream(this.socket.getOutputStream());
+    this.in = new DataInputStream(this.socket.getInputStream());
     this.player = p;
-    this.sendName();
   }
 
   private void sendName() throws IOException{
-
-    DataOutputStream dOut = new DataOutputStream(this.socket.getOutputStream());
-    dOut.writeUTF(this.player.getName());
-    dOut.flush();
+    this.out.writeUTF(this.player.getName());
+    this.out.flush();
   }
 
   private static byte[] toBytes(String str){
@@ -56,12 +54,18 @@ public class ProxyReferee implements Runnable {
 
   @Override
   public void run() {
+    try {
+      this.sendName();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
     StringBuilder str = new StringBuilder();
 
     while (!this.socket.isClosed()) {
       NetUtil.readNewInput(str, this.in);
 
-      System.out.print(str.toString());
+      System.out.print("input " + str);
 
       try{
         this.execute(new JSONArray(str.toString()));
@@ -105,14 +109,16 @@ public class ProxyReferee implements Runnable {
     Position nextGoal = JsonDeserializer.position(args.getJSONObject(1));
 
     this.player.setup(maybeProjection, nextGoal);
-    this.out.write(toBytes("\"void\""));
+    this.out.writeUTF("\"void\"");
+    this.out.flush();
   }
 
 
   private void handleWin(JSONArray args) throws JSONException, IOException {
     boolean didWin = args.getBoolean(0);
     this.player.win(didWin);
-    this.out.write(toBytes("\"void\""));
+    this.out.writeUTF("\"void\"");
+    this.out.flush();
     this.socket.close();
   }
 
@@ -122,10 +128,11 @@ public class ProxyReferee implements Runnable {
     StateProjection projection = state.getStateProjection();
     ITurn turn = this.player.takeTurn(projection);
     if(turn.isMove()){
-      this.out.write(toBytes(JsonSerializer.move(turn.getMove()).toString()));
+      this.out.writeUTF(JsonSerializer.move(turn.getMove()).toString());
     } else{
-      this.out.write(toBytes("\"PASS\""));
+      this.out.writeUTF("\"PASS\"");
     }
+    this.out.flush();
   }
 
 

@@ -98,6 +98,8 @@ public class ProxyPlayer implements IPlayer {
     while (true) {
       NetUtil.readNewInput(response, this.in);
 
+      System.out.println(response);
+
       if (response.toString().equals("\"void\"")) {
         return true;
       }
