@@ -13,12 +13,24 @@ import referee.Move;
  */
 public interface IState {
 
+  /**
+   * Kick the given player
+   */
   void kickPlayer(PlayerAvatar player);
 
+  /**
+   * skip the current turn
+   */
   void skipTurn();
 
+  /**
+   * Apply the given move
+   */
   void executeTurn(Move move);
 
+  /**
+   * Determine whether the game is over
+   */
   boolean isGameOver();
 
   /*
@@ -27,8 +39,15 @@ public interface IState {
 
   GameStatus getGameStatus();
 
+
+  /**
+   * Retrieve the board in the state
+   */
   IBoard getBoard();
 
+  /**
+   * Return a copy of the list of players
+   */
   List<PlayerAvatar> getPlayerList();
 
   StateProjection getStateProjection();

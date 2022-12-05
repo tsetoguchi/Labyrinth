@@ -4,9 +4,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 
+/**
+ * Represents the results of the game
+ */
 public class GameResults {
 
+  // the names of the winners
   List<String> winners;
+
+  // the names of the eliminated
   List<String> eliminated;
 
   public GameResults(List<String> winners, List<String> eliminated) {
