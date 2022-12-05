@@ -28,6 +28,7 @@ public class JsonSerializer {
 
   public static JSONArray move(Move move) throws JSONException {
     JSONArray resultArray = new JSONArray();
+    //
     resultArray.put(move.getSlideIndex());
     resultArray.put(move.getSlideDirection());
     resultArray.put(rotationsToDegrees(move.getSpareTileRotations()));

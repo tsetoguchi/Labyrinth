@@ -200,6 +200,7 @@ public class Referee implements IReferee {
    * Removes the player from the State and Referee
    */
   private void kickPlayerInAll(PlayerAvatar player) {
+    System.out.println("Kicked " + this.playerAvatarToHandler.get(player).getPlayerName());
     this.game.kickPlayer(player);
     this.eliminated.add(player);
   }
