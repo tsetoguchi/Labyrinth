@@ -16,12 +16,16 @@ import model.state.PlayerAvatar;
  */
 public class GoalHandler {
 
+  // the current goals for each player
   private final Map<PlayerAvatar, Position> currentGoals;
+
+  // the count of goals reached for each player
   private final Map<PlayerAvatar, Integer> goalCount;
 
-  // goals to distribute amongst players
+  // remaining goals to distribute amongst players
   private final Queue<Position> potentialGoals;
 
+  // the players on their way home
   private final Set<PlayerAvatar> playersGoingHome;
   private boolean anyPlayersHome;
 

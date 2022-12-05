@@ -1,8 +1,14 @@
 package model.board;
 
+/**
+ * Represents a direction
+ */
 public enum Direction {
     UP, DOWN, LEFT, RIGHT;
 
+    /**
+     * Retrieves the direction opposite of the given direction
+     */
     public static Direction opposite(Direction direction) {
         if (direction == UP) {
             return DOWN;

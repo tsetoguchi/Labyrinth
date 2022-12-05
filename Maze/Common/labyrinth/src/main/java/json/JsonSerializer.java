@@ -16,7 +16,7 @@ import org.json.JSONObject;
 import referee.Move;
 
 /**
- * Serialization methods for Labyrinth models.
+ * Represents a json serializer for labyrinth
  */
 public class JsonSerializer {
 

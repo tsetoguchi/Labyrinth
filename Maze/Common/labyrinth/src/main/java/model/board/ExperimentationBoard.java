@@ -32,16 +32,6 @@ public class ExperimentationBoard extends Board {
         Position avatarAfterSliding = copy.getAvatarPositionAfterSliding(current,
                 copy.getWidth(), copy.getHeight(), direction, index);
         Set<Position> reachablePositions = copy.getReachablePositions(avatarAfterSliding);
-//        if(current.equals(new Position(0,3))) {
-//            for (Position p : reachablePositions) {
-//                System.out.println(p.toString());
-//            }
-//        }
-        /*
-        this.slideAndInsert(Direction.opposite(direction), index, 0);
-        this.getSpareTile().rotate(4 - rotations);
-         */
-
         return reachablePositions;
     }
 

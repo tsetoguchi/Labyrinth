@@ -1,7 +1,7 @@
 package model.board;
 
 /**
- * Represents the kinds of gems in Labyrinth.
+ * Represents the gems in Labyrinth.
  */
 public enum Gem {
   alexandrite_pear_shape,
@@ -107,6 +107,9 @@ public enum Gem {
   zircon,
   zoisite;
 
+  /**
+   * Retrieves the name of the gem with dashes in place of underscores
+   */
   public String withDashes() {
     return this.name().replace("_", "-");
   }

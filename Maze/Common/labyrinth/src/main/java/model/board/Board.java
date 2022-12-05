@@ -25,8 +25,6 @@ public class Board implements IBoard {
 
 
   public Board(int width, int height, Tile[][] tileGrid, Tile spareTile) {
-
-    // TODO: fix exception messages
     this.width = width;
     this.height = height;
     if (tileGrid.length != height) {

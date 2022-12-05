@@ -19,8 +19,8 @@ import player.IPlayer;
 import java.util.*;
 
 /**
- * Manages a game by running it to completion, kicking any players that misbehave, fail to respond,
- * or throw an error, and returns the result of the game to the remaining players.
+ * Manages a game by managing the turns of the players and running it to completion. Kicks any
+ * players that misbehave, fail to respond, or throw an error, and returns the result of the game.
  */
 public class Referee implements IReferee {
 
@@ -42,7 +42,7 @@ public class Referee implements IReferee {
    * progresses.
    */
   public Referee(IState game, List<IPlayer> players,
-                 List<IObserver> observers, IRules rules, List<Position> goals) {
+      List<IObserver> observers, IRules rules, List<Position> goals) {
     this.game = game;
     this.rules = rules;
     this.playerAvatarToHandler = this.mapPlayerAvatarsToPlayerHandlers(game, players);
@@ -101,9 +101,8 @@ public class Referee implements IReferee {
 //    this.observers = new ArrayList<>();
 //    this.eliminated = new ArrayList<>();
 //  }
-
   private Map<PlayerAvatar, PlayerHandler> mapPlayerAvatarsToPlayerHandlers(IState game,
-                                                                            List<IPlayer> IPlayers) {
+      List<IPlayer> IPlayers) {
     if (IPlayers.size() != game.getPlayerList().size()) {
       throw new IllegalArgumentException("Amount of clients and players do not match.");
     }
@@ -149,7 +148,6 @@ public class Referee implements IReferee {
 
     Optional<ITurn> potentialTurn = this.getTurn(activePlayer);
 
-
     if (potentialTurn.isEmpty()) {
       this.kickPlayerInAll(activePlayer);
       return;
@@ -179,13 +177,13 @@ public class Referee implements IReferee {
     ExperimentationBoard expBoard = this.game.getBoard().getExperimentationBoard();
 
     if (!this.rules.isValidSlideAndInsert(move, this.game.getBoardWidth(),
-            this.game.getBoardHeight())) {
+        this.game.getBoardHeight())) {
       return false;
     }
 
     return expBoard
-            .findReachableTilePositionsAfterSlideAndInsert(move, currentPosition)
-            .contains(moveDestination);
+        .findReachableTilePositionsAfterSlideAndInsert(move, currentPosition)
+        .contains(moveDestination);
   }
 
   private void assignNextGoal(PlayerAvatar player) {
@@ -294,7 +292,8 @@ public class Referee implements IReferee {
     }
   }
 
-  private void sendSetup(PlayerAvatar player, Optional<StateProjection> stateProjection, Position nextGoal) {
+  private void sendSetup(PlayerAvatar player, Optional<StateProjection> stateProjection,
+      Position nextGoal) {
     PlayerHandler playerHandler = this.playerAvatarToHandler.get(player);
     Optional<Boolean> outcome = playerHandler.setup(stateProjection, nextGoal);
     if (outcome.isEmpty()) {

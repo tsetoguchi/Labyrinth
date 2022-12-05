@@ -28,6 +28,9 @@ import org.json.JSONObject;
 import player.IPlayer;
 import referee.Move;
 
+/**
+ * Represents a json deserializer for labyrinth
+ */
 public class JsonDeserializer {
 
   private static final Map<String, Color> colors;
