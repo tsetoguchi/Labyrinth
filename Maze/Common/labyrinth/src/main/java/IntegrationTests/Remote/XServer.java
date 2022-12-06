@@ -26,7 +26,7 @@ public class XServer {
     IState game = JsonDeserializer.state(jsonGame);
 
     JSONArray jsonPlmt = jsonGame.getJSONArray("plmt");
-    List<Position> goals = JsonDeserializer.goals(jsonPlmt);
+    List<Position> goals = JsonDeserializer.goals(jsonPlmt, jsonGame);
 
     Server server = new Server(game, goals, port);
     GameResults results = server.call();

@@ -28,7 +28,7 @@ public class XBad2 {
     IState game = JsonDeserializer.state(stateJSON);
 
     JSONArray plmt = stateJSON.getJSONArray("plmt");
-    List<Position> goals = JsonDeserializer.goals(plmt);
+    List<Position> goals = JsonDeserializer.goals(plmt, stateJSON);
 
     Referee referee = new Referee(game, players, goals);
     GameResults results = referee.runGame();

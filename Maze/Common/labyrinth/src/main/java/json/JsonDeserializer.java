@@ -146,13 +146,23 @@ public class JsonDeserializer {
   }
 
 
-  public static List<Position> goals(JSONArray jsonPlmt) throws JSONException {
+  public static List<Position> goals(JSONArray jsonPlmt, JSONObject jsonGame) throws JSONException {
     List<Position> goals = new ArrayList<>();
     for(int i=0; i<jsonPlmt.length(); i++){
       JSONObject playerJSON = jsonPlmt.getJSONObject(i);
       Position goal = position(playerJSON.getJSONObject("goto"));
       goals.add(goal);
     }
+
+    if(!jsonGame.isNull("goals")){
+      JSONArray jsonGoals = jsonGame.getJSONArray("goals");
+      for(int i=0; i<jsonGame.length(); i++){
+        JSONObject jsonPosition = jsonGoals.getJSONObject(i);
+        Position p = JsonDeserializer.position(jsonPosition);
+        goals.add(p);
+      }
+    }
+
     return goals;
   }
 
