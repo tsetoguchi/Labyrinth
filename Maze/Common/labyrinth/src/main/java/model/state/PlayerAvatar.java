@@ -2,6 +2,7 @@ package model.state;
 
 import java.awt.*;
 
+import java.util.Objects;
 import model.Position;
 
 /**
@@ -57,5 +58,23 @@ public class PlayerAvatar {
         ", homePosition=" + this.home +
         ", currentAvatarPosition=" + this.currentPosition +
         '}';
+  }
+
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof PlayerAvatar)) {
+      return false;
+    }
+    PlayerAvatar that = (PlayerAvatar) o;
+    return this.color.equals(that.color);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(this.color);
   }
 }
