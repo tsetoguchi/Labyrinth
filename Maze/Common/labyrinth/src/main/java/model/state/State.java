@@ -298,7 +298,7 @@ public class State implements IState {
     int size = this.playerList.size();
     for(int i=0; i<size; i++){
       PlayerAvatar p = this.playerList.get((this.activePlayer + i) % size);
-      players.add(p);
+      players.add(p.deepCopy());
     }
     return players;
   }

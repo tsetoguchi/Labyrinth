@@ -49,6 +49,9 @@ public interface IState {
    */
   List<PlayerAvatar> getPlayerList();
 
+  /**
+   * Returns a state projection of this state
+   */
   StateProjection getStateProjection();
 
   Optional<SlideAndInsertRecord> getPreviousSlideAndInsert();
