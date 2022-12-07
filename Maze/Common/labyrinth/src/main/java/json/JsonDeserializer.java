@@ -25,7 +25,7 @@ import model.state.State;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import player.IPlayer;
+
 import referee.Move;
 
 /**
@@ -33,7 +33,7 @@ import referee.Move;
  */
 public class JsonDeserializer {
 
-  private static final Map<String, Color> colors;
+  private static final Map<String, Color> stringToColor;
   static Map<String, Set<Direction>> symbolToDirection = new HashMap<>();
   static Map<Set<Direction>, String> directionToSymbol = new HashMap<>();
 
@@ -54,16 +54,16 @@ public class JsonDeserializer {
       directionToSymbol.put(entry.getValue(), entry.getKey());
     }
 
-    colors = new HashMap<>();
-    colors.put("purple", new Color(218, 112, 214));
-    colors.put("orange", Color.ORANGE);
-    colors.put("pink", Color.PINK);
-    colors.put("red", Color.RED);
-    colors.put("blue", Color.BLUE);
-    colors.put("green", Color.GREEN);
-    colors.put("yellow", Color.YELLOW);
-    colors.put("white", Color.WHITE);
-    colors.put("black", Color.BLACK);
+    stringToColor = new HashMap<>();
+    stringToColor.put("purple", new Color(218, 112, 214));
+    stringToColor.put("orange", Color.ORANGE);
+    stringToColor.put("pink", Color.PINK);
+    stringToColor.put("red", Color.RED);
+    stringToColor.put("blue", Color.BLUE);
+    stringToColor.put("green", Color.GREEN);
+    stringToColor.put("yellow", Color.YELLOW);
+    stringToColor.put("white", Color.WHITE);
+    stringToColor.put("black", Color.BLACK);
   }
 
   public static IState state(JSONObject game) throws JSONException {
@@ -92,10 +92,17 @@ public class JsonDeserializer {
   }
 
   private static PlayerAvatar playerAvatar(JSONObject jsonPlayer) throws JSONException {
-    Color color = colors.get(jsonPlayer.getString("color"));
+    Color color = stringToColor(jsonPlayer.getString("color"));
     Position current = position(jsonPlayer.getJSONObject("current"));
     Position home = position(jsonPlayer.getJSONObject("home"));
     return new PlayerAvatar(color, home, current);
+  }
+
+  public static Color stringToColor(String color) {
+    if (stringToColor.containsKey(color)) {
+      return stringToColor.get(color);
+    }
+    return Color.decode("#" + color);
   }
 
   public static Position position(JSONObject jsonPosition) throws JSONException {
@@ -146,7 +153,8 @@ public class JsonDeserializer {
   }
 
 
-  public static List<Position> goals(JSONArray jsonPlmt, JSONObject jsonGame) throws JSONException {
+  public static List<Position> goals(JSONObject jsonGame) throws JSONException {
+    JSONArray jsonPlmt = jsonGame.getJSONArray("plmt");
     List<Position> goals = new ArrayList<>();
     for(int i=0; i<jsonPlmt.length(); i++){
       JSONObject playerJSON = jsonPlmt.getJSONObject(i);

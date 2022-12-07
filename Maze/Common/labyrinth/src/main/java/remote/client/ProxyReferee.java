@@ -27,34 +27,20 @@ import remote.NetUtil;
 public class ProxyReferee implements Runnable {
 
   private final Socket socket;
-  private final DataOutputStream out;
-  private final DataInputStream in;
   private final IPlayer player;
 
   public ProxyReferee(Socket socket, IPlayer p) throws IOException {
     this.socket = socket;
-    this.out = new DataOutputStream(this.socket.getOutputStream());
-    this.in = new DataInputStream(this.socket.getInputStream());
     this.player = p;
   }
 
-  private void sendName() throws IOException{
-    this.out.writeUTF(this.player.getName());
-    this.out.flush();
+  private void sendName(){
+    NetUtil.sendOutput(this.player.getName(), this.socket);
   }
-
-  private static byte[] toBytes(String str){
-    return str.getBytes(StandardCharsets.UTF_8);
-  }
-
 
   @Override
   public void run() {
-    try {
-      this.sendName();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+    this.sendName();
 
     StringBuilder str = new StringBuilder();
 
@@ -65,7 +51,7 @@ public class ProxyReferee implements Runnable {
       try{
         this.execute(new JSONArray(str.toString()));
         str = new StringBuilder();
-      } catch (JSONException e){
+      } catch (JSONException ignore){
         //e.printStackTrace();
       }
     }

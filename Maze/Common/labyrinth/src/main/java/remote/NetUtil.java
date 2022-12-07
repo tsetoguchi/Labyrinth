@@ -18,12 +18,11 @@ public class NetUtil {
       InputStream input = sock.getInputStream();
       in = new DataInputStream(input);
 
-      str.append(in.readUTF());
 
-      //sock.shutdownInput();
-
-    } catch(Exception e){
-      e.printStackTrace();
+      String message = in.readUTF();
+      System.out.println(message);
+      str.append(message);
+    } catch(Exception ignore){
     }
   }
 

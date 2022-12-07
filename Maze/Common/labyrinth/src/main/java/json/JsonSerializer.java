@@ -1,7 +1,11 @@
 package json;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.awt.*;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import model.Position;
 import model.board.IBoard;
@@ -20,10 +24,20 @@ import referee.Move;
  */
 public class JsonSerializer {
 
-  ObjectMapper mapper;
+  private static final Map<Color, String> colorToString;
 
-  public JsonSerializer() {
-    this.mapper = new ObjectMapper();
+
+  static{
+    colorToString = new HashMap<>();
+    colorToString.put(new Color(218, 112, 214), "purple");
+    colorToString.put(Color.ORANGE, "orange");
+    colorToString.put(Color.PINK, "pink");
+    colorToString.put(Color.RED, "red");
+    colorToString.put(Color.BLUE, "blue");
+    colorToString.put(Color.GREEN, "green");
+    colorToString.put(Color.YELLOW, "yellow");
+    colorToString.put(Color.WHITE, "white");
+    colorToString.put(Color.BLACK, "black");
   }
 
   public static JSONArray move(Move move) throws JSONException {
@@ -163,9 +177,18 @@ public class JsonSerializer {
     JSONObject result = new JSONObject();
     result.put("current", coordinate(player.getCurrentPosition()));
     result.put("home", coordinate(player.getHome()));
-    result.put("color", player.getColor());
+    result.put("color", colorToString(player.getColor()));
     return result;
   }
+
+  public static String colorToString(Color color) {
+    if (colorToString.containsKey(color)) {
+      return colorToString.get(color);
+    } else {
+      return String.format("%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue());
+    }
+  }
+
 
   public static JSONArray last(Optional<SlideAndInsertRecord> last) throws JSONException {
 

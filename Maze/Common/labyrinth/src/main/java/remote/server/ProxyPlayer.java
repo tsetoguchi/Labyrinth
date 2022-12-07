@@ -33,13 +33,11 @@ public class ProxyPlayer implements IPlayer {
 
   private final String playerName;
   private final Socket client;
-  private final DataInputStream in;
 
 
   public ProxyPlayer(Socket client, String playerName) throws IOException {
     this.client = client;
     this.playerName = playerName;
-    this.in = new DataInputStream(client.getInputStream());
   }
 
 

@@ -21,12 +21,15 @@ public class XServer {
     int port = Integer.parseInt(args[0]);
     JSONTokener jsonTokener = IntegrationUtils.getInput();
 
+//    int port = 12345;
+//    JSONTokener jsonTokener = new JSONTokener("");
+
+
 
     JSONObject jsonGame = (JSONObject) jsonTokener.nextValue();
     IState game = JsonDeserializer.state(jsonGame);
 
-    JSONArray jsonPlmt = jsonGame.getJSONArray("plmt");
-    List<Position> goals = JsonDeserializer.goals(jsonPlmt, jsonGame);
+    List<Position> goals = JsonDeserializer.goals(jsonGame);
 
     Server server = new Server(game, goals, port);
     GameResults results = server.call();
