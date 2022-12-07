@@ -1,5 +1,6 @@
 package referee;
 
+import java.util.Objects;
 import model.board.Direction;
 import model.Position;
 
@@ -50,5 +51,23 @@ public class Move implements ITurn{
   public String toString(){
     return " " + this.slideIndex + " " + this.slideDirection + " "
             + this.spareTileRotations + " " + this.moveDestination.toString();
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof Move)) {
+      return false;
+    }
+    Move move = (Move) o;
+    return this.slideIndex == move.slideIndex && this.spareTileRotations == move.spareTileRotations
+        && this.slideDirection == move.slideDirection && this.moveDestination.equals(move.moveDestination);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(this.slideDirection, this.slideIndex, this.spareTileRotations, this.moveDestination);
   }
 }

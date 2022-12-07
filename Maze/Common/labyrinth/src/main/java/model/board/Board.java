@@ -45,7 +45,7 @@ public class Board implements IBoard {
     this.height = height;
 
     Gem[] gemPoolArray = Gem.values();
-    List<Gem> gemPool = List.of(gemPoolArray);
+    List<Gem> gemPool = new ArrayList<>(List.of(gemPoolArray));
     Tile[][] tileGrid = this.generateRandomBoard(width, height, gemPool);
     this.tileGrid = tileGrid;
     Treasure spareTileTreasure = new Treasure(gemPool.get(0), gemPool.get(0));

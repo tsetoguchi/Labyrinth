@@ -53,8 +53,7 @@ public abstract class AbstractStrategy implements IStrategy {
     PlayerAvatar player = this.state.getSelf();
     ITurn turn;
     for (Position candidate : this.getCandidatesInOrder(board, goal)) {
-      turn =
-          this.createTurnForCandidate(player.getCurrentPosition(), candidate);
+      turn = this.createTurnForCandidate(player.getCurrentPosition(), candidate);
       if (turn.isMove()) {
         return turn;
       }

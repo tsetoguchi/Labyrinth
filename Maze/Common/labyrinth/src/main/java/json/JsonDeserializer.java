@@ -112,7 +112,7 @@ public class JsonDeserializer {
   }
 
 
-  private static IBoard board(JSONObject boardJSON, JSONObject spareJSON) throws JSONException {
+  public static IBoard board(JSONObject boardJSON, JSONObject spareJSON) throws JSONException {
     Tile spare = spare(spareJSON);
 
     JSONArray rowsJSON = boardJSON.getJSONArray("connectors");
