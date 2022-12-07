@@ -148,6 +148,7 @@ public class Referee implements IReferee {
 
     Optional<ITurn> potentialTurn = this.getTurn(activePlayer);
 
+    System.out.println(this.game.getBoard().toString());
     if (potentialTurn.isEmpty()) {
       this.kickPlayerInAll(activePlayer);
       return;
