@@ -2,7 +2,7 @@
 //
 //import com.fasterxml.jackson.core.JsonProcessingException;
 //
-//import model.projections.StateProjection;
+//import model.state.StateProjection;
 //import observer.view.OldObserverView;
 //import json.JsonSerializer;
 //

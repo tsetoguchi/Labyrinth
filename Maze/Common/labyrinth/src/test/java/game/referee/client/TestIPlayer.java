@@ -2,7 +2,7 @@
 //
 //import model.state.GameStatus;
 //import model.model.Position;
-//import model.projections.StateProjection;
+//import model.state.StateProjection;
 //import referee.PlayerResult;
 //import player.IPlayer;
 //

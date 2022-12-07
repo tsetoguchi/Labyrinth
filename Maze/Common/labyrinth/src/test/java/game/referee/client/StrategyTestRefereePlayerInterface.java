@@ -1,7 +1,7 @@
 //package model.referee.client;
 //
 //import model.board.IBoard;
-//import model.projections.StateProjection;
+//import model.state.StateProjection;
 //import player.IStrategy;
 //import player.Turn;
 //

@@ -2,7 +2,7 @@ package player;
 
 import model.board.IBoard;
 import model.Position;
-import model.projections.StateProjection;
+import model.state.StateProjection;
 import referee.ITurn;
 
 import java.util.Optional;

@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import model.board.IBoard;
-import model.projections.StateProjection;
 import referee.Move;
 
 /**

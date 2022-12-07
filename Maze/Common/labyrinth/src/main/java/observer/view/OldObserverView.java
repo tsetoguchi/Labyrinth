@@ -1,6 +1,6 @@
 //package observer.view;
 //
-//import model.projections.StateProjection;
+//import model.state.StateProjection;
 //import javax.swing.*;
 //import java.awt.*;
 //import java.awt.event.ActionListener;

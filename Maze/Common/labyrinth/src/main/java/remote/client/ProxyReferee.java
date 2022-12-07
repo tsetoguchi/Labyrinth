@@ -3,22 +3,17 @@ package remote.client;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
-import java.util.Scanner;
 
 import json.JsonDeserializer;
 import json.JsonSerializer;
 import model.Position;
-import model.projections.StateProjection;
+import model.state.StateProjection;
 import model.state.IState;
 import player.IPlayer;
 import referee.ITurn;

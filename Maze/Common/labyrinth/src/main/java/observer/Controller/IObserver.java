@@ -1,6 +1,6 @@
 package observer.Controller;
 
-import model.projections.StateProjection;
+import model.state.StateProjection;
 
 /**
  * Represents a generic neutral Observer that can step through the turns of a game.

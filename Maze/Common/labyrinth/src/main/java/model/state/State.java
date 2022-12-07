@@ -8,7 +8,6 @@ import model.board.Direction;
 import model.Position;
 import model.board.ExperimentationBoard;
 import model.board.IBoard;
-import model.projections.StateProjection;
 import referee.Move;
 
 import java.awt.Color;

@@ -9,7 +9,7 @@ import java.util.function.Supplier;
 
 import model.board.ExperimentationBoard;
 import model.board.IBoard;
-import model.projections.StateProjection;
+import model.state.StateProjection;
 import model.state.GameResults;
 import model.state.IState;
 import model.state.PlayerAvatar;

@@ -1,7 +1,7 @@
 package remote.server;
 
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -14,7 +14,7 @@ import model.board.IBoard;
 
 import java.io.IOException;
 
-import model.projections.StateProjection;
+import model.state.StateProjection;
 import referee.ITurn;
 import referee.Pass;
 import player.IPlayer;

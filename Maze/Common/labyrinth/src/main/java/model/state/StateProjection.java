@@ -1,4 +1,4 @@
-package model.projections;
+package model.state;
 
 import model.board.ExperimentationBoard;
 import model.board.IBoard;

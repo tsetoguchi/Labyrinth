@@ -7,7 +7,7 @@ import model.board.Direction;
 import model.board.ExperimentationBoard;
 import model.board.IBoard;
 import referee.IRules;
-import model.projections.StateProjection;
+import model.state.StateProjection;
 import model.state.PlayerAvatar;
 import model.state.SlideAndInsertRecord;
 import referee.ITurn;

@@ -6,7 +6,7 @@ import java.util.Optional;
 import model.Position;
 import model.board.IBoard;
 import model.board.Tile;
-import model.projections.StateProjection;
+import model.state.StateProjection;
 import model.state.GameResults;
 import model.state.PlayerAvatar;
 import model.state.SlideAndInsertRecord;

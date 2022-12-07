@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 import model.Position;
-import model.projections.StateProjection;
+import model.state.StateProjection;
 import player.EuclideanStrategy;
 import player.IPlayer;
 import player.IStrategy;

@@ -3,7 +3,7 @@
 //import model.board.IBoard;
 //import model.board.Direction;
 //import model.model.Position;
-//import model.projections.StateProjection;
+//import model.state.StateProjection;
 //import player.Turn;
 //
 //import java.util.Optional;
