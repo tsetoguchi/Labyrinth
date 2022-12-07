@@ -18,7 +18,7 @@ public class Move implements ITurn{
               Position moveDestination) {
     this.slideDirection = slideDirection;
     this.slideIndex = slideIndex;
-    this.spareTileRotations = spareTileRotations;
+    this.spareTileRotations = spareTileRotations % 4;
     this.moveDestination = moveDestination;
   }
 

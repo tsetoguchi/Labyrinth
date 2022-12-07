@@ -50,7 +50,7 @@ public abstract class AbstractStrategy implements IStrategy {
   public ITurn createTurn(StateProjection state, Position goal) {
     this.state = state;
     ExperimentationBoard board = this.state.getBoard();
-    PlayerAvatar player = this.state.getSelf();
+    PlayerAvatar player = this.state.getActivePlayer();
     ITurn turn;
     for (Position candidate : this.getCandidatesInOrder(board, goal)) {
       turn = this.createTurnForCandidate(player.getCurrentPosition(), candidate);
