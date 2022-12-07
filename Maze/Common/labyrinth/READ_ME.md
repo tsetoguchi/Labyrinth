@@ -44,7 +44,9 @@ It is also capable of saving the current state of the game as a JSON file.
 
 ###Remote:
 The remote interaction layer allows a server to host a game with client players across a network.
-* Server:
-* ProxyPlayer:
-* Client:
-* ProxyReferee:
+* Server: Signs up clients as ProxyPlayers then creates a Referee to host the game with the given IState.
+* ProxyPlayer: Handles communication between the Referee and Player on the Server side. Sends method calls 
+across the network to the associated ProxyReferee and sends returns the response to the Referee.
+* Client: Establishes a connection with the Server then instantiates a ProxyReferee for a given Player.
+* ProxyReferee: Handles communication between the Referee and Player on the Client side. Receives method calls
+across the network form the ProxyPlayer and sends back the Player's response.
