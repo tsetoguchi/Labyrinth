@@ -113,4 +113,8 @@ public enum Gem {
   public String withDashes() {
     return this.name().replace("_", "-");
   }
+
+  public Gem getGem(String str){
+    return Gem.valueOf(str.replace("-", "_"));
+  }
 }
