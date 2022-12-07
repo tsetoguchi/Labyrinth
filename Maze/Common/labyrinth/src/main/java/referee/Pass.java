@@ -14,4 +14,15 @@ public class Pass implements ITurn{
     throw new NoSuchElementException();
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof Pass)) {
+      return false;
+    }
+    return true;
+  }
+
 }

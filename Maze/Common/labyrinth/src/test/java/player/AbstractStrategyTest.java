@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import java.awt.Color;
 import java.util.List;
 import json.JsonDeserializer;
-import json.JsonSerializer;
 import model.Position;
 import model.board.Board;
 import model.board.Direction;
@@ -17,10 +16,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import referee.ITurn;
 import referee.Move;
+import referee.Pass;
 
 class AbstractStrategyTest {
 
   EuclideanStrategy euclid;
+  RiemannStrategy riemann;
+
+  PassStrategy pass;
 
   PlayerAvatar p1;
   PlayerAvatar p2;
@@ -34,6 +37,8 @@ class AbstractStrategyTest {
   @BeforeEach
   void setUp() throws JSONException {
     this.euclid = new EuclideanStrategy();
+    this.riemann = new RiemannStrategy();
+    this.pass = new PassStrategy();
     this.p1 = new PlayerAvatar(JsonDeserializer.stringToColor("AAFFCC"),
         new Position(3, 3));
     this.p2 = new PlayerAvatar(Color.YELLOW, new Position(5, 5));
@@ -112,8 +117,20 @@ class AbstractStrategyTest {
   }
 
   @Test
-  void createTurn() {
+  void createTurnEuclid() {
     ITurn turn = this.euclid.createTurn(this.state.getStateProjection(), new Position(5, 3));
     assertEquals(new Move(Direction.LEFT, 0, 4, new Position(5, 3)), turn);
+  }
+
+  @Test
+  void createTurnRiemann() {
+    ITurn turn = this.riemann.createTurn(this.state.getStateProjection(), new Position(6, 6));
+    assertEquals(new Move(Direction.LEFT, 2, 4, new Position(0,3)), turn);
+  }
+
+  @Test
+  void createTurnPass() {
+    ITurn turn = this.pass.createTurn(this.state.getStateProjection(), new Position(4, 5));
+    assertEquals(new Pass(), turn);
   }
 }

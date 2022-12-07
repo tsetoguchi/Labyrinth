@@ -93,8 +93,8 @@ public class JsonDeserializer {
 
   private static PlayerAvatar playerAvatar(JSONObject jsonPlayer) throws JSONException {
     Color color = stringToColor(jsonPlayer.getString("color"));
-    Position current = position(jsonPlayer.getJSONObject("current"));
-    Position home = position(jsonPlayer.getJSONObject("home"));
+    Position current = coordinate(jsonPlayer.getJSONObject("current"));
+    Position home = coordinate(jsonPlayer.getJSONObject("home"));
     return new PlayerAvatar(color, home, current);
   }
 
@@ -105,7 +105,7 @@ public class JsonDeserializer {
     return Color.decode("#" + color);
   }
 
-  public static Position position(JSONObject jsonPosition) throws JSONException {
+  public static Position coordinate(JSONObject jsonPosition) throws JSONException {
     int row = jsonPosition.getInt("row#");
     int col = jsonPosition.getInt("column#");
     return new Position(row, col);
@@ -129,11 +129,11 @@ public class JsonDeserializer {
       for(int c=0; c<width; c++){
         String connector = rowJSON.getString(c);
         Set<Direction> pathwayConnections = symbolToDirection.get(connector);
-//        JSONArray treasureJSON = rowGemJSON.getJSONArray(0);
-//        Gem g1 = Gem.valueOf(treasureJSON.getString(0));
-//        Gem g2 = Gem.valueOf(treasureJSON.getString(1));
-        Gem g1 = null;
-        Gem g2 = null;
+        JSONArray treasureJSON = rowGemJSON.getJSONArray(0);
+        Gem g1 = Gem.getGem(treasureJSON.getString(0));
+        Gem g2 = Gem.getGem(treasureJSON.getString(1));
+//        Gem g1 = null;
+//        Gem g2 = null;
         Treasure treasure = new Treasure(g1, g2);
         tiles[r][c] = new Tile(pathwayConnections, treasure);
       }
@@ -158,7 +158,7 @@ public class JsonDeserializer {
     List<Position> goals = new ArrayList<>();
     for(int i=0; i<jsonPlmt.length(); i++){
       JSONObject playerJSON = jsonPlmt.getJSONObject(i);
-      Position goal = position(playerJSON.getJSONObject("goto"));
+      Position goal = coordinate(playerJSON.getJSONObject("goto"));
       goals.add(goal);
     }
 
@@ -166,7 +166,7 @@ public class JsonDeserializer {
       JSONArray jsonGoals = jsonGame.getJSONArray("goals");
       for(int i=0; i<jsonGame.length(); i++){
         JSONObject jsonPosition = jsonGoals.getJSONObject(i);
-        Position p = JsonDeserializer.position(jsonPosition);
+        Position p = JsonDeserializer.coordinate(jsonPosition);
         goals.add(p);
       }
     }
@@ -180,7 +180,7 @@ public class JsonDeserializer {
     Direction direction = Direction.valueOf(moveJSON.getString(1));
     int degree = moveJSON.getInt(2) / 90;
     degree = (4 - degree) % 4;
-    Position moveTo = JsonDeserializer.position(moveJSON.getJSONObject(3));
+    Position moveTo = JsonDeserializer.coordinate(moveJSON.getJSONObject(3));
     return new Move(direction, index, degree, moveTo);
   }
 }

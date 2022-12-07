@@ -3,11 +3,8 @@ package remote.client;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 import json.JsonDeserializer;
@@ -89,7 +86,7 @@ public class ProxyReferee implements Runnable {
       maybeProjection = Optional.empty();
     }
 
-    Position nextGoal = JsonDeserializer.position(args.getJSONObject(1));
+    Position nextGoal = JsonDeserializer.coordinate(args.getJSONObject(1));
 
     this.player.setup(maybeProjection, nextGoal);
     NetUtil.sendOutput("\"void\"", this.socket);
