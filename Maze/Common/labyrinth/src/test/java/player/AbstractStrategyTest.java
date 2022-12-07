@@ -2,6 +2,7 @@ package player;
 
 import static org.junit.Assert.assertEquals;
 
+import java.awt.Color;
 import java.util.List;
 import json.JsonDeserializer;
 import json.JsonSerializer;
@@ -35,7 +36,8 @@ class AbstractStrategyTest {
     this.euclid = new EuclideanStrategy();
     this.p1 = new PlayerAvatar(JsonDeserializer.stringToColor("AAFFCC"),
         new Position(3, 3));
-    this.players = List.of(this.p1);
+    this.p2 = new PlayerAvatar(Color.YELLOW, new Position(5, 5));
+    this.players = List.of(this.p1, this.p2);
 
     this.jsonBoard = new JSONObject(
 
