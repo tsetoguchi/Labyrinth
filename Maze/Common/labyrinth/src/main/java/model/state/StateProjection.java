@@ -32,7 +32,7 @@ public class StateProjection {
         return this.players;
     }
 
-    public PlayerAvatar getSelf() {
+    public PlayerAvatar getActivePlayer() {
         return this.players.get(0);
     }
 

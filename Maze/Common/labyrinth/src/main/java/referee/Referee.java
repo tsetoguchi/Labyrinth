@@ -32,6 +32,7 @@ public class Referee implements IReferee {
 
   private final Map<PlayerAvatar, PlayerHandler> playerAvatarToHandler;
   private final List<PlayerAvatar> eliminated;
+  private final List<PlayerAvatar> winners;
 
   private final List<IObserver> observers;
 
@@ -48,6 +49,7 @@ public class Referee implements IReferee {
     this.playerAvatarToHandler = this.mapPlayerAvatarsToPlayerHandlers(game, players);
     this.observers = observers;
     this.eliminated = new ArrayList<>();
+    this.winners = new ArrayList<>();
     this.goalHandler = new GoalHandler(game.getPlayerList(), goals);
   }
 
@@ -134,6 +136,7 @@ public class Referee implements IReferee {
       this.informObserverOfState();
     }
 
+
     this.sendWin();
     this.informObserversOfGameEnd();
 
@@ -148,7 +151,6 @@ public class Referee implements IReferee {
 
     Optional<ITurn> potentialTurn = this.getTurn(activePlayer);
 
-    System.out.println(this.game.getBoard().toString());
     if (potentialTurn.isEmpty()) {
       this.kickPlayerInAll(activePlayer);
       return;
@@ -158,6 +160,12 @@ public class Referee implements IReferee {
 
     if (turn.isMove()) {
       Move move = turn.getMove();
+
+      System.out.print(this.getNamesFromAvatars(List.of(activePlayer)));
+      System.out.println(activePlayer + " goal: " + goalHandler.getPlayerCurrentGoal(activePlayer));
+      System.out.println(move.toString());
+      System.out.println(this.game.getBoard().toString());
+
       if (this.isValidMove(move, activePlayer)) {
         this.game.executeTurn(move);
         this.assignNextGoal(activePlayer);
@@ -166,6 +174,7 @@ public class Referee implements IReferee {
       }
 
     } else {
+      System.out.println("PASS");
       this.game.skipTurn();
     }
 
@@ -246,7 +255,8 @@ public class Referee implements IReferee {
   }
 
   private GameResults createGameResults() {
-    List<String> winners = this.getNamesFromAvatars(this.getWinners());
+    this.winners.removeAll(this.eliminated);
+    List<String> winners = this.getNamesFromAvatars(this.winners);
     List<String> kicked = this.getNamesFromAvatars(this.eliminated);
     return new GameResults(winners, kicked);
   }
@@ -267,11 +277,12 @@ public class Referee implements IReferee {
 
   private void sendWin() {
     List<PlayerAvatar> players = this.game.getPlayerList();
-    List<PlayerAvatar> winners = this.getWinners();
+    this.winners.addAll(this.getWinners());
+    System.out.println(this.getNamesFromAvatars(this.winners));
     for (PlayerAvatar player : players) {
 
       Optional<Boolean> response;
-      if (winners.contains(player)) {
+      if (this.winners.contains(player)) {
         response = (this.playerAvatarToHandler.get(player).win(true));
       } else {
         response = (this.playerAvatarToHandler.get(player).win(false));

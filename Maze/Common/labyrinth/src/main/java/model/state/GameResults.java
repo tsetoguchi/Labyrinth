@@ -28,5 +28,4 @@ public class GameResults {
     return this.eliminated;
   }
 
-  
 }
