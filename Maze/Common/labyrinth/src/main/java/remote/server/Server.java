@@ -99,7 +99,6 @@ public class Server implements Callable<GameResults> {
       Callable<ProxyPlayer> makePlayer = () -> {
         DataInputStream in = new DataInputStream(s.getInputStream());
         String name = in.readUTF();
-        System.out.println(name);
         return new ProxyPlayer(s, name);
       };
 
