@@ -70,8 +70,8 @@ public abstract class AbstractStrategy implements IStrategy {
     int boardWidth = board.getWidth();
 
     for (int rowIndex = 0; rowIndex < boardHeight; rowIndex++) {
-      for (int rotations = 4; rotations >= 1; rotations--) {
-        for (Direction direction : new Direction[]{LEFT, RIGHT}) {
+      for (Direction direction : new Direction[]{LEFT, RIGHT}) {
+        for (int rotations = 4; rotations >= 1; rotations--){
           Move toTry = new Move(direction, rowIndex, rotations, candidate);
           if(this.validTurn(currentPosition, toTry)){
             return toTry;
@@ -81,8 +81,8 @@ public abstract class AbstractStrategy implements IStrategy {
     }
 
     for (int colIndex = 0; colIndex < boardWidth; colIndex++) {
-      for (int rotations = 4; rotations >= 1; rotations--) {
-        for (Direction direction : new Direction[]{UP, DOWN}) {
+      for (Direction direction : new Direction[]{UP, DOWN}) {
+        for (int rotations = 4; rotations >= 1; rotations--){
           Move toTry = new Move(direction, colIndex, rotations, candidate);
           if(this.validTurn(currentPosition, toTry)){
             return toTry;
