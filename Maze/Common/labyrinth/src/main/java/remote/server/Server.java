@@ -1,24 +1,17 @@
 package remote.server;
 
-import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.Proxy;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import model.Position;
 import model.state.GameResults;
@@ -96,7 +89,14 @@ public class Server implements Callable<GameResults> {
       }
     }
 
+    this.createPlayers();
 
+  }
+
+  /**
+   * Creates the players form the connections by receiving their names.
+   */
+  private void createPlayers() {
     for(Socket s : this.connections){
       Callable<ProxyPlayer> makePlayer = () -> {
         DataInputStream in = new DataInputStream(s.getInputStream());
@@ -114,7 +114,6 @@ public class Server implements Callable<GameResults> {
         } catch(Throwable ignore){}
       }
     }
-
   }
 
   /**
@@ -123,8 +122,7 @@ public class Server implements Callable<GameResults> {
    */
   private Socket signUpClient(long waitTimeRemaining) {
     Callable<Socket> acceptConnection = () -> {
-      Socket sock = this.serverSocket.accept();
-      return sock;
+      return this.serverSocket.accept();
     };
 
     try {
