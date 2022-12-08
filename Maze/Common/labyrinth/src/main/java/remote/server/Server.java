@@ -60,7 +60,6 @@ public class Server implements Callable<GameResults> {
 
   /**
    * Signs up players and runs a game to completion and returns the results of the game.
-   * @return computed result
    */
   @Override
   public GameResults call() {
@@ -70,7 +69,10 @@ public class Server implements Callable<GameResults> {
     } catch (Throwable ignore) {}
 
     if (this.players.size() >= MIN_NUMBER_OF_PLAYERS) {
+
+      // Reverse the player list so that the youngest player is in the front
       Collections.reverse(this.players);
+
       IReferee referee = new Referee(this.game, this.players, this.goals);
       return referee.runGame();
     } else {
@@ -79,11 +81,15 @@ public class Server implements Callable<GameResults> {
   }
 
 
+  /**
+   * Signs up clients until the specified number of wait times or enough players have joined
+   */
   private void beginSignUp() {
 
     for (int i = 0; i < NUMBER_OF_WAIT_TIMES && this.connections.size() < MIN_NUMBER_OF_PLAYERS;
          i++) {
       long endTime = System.currentTimeMillis() + (WAIT_PERIOD_SECONDS * 1000);
+
       while (System.currentTimeMillis() < endTime && this.connections.size() < MAX_NUMBER_OF_PLAYERS) {
         long waitTimeRemaining = endTime - System.currentTimeMillis();
         this.connections.add(this.signUpClient(waitTimeRemaining));
