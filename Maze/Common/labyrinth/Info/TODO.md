@@ -2,7 +2,7 @@
   * If given a gamestate, the server should enforce that the number of remote clients and number of players in the gamestate are equal.
   * The server should require a client to send it's name in the required time before it considers it a valid connection. Currently, the server establishes as many connections as are tried and filters out players that never sent their name after.
 
-* NetUtil
+* NetUtil:
   * readInput(StringBuilder str, Socket sock): this method can not read in complex inputs. Currently, it appends whatever is in the stream to the string builder. If given one and a half JSON values, the ProxyPlayer/ProxyReferee trying to interpret this would not know what to do. To fix this in future implementations, we could either read in a single character at a time (which we thought would be inefficient with timeouts being a potential issue) or use some sort of tokener to parse through the input.
 
 * Referee:
@@ -10,3 +10,6 @@
   * ObserverHandler: currently our Referee is not protected from Observers. Ideally, the Referee would interact with the Observer in a similar fashion to how to communicates with Players using our PlayerHandler.
   * 
 
+* AbstractStrategy + EuclidStrategy + RiemannStrategy:
+  * This code can be kind of cluttered, and the methods are long. Duplicated code could potentially be better designed.
+  * We believe there exists a discrepancy between our implementation of the strategy and the spec's. There are a few staff tests in which we perceive our players acting correctly, but the wrong player wins. We've followed these games through to completion, and can't figure out why another player should win. Our unit tests for Euclid/Riemann's functionality of getting the ordered candidates confirms they work as intended, but further unit testing of the AbstractStrategy may be appropriate.
