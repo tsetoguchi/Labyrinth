@@ -13,6 +13,9 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 
+/**
+ * Represents a board in Labyrinth
+ */
 public class Board implements IBoard {
 
   protected final Tile[][] tileGrid;
@@ -52,6 +55,10 @@ public class Board implements IBoard {
     this.spareTile = new Tile(spareTileTreasure);
   }
 
+  /**
+   * Generates a random tile grid based on the given width and height.
+   * The tile grid will also contain random gems from the given gem pool.
+   */
   private Tile[][] generateRandomBoard(int width, int height, List<Gem> gemPool) {
     Tile[][] tileGrid = new Tile[height][width];
 
@@ -77,6 +84,9 @@ public class Board implements IBoard {
     return tileGrid;
   }
 
+  /**
+   * Retrieve the tile at the given position.
+   */
   @Override
   public Tile getTileAt(Position position) {
     if (position.getRow() >= this.tileGrid.length) {
@@ -90,21 +100,34 @@ public class Board implements IBoard {
     return this.tileGrid[position.getRow()][position.getColumn()];
   }
 
+  /**
+   * Retrieve the current spare tile.
+   */
   @Override
   public Tile getSpareTile() {
     return this.spareTile;
   }
 
+  /**
+   * Returns the height of the board.
+   */
   @Override
   public int getHeight() {
     return this.height;
   }
 
+  /**
+   * Returns the width of the board.
+   */
   @Override
   public int getWidth() {
     return this.width;
   }
 
+  /**
+   * Apply a slide and insert to the board, with the given
+   * direction, row/col index, and rotation of spare tile.
+   */
   @Override
   public void slideAndInsert(Direction direction, int index, int rotations) {
     Tile nextSpareTile = this.slide(direction, index);
@@ -177,6 +200,9 @@ public class Board implements IBoard {
       return new ExperimentationBoard(this.width, this.height, newGrid, this.spareTile.deepCopy());
   }
 
+  /**
+   * Convert the board into its canonical characters as a string
+   */
   @Override
   public String toSymbolGrid() {
     StringBuilder builder = new StringBuilder();
@@ -193,6 +219,9 @@ public class Board implements IBoard {
   }
 
 
+  /**
+   * Returns a deep copy of the board
+   */
   public IBoard deepCopy() {
     Tile[][] newGrid = new Tile[this.getHeight()][this.getWidth()];
     for (int row = 0; row < newGrid.length; row++) {

@@ -223,6 +223,9 @@ public class State implements IState {
     }
   }
 
+  /**
+   * Apply the given move to this state.
+   */
   private void slideAndInsert(Move move) {
     int index = move.getSlideIndex();
     int rotations = move.getSpareTileRotations();
