@@ -20,6 +20,10 @@ import player.IPlayer;
 import referee.IReferee;
 import referee.Referee;
 
+/**
+ * Responsible for instantiating a remote game of Labyrinth. Given a game, goals, and port information,
+ * it signs up players, creates ProxyPlayers to represent them, and creates/runs a referee.
+ */
 public class Server implements Callable<GameResults> {
 
   public static final int WAIT_PERIOD_SECONDS = 20;
