@@ -1,18 +1,15 @@
 package IntegrationTests;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.JSONTokener;
-
-import java.util.Collections;
 import java.util.List;
-
 import json.JsonDeserializer;
 import json.JsonSerializer;
 import model.Position;
 import model.state.GameResults;
 import model.state.IState;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 import player.IPlayer;
 import referee.Referee;
 

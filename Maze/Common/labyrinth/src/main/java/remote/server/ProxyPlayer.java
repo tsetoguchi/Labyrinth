@@ -112,6 +112,9 @@ public class ProxyPlayer implements IPlayer {
     }
   }
 
+  /**
+   * Retrieves the name of the player.
+   */
   @Override
   public String getName() {
     return this.playerName;

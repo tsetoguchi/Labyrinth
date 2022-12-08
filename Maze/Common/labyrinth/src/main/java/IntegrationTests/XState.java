@@ -1,26 +1,17 @@
 package IntegrationTests;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.JSONTokener;
-
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-
 import json.JsonDeserializer;
-import json.JsonSerializer;
 import model.Position;
 import model.Utils;
 import model.board.Direction;
 import model.board.ExperimentationBoard;
-import model.state.GameResults;
 import model.state.IState;
-import player.IPlayer;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 import referee.Move;
-import referee.Referee;
 
 public class XState {
 

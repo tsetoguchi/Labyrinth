@@ -2,8 +2,8 @@ package referee;
 
 public interface ITurn {
 
-  public boolean isMove();
+  boolean isMove();
 
-  public Move getMove();
+  Move getMove();
 
 }

@@ -1,11 +1,7 @@
 package referee;
 
-import observer.Controller.IObserver;
 import model.state.GameResults;
-import model.state.IState;
-import player.IPlayer;
-
-import java.util.List;
+import observer.Controller.IObserver;
 
 public interface IReferee {
 

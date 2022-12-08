@@ -1,6 +1,8 @@
 package model.board;
 
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents an unordered pair of gems.

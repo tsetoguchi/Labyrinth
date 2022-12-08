@@ -5,13 +5,16 @@ import static model.board.Direction.LEFT;
 import static model.board.Direction.RIGHT;
 import static model.board.Direction.UP;
 
-import model.Exceptions.IllegalGameActionException;
-import model.Position;
-import referee.IRules;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Queue;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
+import model.Position;
 
 /**
  * Represents a board in Labyrinth
@@ -49,8 +52,7 @@ public class Board implements IBoard {
 
     Gem[] gemPoolArray = Gem.values();
     List<Gem> gemPool = new ArrayList<>(List.of(gemPoolArray));
-    Tile[][] tileGrid = this.generateRandomBoard(width, height, gemPool);
-    this.tileGrid = tileGrid;
+    this.tileGrid = this.generateRandomBoard(width, height, gemPool);
     Treasure spareTileTreasure = new Treasure(gemPool.get(0), gemPool.get(0));
     this.spareTile = new Tile(spareTileTreasure);
   }

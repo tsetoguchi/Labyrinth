@@ -1,17 +1,13 @@
 package IntegrationTests;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.JSONTokener;
-
-import java.io.IOException;
-
 import json.JsonDeserializer;
 import model.Position;
 import model.state.IState;
 import model.state.StateProjection;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 import player.EuclideanStrategy;
-import player.IPlayer;
 import player.IStrategy;
 import player.RiemannStrategy;
 

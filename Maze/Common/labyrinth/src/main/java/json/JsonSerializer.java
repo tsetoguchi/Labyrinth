@@ -1,8 +1,6 @@
 package json;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.awt.*;
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,10 +8,10 @@ import java.util.Optional;
 import model.Position;
 import model.board.IBoard;
 import model.board.Tile;
-import model.state.StateProjection;
 import model.state.GameResults;
 import model.state.PlayerAvatar;
 import model.state.SlideAndInsertRecord;
+import model.state.StateProjection;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -190,7 +188,7 @@ public class JsonSerializer {
   }
 
 
-  public static JSONArray last(Optional<SlideAndInsertRecord> last) throws JSONException {
+  public static JSONArray last(Optional<SlideAndInsertRecord> last) {
 
     if (last.isEmpty()) {
       return null;

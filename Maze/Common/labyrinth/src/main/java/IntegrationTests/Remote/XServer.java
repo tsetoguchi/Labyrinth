@@ -1,17 +1,14 @@
 package IntegrationTests.Remote;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.json.JSONTokener;
-
 import IntegrationTests.IntegrationUtils;
 import java.util.List;
-
 import json.JsonDeserializer;
 import json.JsonSerializer;
 import model.Position;
 import model.state.GameResults;
 import model.state.IState;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 import remote.server.Server;
 
 public class XServer {
