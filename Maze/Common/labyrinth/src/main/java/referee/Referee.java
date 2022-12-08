@@ -103,7 +103,7 @@ public class Referee implements IReferee {
 //    this.observers = new ArrayList<>();
 //    this.eliminated = new ArrayList<>();
 //  }
-  private Map<PlayerAvatar, PlayerHandler> mapPlayerAvatarsToPlayerHandlers(IState game,
+  protected Map<PlayerAvatar, PlayerHandler> mapPlayerAvatarsToPlayerHandlers(IState game,
       List<IPlayer> IPlayers) {
     if (IPlayers.size() != game.getPlayerList().size()) {
       throw new IllegalArgumentException("Amount of clients and players do not match.");
@@ -174,7 +174,6 @@ public class Referee implements IReferee {
       }
 
     } else {
-      System.out.println("PASS");
       this.game.skipTurn();
     }
 
@@ -208,7 +207,6 @@ public class Referee implements IReferee {
    * Removes the player from the State and Referee
    */
   private void kickPlayerInAll(PlayerAvatar player) {
-    System.out.println("Kicked " + this.playerAvatarToHandler.get(player).getPlayerName());
     this.game.kickPlayer(player);
     this.eliminated.add(player);
   }
@@ -278,7 +276,6 @@ public class Referee implements IReferee {
   private void sendWin() {
     List<PlayerAvatar> players = this.game.getPlayerList();
     this.winners.addAll(this.getWinners());
-    System.out.println(this.getNamesFromAvatars(this.winners));
     for (PlayerAvatar player : players) {
 
       Optional<Boolean> response;
@@ -295,7 +292,7 @@ public class Referee implements IReferee {
   }
 
   private void sendInitialSetup() {
-    List<PlayerAvatar> players = new ArrayList<>(this.game.getPlayerList());
+    List<PlayerAvatar> players = this.game.getPlayerList();
 
     for (PlayerAvatar player : players) {
       Position firstGoal = this.goalHandler.getPlayerCurrentGoal(player);
