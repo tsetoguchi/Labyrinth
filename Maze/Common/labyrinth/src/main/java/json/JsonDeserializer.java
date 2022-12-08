@@ -144,10 +144,8 @@ public class JsonDeserializer {
   public static Tile spare(JSONObject spareJSON) throws JSONException {
     String connector = spareJSON.getString("tilekey");
     Set<Direction> pathwayConnections = symbolToDirection.get(connector);
-//    Gem gem1 = Gem.valueOf(spareJSON.getString("1-image"));
-//    Gem gem2 = Gem.valueOf(spareJSON.getString("2-image"));
-    Gem gem1 = null;
-    Gem gem2 = null;
+    Gem gem1 = Gem.getGem(spareJSON.getString("1-image"));
+    Gem gem2 = Gem.getGem(spareJSON.getString("2-image"));
     Treasure treasure = new Treasure(gem1, gem2);
     return new Tile(pathwayConnections, treasure);
   }
