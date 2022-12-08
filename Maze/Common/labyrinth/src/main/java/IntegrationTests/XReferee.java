@@ -5,6 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import java.util.Collections;
 import java.util.List;
 
 import json.JsonDeserializer;
@@ -15,7 +16,7 @@ import model.state.IState;
 import player.IPlayer;
 import referee.Referee;
 
-public class XBad2 {
+public class XReferee {
 
   public static void main(String[] args) throws JSONException {
 
@@ -23,6 +24,7 @@ public class XBad2 {
 
     JSONArray playersJSON = (JSONArray) jsonTokener.nextValue();
     List<IPlayer> players = TestPlayer.jsonToTestPlayers(playersJSON);
+//    Collections.reverse(players);
 
     JSONObject stateJSON = (JSONObject) jsonTokener.nextValue();
     IState game = JsonDeserializer.state(stateJSON);

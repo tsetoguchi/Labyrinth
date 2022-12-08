@@ -16,7 +16,7 @@ import player.IStrategy;
 import player.RiemannStrategy;
 
 
-public class StrategyIntegrationTest {
+public class XStrategy {
     public static void main(String[] args) throws JSONException {
 
       JSONTokener jsonTokener = IntegrationUtils.getInput();
