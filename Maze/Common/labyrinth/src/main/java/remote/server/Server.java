@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.net.Proxy;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -36,6 +37,7 @@ public class Server implements Callable<GameResults> {
   private final IState game;
   private final List<Position> goals;
   private final List<IPlayer> players;
+  private final List<Socket> connections;
 
   private final ServerSocket serverSocket;
   private final ExecutorService service;
@@ -44,6 +46,7 @@ public class Server implements Callable<GameResults> {
     this.game = game;
     this.goals = goals;
     this.players = new ArrayList<>();
+    this.connections = new ArrayList<>();
     this.service = Executors.newCachedThreadPool();
 
     try{
@@ -51,7 +54,6 @@ public class Server implements Callable<GameResults> {
     } catch (IOException e){
       throw new RuntimeException(e);
     }
-
   }
 
 
@@ -76,19 +78,18 @@ public class Server implements Callable<GameResults> {
 
 
   private void beginSignUp() {
-    List<Socket> connections = new ArrayList<>();
 
-    for (int i = 0; i < NUMBER_OF_WAIT_TIMES && this.players.size() < MIN_NUMBER_OF_PLAYERS;
+    for (int i = 0; i < NUMBER_OF_WAIT_TIMES && this.connections.size() < MIN_NUMBER_OF_PLAYERS;
          i++) {
       long endTime = System.currentTimeMillis() + (WAIT_PERIOD_SECONDS * 1000);
-      while (System.currentTimeMillis() < endTime && this.players.size() <= MAX_NUMBER_OF_PLAYERS) {
+      while (System.currentTimeMillis() < endTime && this.connections.size() < MAX_NUMBER_OF_PLAYERS) {
         long waitTimeRemaining = endTime - System.currentTimeMillis();
-        connections.add(this.signUpClient(waitTimeRemaining));
+        this.connections.add(this.signUpClient(waitTimeRemaining));
       }
     }
 
 
-    for(Socket s : connections){
+    for(Socket s : this.connections){
       Callable<ProxyPlayer> makePlayer = () -> {
         DataInputStream in = new DataInputStream(s.getInputStream());
         String name = in.readUTF();
@@ -117,8 +118,7 @@ public class Server implements Callable<GameResults> {
     try {
       Future<Socket> futurePlayer = this.service.submit(acceptConnection);
       return futurePlayer.get(waitTimeRemaining, TimeUnit.MILLISECONDS);
-    }catch(Exception e){
-    }
+    }catch(Exception ignore){}
     return null;
   }
 
