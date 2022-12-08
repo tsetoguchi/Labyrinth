@@ -117,7 +117,10 @@ public class Server implements Callable<GameResults> {
 
   }
 
-
+  /**
+   * Signs up the current client if the connection was successful.
+   * The waitTimeRemaining is the amount of time left until the waiting period is over.
+   */
   private Socket signUpClient(long waitTimeRemaining) {
     Callable<Socket> acceptConnection = () -> {
       Socket sock = this.serverSocket.accept();
