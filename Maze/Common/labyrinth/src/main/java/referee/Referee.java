@@ -161,10 +161,11 @@ public class Referee implements IReferee {
     if (turn.isMove()) {
       Move move = turn.getMove();
 
-      System.out.print(this.getNamesFromAvatars(List.of(activePlayer)));
-      System.out.println(activePlayer + " goal: " + goalHandler.getPlayerCurrentGoal(activePlayer));
-      System.out.println(move.toString());
-      System.out.println(this.game.getBoard().toString());
+      //TODO debug gameplay
+//      System.out.print(this.getNamesFromAvatars(List.of(activePlayer)));
+//      System.out.println(activePlayer + " goal: " + goalHandler.getPlayerCurrentGoal(activePlayer));
+//      System.out.println(move.toString());
+//      System.out.println(this.game.getBoard().toString());
 
       if (this.isValidMove(move, activePlayer)) {
         this.game.executeTurn(move);

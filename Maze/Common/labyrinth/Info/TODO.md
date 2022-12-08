@@ -8,11 +8,9 @@
 * Referee:
   * Our referee no longer has the functionality of starting a game given a list of players. Given a list of players, the referee would need to ask the players to propose a board, choose one the boards proposed, create an IState, randomly generate goals, and then play the game to completion. This was out of our scope for the final weeks and something we never got around.
   * ObserverHandler: currently our Referee is not protected from Observers. Ideally, the Referee would interact with the Observer in a similar fashion to how to communicates with Players using our PlayerHandler.
-  * 
 
 * AbstractStrategy + EuclidStrategy + RiemannStrategy:
   * This code can be kind of cluttered, and the methods are long. Duplicated code could potentially be better designed.
-  * We believe there exists a discrepancy between our implementation of the strategy and the spec's. There are a few staff tests in which we perceive our players acting correctly, but the wrong player wins. We've followed these games through to completion, and can't figure out why another player should win. Our unit tests for Euclid/Riemann's functionality of getting the ordered candidates confirms they work as intended, but further unit testing of the AbstractStrategy may be appropriate.
 
 * Testing:
   * Most of the older integration testing is deprecated and no longer compatible with the codebase. We confirm functionality of components such as the State, Board, Players, and Strategies by our Referee integration test. This came from the old JSON serialization/deserialization being ill-designed and unreliable for the remote communication layer.

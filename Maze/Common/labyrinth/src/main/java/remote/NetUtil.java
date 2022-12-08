@@ -15,8 +15,8 @@ public class NetUtil {
       in = new DataInputStream(input);
 
       String message = in.readUTF();
-      //TODO debug message:
-      System.out.println(message);
+      //TODO debug messages over network:
+      //System.out.println(message);
       str.append(message);
     } catch(Exception ignore){
     }
