@@ -68,8 +68,7 @@ public class ProxyPlayer implements IPlayer {
   }
 
   /**
-   * Prompts the ProxyReferee to tell the corresponding Player to setup. Then waits for a response
-   * from the ProxyReferee to send the player's turn back to the IReferee. Once a "void" response
+   * Prompts the ProxyReferee to tell the corresponding Player to setup. Once a "void" response
    * is received, true is returned.
    */
   @Override
@@ -95,6 +94,10 @@ public class ProxyPlayer implements IPlayer {
     }
   }
 
+  /**
+   * Prompts the ProxyReferee to tell the corresponding Player whether they won or not. Once a
+   * "void" response is received, true is returned.
+   */
   @Override
   public boolean win(boolean won) {
 
@@ -120,6 +123,9 @@ public class ProxyPlayer implements IPlayer {
     return this.playerName;
   }
 
+  /**
+   * Retrieves a random board with the given amount of rows (height) and columns (width).
+   */
   @Override
   public IBoard proposeBoard(int rows, int columns) {
     return new Board(columns, rows);
