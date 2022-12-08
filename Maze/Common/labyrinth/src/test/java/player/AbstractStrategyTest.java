@@ -8,6 +8,7 @@ import json.JsonDeserializer;
 import model.Position;
 import model.board.Board;
 import model.board.Direction;
+import model.board.IBoard;
 import model.state.PlayerAvatar;
 import model.state.State;
 import org.json.JSONException;
@@ -133,4 +134,94 @@ class AbstractStrategyTest {
     ITurn turn = this.pass.createTurn(this.state.getStateProjection(), new Position(4, 5));
     assertEquals(new Pass(), turn);
   }
+
+
+  @Test
+  void euclidCandidates(){
+    int width = 7;
+    int height = 7;
+    IBoard board = new Board(width, height);
+    Position goal = new Position(3, 4);
+
+    EuclidTest euclid = new EuclidTest();
+
+    List<Position> candidates = euclid.getCandidatesInOrder(board, goal);
+
+    int[][] array = new int[height][width];
+
+    for(int i=0; i<candidates.size(); i++) {
+      Position p = candidates.get(i);
+      array[p.getRow()][p.getColumn()] = i;
+    }
+
+    assertEquals(0, array[3][4]);
+    assertEquals(2, array[3][3]);
+    assertEquals(3, array[3][5]);
+    assertEquals(6, array[2][5]);
+    assertEquals(4, array[4][4]);
+    assertEquals(12, array[5][4]);
+    assertEquals(20, array[5][5]);
+    assertEquals(41, array[2][0]);
+
+//    for(int r=0; r<height; r++){
+//      for(int c=0; c<width; c++){
+//        System.out.print(array[r][c] + " ");
+//      }
+//      System.out.print("\n");
+//    }
+
+
+  }
+
+  @Test
+  void riemannCandidates(){
+    int width = 7;
+    int height = 7;
+    IBoard board = new Board(width, height);
+    Position goal = new Position(3, 4);
+
+    RiemannTest riemann = new RiemannTest();
+
+    List<Position> candidates = riemann.getCandidatesInOrder(board, goal);
+
+    int[][] array = new int[height][width];
+
+    for(int i=0; i<candidates.size(); i++) {
+      Position p = candidates.get(i);
+      array[p.getRow()][p.getColumn()] = i;
+    }
+
+    assertEquals(0, array[3][4]);
+    assertEquals(25, array[3][3]);
+    assertEquals(1, array[0][0]);
+    assertEquals(2, array[0][1]);
+    assertEquals(8, array[1][0]);
+    assertEquals(39, array[5][4]);
+    assertEquals(40, array[5][5]);
+    assertEquals(15, array[2][0]);
+
+//    for(int r=0; r<height; r++){
+//      for(int c=0; c<width; c++){
+//        System.out.print(array[r][c] + " ");
+//      }
+//      System.out.print("\n");
+//    }
+
+  }
+
+
+  class EuclidTest extends EuclideanStrategy {
+    @Override
+    public List<Position> getCandidatesInOrder(IBoard board, Position goal) {
+      return super.getCandidatesInOrder(board, goal);
+    }
+  }
+
+  class RiemannTest extends RiemannStrategy {
+    @Override
+    public List<Position> getCandidatesInOrder(IBoard board, Position goal) {
+      return super.getCandidatesInOrder(board, goal);
+    }
+  }
+
 }

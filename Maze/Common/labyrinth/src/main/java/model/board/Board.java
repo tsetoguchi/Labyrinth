@@ -354,8 +354,10 @@ public class Board implements IBoard {
   }
 
   public String toString(){
-    String result = "";
+    String result = " 0123456\n";
     for (int row = 0; row < this.getHeight(); row++) {
+
+      result += row;
       for (int col = 0; col < this.getWidth(); col++) {
         result += this.tileGrid[row][col].toSymbol();
       }
