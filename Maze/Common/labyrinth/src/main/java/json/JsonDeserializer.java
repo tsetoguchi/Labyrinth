@@ -178,9 +178,15 @@ public class JsonDeserializer {
   public static Move move(JSONArray moveJSON) throws JSONException {
     int index = moveJSON.getInt(0);
     Direction direction = Direction.valueOf(moveJSON.getString(1));
-    int degree = moveJSON.getInt(2) / 90;
-    degree = (4 - degree) % 4;
+    int rotations = degreesToRotations(moveJSON.getInt(2));
     Position moveTo = JsonDeserializer.coordinate(moveJSON.getJSONObject(3));
-    return new Move(direction, index, degree, moveTo);
+    return new Move(direction, index, rotations, moveTo);
   }
+
+  public static int degreesToRotations(int degrees) {
+    int counterClockwiseRotations = degrees / 90;
+    return (4 - counterClockwiseRotations) % 4;
+  }
+
+
 }
