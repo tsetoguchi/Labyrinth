@@ -74,33 +74,6 @@ public class ProxyReferee implements Runnable {
     }
   }
 
-
-  private void handleSetup(JSONArray args) throws JSONException, IOException {
-    Optional<StateProjection> maybeProjection;
-
-    try{
-      IState s = JsonDeserializer.state(args.getJSONObject(0));
-      StateProjection projection = s.getStateProjection();
-      maybeProjection = Optional.of(projection);
-    } catch (JSONException ignore){
-      maybeProjection = Optional.empty();
-    }
-
-    Position nextGoal = JsonDeserializer.coordinate(args.getJSONObject(1));
-
-    this.player.setup(maybeProjection, nextGoal);
-    NetUtil.sendOutput("\"void\"", this.socket);
-  }
-
-
-  private void handleWin(JSONArray args) throws JSONException, IOException {
-    boolean didWin = args.getBoolean(0);
-    this.player.win(didWin);
-    NetUtil.sendOutput("\"void\"", this.socket);
-    this.socket.close();
-  }
-
-
   private void handleTakeTurn(JSONArray args) throws JSONException, IOException {
 
     IState state = JsonDeserializer.state(args.getJSONObject(0));
@@ -122,6 +95,36 @@ public class ProxyReferee implements Runnable {
     NetUtil.sendOutput(toSend, this.socket);
 
   }
+
+  private void handleWin(JSONArray args) throws JSONException, IOException {
+    boolean didWin = args.getBoolean(0);
+    this.player.win(didWin);
+    NetUtil.sendOutput("\"void\"", this.socket);
+    this.socket.close();
+  }
+
+  private void handleSetup(JSONArray args) throws JSONException, IOException {
+    Optional<StateProjection> maybeProjection;
+
+    try{
+      IState s = JsonDeserializer.state(args.getJSONObject(0));
+      StateProjection projection = s.getStateProjection();
+      maybeProjection = Optional.of(projection);
+    } catch (JSONException ignore){
+      maybeProjection = Optional.empty();
+    }
+
+    Position nextGoal = JsonDeserializer.coordinate(args.getJSONObject(1));
+
+    this.player.setup(maybeProjection, nextGoal);
+    NetUtil.sendOutput("\"void\"", this.socket);
+  }
+
+
+
+
+
+
 
 
 

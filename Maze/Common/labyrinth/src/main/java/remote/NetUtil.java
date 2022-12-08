@@ -32,8 +32,6 @@ public class NetUtil {
       out.writeUTF(str);
       out.flush();
 
-      //sock.shutdownOutput();
-
     } catch(Exception e){
       e.printStackTrace();
     }

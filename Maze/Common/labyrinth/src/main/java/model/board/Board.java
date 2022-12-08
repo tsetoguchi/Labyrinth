@@ -126,7 +126,7 @@ public class Board implements IBoard {
 
   /**
    * Apply a slide and insert to the board, with the given
-   * direction, row/col index, and rotation of spare tile.
+   * direction, row/col index, and clockwise rotation of spare tile.
    */
   @Override
   public void slideAndInsert(Direction direction, int index, int rotations) {

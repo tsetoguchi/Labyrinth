@@ -1,27 +1,19 @@
 package remote.server;
 
-import java.io.DataInputStream;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-
+import java.net.Socket;
+import java.util.Optional;
 import json.JsonDeserializer;
 import json.JsonSerializer;
-import model.Exceptions.IllegalPlayerActionException;
 import model.Position;
 import model.board.Board;
 import model.board.IBoard;
-
-import java.io.IOException;
-
 import model.state.StateProjection;
+import org.json.JSONArray;
+import org.json.JSONException;
+import player.IPlayer;
 import referee.ITurn;
 import referee.Pass;
-import player.IPlayer;
 import remote.NetUtil;
-
-import java.net.Socket;
-import java.util.Optional;
 
 /**
  * The communication interface for a referee to communicate with a player through a network. The
@@ -31,22 +23,27 @@ import java.util.Optional;
  */
 public class ProxyPlayer implements IPlayer {
 
+  // The socket connected to the corresponding ProxyReferee
+  private final Socket socket;
   private final String playerName;
-  private final Socket client;
 
-
-  public ProxyPlayer(Socket client, String playerName) throws IOException {
-    this.client = client;
+  public ProxyPlayer(Socket socket, String playerName) {
+    this.socket = socket;
     this.playerName = playerName;
   }
 
 
+  /**
+   * Prompts the ProxyReferee to ask the corresponding Player for a turn. Then waits for a response
+   * from the ProxyReferee to send the player's turn back to the IReferee. Once a response is
+   * received, it is deserialized into an ITurn and returned.
+   */
   @Override
-  public ITurn takeTurn(StateProjection game) throws IllegalPlayerActionException {
+  public ITurn takeTurn(StateProjection game) {
 
     try {
       JSONArray toSend = JsonSerializer.takeTurn(game);
-      NetUtil.sendOutput(toSend.toString(), this.client);
+      NetUtil.sendOutput(toSend.toString(), this.socket);
     } catch (JSONException e) {
       throw new RuntimeException(e);
     }
@@ -54,7 +51,7 @@ public class ProxyPlayer implements IPlayer {
 
     StringBuilder response = new StringBuilder();
     while (true) {
-      NetUtil.readInput(response, this.client);
+      NetUtil.readInput(response, this.socket);
 
 
       try {
@@ -70,13 +67,17 @@ public class ProxyPlayer implements IPlayer {
     }
   }
 
-
+  /**
+   * Prompts the ProxyReferee to tell the corresponding Player to setup. Then waits for a response
+   * from the ProxyReferee to send the player's turn back to the IReferee. Once a "void" response
+   * is received, true is returned.
+   */
   @Override
   public boolean setup(Optional<StateProjection> game, Position goal) {
 
     try {
       JSONArray toSend = JsonSerializer.setup(game, goal);
-      NetUtil.sendOutput(toSend.toString(), this.client);
+      NetUtil.sendOutput(toSend.toString(), this.socket);
 
     } catch (JSONException e) {
       e.printStackTrace();
@@ -84,7 +85,7 @@ public class ProxyPlayer implements IPlayer {
 
     StringBuilder response = new StringBuilder();
     while (true) {
-      NetUtil.readInput(response, this.client);
+      NetUtil.readInput(response, this.socket);
 
 
       if (response.toString().equals("\"void\"")) {
@@ -98,11 +99,11 @@ public class ProxyPlayer implements IPlayer {
   public boolean win(boolean won) {
 
     JSONArray toSend = JsonSerializer.win(won);
-    NetUtil.sendOutput(toSend.toString(), this.client);
+    NetUtil.sendOutput(toSend.toString(), this.socket);
 
     StringBuilder response = new StringBuilder();
     while (true) {
-      NetUtil.readInput(response, this.client);
+      NetUtil.readInput(response, this.socket);
 
       if (response.toString().equals("\"void\"")) {
         return true;

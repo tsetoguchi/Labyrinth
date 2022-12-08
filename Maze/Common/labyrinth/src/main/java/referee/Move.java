@@ -49,8 +49,8 @@ public class Move implements ITurn{
   }
 
   public String toString(){
-    return " " + this.slideIndex + " " + this.slideDirection + " "
-            + this.spareTileRotations + " " + this.moveDestination.toString();
+    return "Direction:" + this.slideDirection + "| Index:" + this.slideIndex + "| Rotations:" +
+            + this.spareTileRotations + "| Destination:" + this.moveDestination.toString();
   }
 
   @Override

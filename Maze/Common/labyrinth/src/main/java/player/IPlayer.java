@@ -7,7 +7,9 @@ import referee.ITurn;
 
 import java.util.Optional;
 
-
+/**
+ * 
+ */
 public interface IPlayer {
 
   ITurn takeTurn(StateProjection game);

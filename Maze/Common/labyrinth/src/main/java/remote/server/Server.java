@@ -21,8 +21,9 @@ import referee.IReferee;
 import referee.Referee;
 
 /**
- * Responsible for instantiating a remote game of Labyrinth. Given a game, goals, and port information,
- * it signs up players, creates ProxyPlayers to represent them, and creates/runs a referee.
+ * Responsible for instantiating a remote game of Labyrinth. Given a game, goals, and port
+ * information, it signs up players, creates ProxyPlayers to represent them, and creates/runs a
+ * referee.
  */
 public class Server implements Callable<GameResults> {
 
@@ -47,9 +48,9 @@ public class Server implements Callable<GameResults> {
     this.connections = new ArrayList<>();
     this.service = Executors.newCachedThreadPool();
 
-    try{
+    try {
       this.serverSocket = new ServerSocket(port);
-    } catch (IOException e){
+    } catch (IOException e) {
       throw new RuntimeException(e);
     }
   }
@@ -61,10 +62,8 @@ public class Server implements Callable<GameResults> {
   @Override
   public GameResults call() {
 
-    try {
-      this.beginSignUp();
-      this.createPlayers();
-    } catch (Throwable ignore) {}
+    this.beginSignUp();
+    this.createPlayers();
 
     if (this.players.size() >= MIN_NUMBER_OF_PLAYERS) {
 
@@ -85,12 +84,13 @@ public class Server implements Callable<GameResults> {
   private void beginSignUp() {
 
     for (int i = 0; i < NUMBER_OF_WAIT_TIMES && this.connections.size() < MIN_NUMBER_OF_PLAYERS;
-         i++) {
+        i++) {
       long endTime = System.currentTimeMillis() + (WAIT_PERIOD_SECONDS * 1000);
 
-      while (System.currentTimeMillis() < endTime && this.connections.size() < MAX_NUMBER_OF_PLAYERS) {
+      while (System.currentTimeMillis() < endTime
+          && this.connections.size() < MAX_NUMBER_OF_PLAYERS) {
         long waitTimeRemaining = endTime - System.currentTimeMillis();
-        this.connections.add(this.signUpClient(waitTimeRemaining));
+        this.signUpClient(waitTimeRemaining);
       }
     }
   }
@@ -99,7 +99,7 @@ public class Server implements Callable<GameResults> {
    * Creates the players form the connections by receiving their names.
    */
   private void createPlayers() {
-    for(Socket s : this.connections){
+    for (Socket s : this.connections) {
       Callable<ProxyPlayer> makePlayer = () -> {
         DataInputStream in = new DataInputStream(s.getInputStream());
         String name = in.readUTF();
@@ -109,28 +109,31 @@ public class Server implements Callable<GameResults> {
       try {
         Future<ProxyPlayer> futurePlayer = this.service.submit(makePlayer);
         this.players.add(futurePlayer.get(PLAYER_SIGN_UP_SECONDS, TimeUnit.MILLISECONDS));
-      }catch(Throwable t) {
-        try{
+      } catch (Throwable t) {
+        try {
           s.close();
-        } catch(Throwable ignore){}
+        } catch (Throwable ignore) {
+        }
       }
     }
   }
 
   /**
-   * Signs up the current client if the connection was successful.
-   * The waitTimeRemaining is the amount of time left until the waiting period is over.
+   * Signs up the current client if the connection was successful. The waitTimeRemaining is the
+   * amount of time left until the waiting period is over.
    */
-  private Socket signUpClient(long waitTimeRemaining) {
+  private void signUpClient(long waitTimeRemaining) {
     Callable<Socket> acceptConnection = () -> {
       return this.serverSocket.accept();
     };
 
     try {
-      Future<Socket> futurePlayer = this.service.submit(acceptConnection);
-      return futurePlayer.get(waitTimeRemaining, TimeUnit.MILLISECONDS);
-    }catch(Exception ignore){}
-    return null;
+      Future<Socket> futureConnection = this.service.submit(acceptConnection);
+      Socket connection = futureConnection.get(waitTimeRemaining, TimeUnit.MILLISECONDS);
+      this.connections.add(connection);
+    } catch (Exception ignore) {
+    }
+
   }
 
 }

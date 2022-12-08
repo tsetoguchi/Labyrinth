@@ -1,7 +1,7 @@
 package model.board;
 
 /**
- * Represents a direction
+ * Represents one of the four directions a slide can occur.
  */
 public enum Direction {
     UP, DOWN, LEFT, RIGHT;
