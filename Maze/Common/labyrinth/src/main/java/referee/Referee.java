@@ -15,6 +15,7 @@ import model.state.IState;
 import model.state.PlayerAvatar;
 import observer.Controller.IObserver;
 import player.IPlayer;
+import player.Player;
 
 import java.util.*;
 
@@ -222,9 +223,22 @@ public class Referee implements IReferee {
   }
 
   private List<PlayerAvatar> getWinners() {
+    List<PlayerAvatar> candidates = this.getWinnerCandidates();
+
+    //If player who ended game has enough goals:
+    Optional<PlayerAvatar> potentialGameEnder = this.goalHandler.getPlayerHome();
+    if(potentialGameEnder.isPresent() && candidates.contains(potentialGameEnder.get())){
+      return List.of(potentialGameEnder.get());
+    }
+
+    return this.assesWinnerDistance(candidates);
+  }
+
+  private List<PlayerAvatar> getWinnerCandidates(){
     List<PlayerAvatar> candidates = new ArrayList<>();
     int maxGoals = 0;
-    for (PlayerAvatar player : this.game.getPlayerList()) {
+    List<PlayerAvatar> gamePlayers = this.game.getPlayerList();
+    for (PlayerAvatar player : gamePlayers) {
       int goalsReached = this.goalHandler.getPlayerGoalCount(player);
       if (goalsReached > maxGoals) {
         maxGoals = goalsReached;
@@ -234,7 +248,10 @@ public class Referee implements IReferee {
         candidates.add(player);
       }
     }
+    return candidates;
+  }
 
+  private List<PlayerAvatar> assesWinnerDistance(List<PlayerAvatar> candidates){
     List<PlayerAvatar> winners = new ArrayList<>();
     double minDistance = Double.MAX_VALUE;
     for (PlayerAvatar player : candidates) {
@@ -249,7 +266,6 @@ public class Referee implements IReferee {
         winners.add(player);
       }
     }
-
     return winners;
   }
 

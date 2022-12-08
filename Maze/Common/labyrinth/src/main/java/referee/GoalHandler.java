@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Queue;
 import java.util.Set;
 
@@ -27,7 +28,7 @@ public class GoalHandler {
 
   // the players on their way home
   private final Set<PlayerAvatar> playersGoingHome;
-  private boolean anyPlayersHome;
+  private Optional<PlayerAvatar> playerHome;
 
   /**
    * Creates a goal handler
@@ -39,7 +40,7 @@ public class GoalHandler {
     this.potentialGoals.addAll(allGoals);
     this.goalCount = new HashMap<>();
     this.currentGoals = new HashMap<>();
-    this.anyPlayersHome = false;
+    this.playerHome = Optional.empty();
     this.playersGoingHome = new HashSet<>();
     this.initializePlayerData(players);
   }
@@ -51,15 +52,31 @@ public class GoalHandler {
    */
   public void nextGoal(PlayerAvatar player) {
 
-    Position nextGoal;
-    if (!this.goalsLeft()) {
-      nextGoal = player.getHome();
-      this.playersGoingHome.add(player);
-    } else {
-      nextGoal = this.potentialGoals.poll();
-      this.goalCount.replace(player, this.goalCount.get(player) + 1);
+    if(this.potentialGoals.size() > 0){
+      this.assignNextGoal(player);
+      return;
     }
 
+    Position playerHome = player.getHome();
+    this.playersGoingHome.add(player);
+    this.currentGoals.replace(player, playerHome);
+
+//    Position playerHome = player.getHome();
+//    if (this.potentialGoals.size() == 1 && this.potentialGoals.peek().equals(playerHome)) {
+//      this.potentialGoals.poll();
+//      this.playersGoingHome.add(player);
+//      this.currentGoals.replace(player, playerHome);
+//    } else {
+//      this.assignNextGoal(player);
+//    }
+
+
+
+  }
+
+  private void assignNextGoal(PlayerAvatar player){
+    Position nextGoal = this.potentialGoals.poll();
+    this.goalCount.replace(player, this.goalCount.get(player) + 1);
     this.currentGoals.replace(player, nextGoal);
   }
 
@@ -72,7 +89,7 @@ public class GoalHandler {
     boolean onGoal = player.getCurrentPosition().equals(goal);
 
     if(onGoal && this.playersGoingHome.contains(player)){
-      this.anyPlayersHome = true;
+      this.playerHome = Optional.of(player);
     }
 
     return onGoal;
@@ -89,7 +106,11 @@ public class GoalHandler {
    * Returns true if any players have returned home after getting all potential goals
    */
   public boolean anyPlayersHome() {
-    return this.anyPlayersHome;
+    return this.playerHome.isPresent();
+  }
+
+  public Optional<PlayerAvatar> getPlayerHome(){
+    return this.playerHome;
   }
 
   /**
