@@ -70,7 +70,7 @@ public class JsonDeserializer {
     IBoard board = board(game.getJSONObject("board"), game.getJSONObject("spare"));
     List<PlayerAvatar> playerAvatars = playerAvatars(game.getJSONArray("plmt"));
 
-    if(!game.isNull("last")){
+    if (!game.isNull("last")) {
       SlideAndInsertRecord previousTurn = lastTurn(game.getJSONArray("last"));
       return new State(board, playerAvatars, previousTurn);
     }
@@ -85,7 +85,7 @@ public class JsonDeserializer {
 
   private static List<PlayerAvatar> playerAvatars(JSONArray plmt) throws JSONException {
     List<PlayerAvatar> players = new ArrayList<>();
-    for(int i=0; i<plmt.length(); i++){
+    for (int i = 0; i < plmt.length(); i++) {
       players.add(playerAvatar(plmt.getJSONObject(i)));
     }
     return players;
@@ -123,10 +123,10 @@ public class JsonDeserializer {
 
     Tile[][] tiles = new Tile[height][width];
 
-    for(int r=0; r<height; r++){
+    for (int r = 0; r < height; r++) {
       JSONArray rowJSON = rowsJSON.getJSONArray(r);
       JSONArray rowGemJSON = rowsGemJSON.getJSONArray(r);
-      for(int c=0; c<width; c++){
+      for (int c = 0; c < width; c++) {
         String connector = rowJSON.getString(c);
         Set<Direction> pathwayConnections = symbolToDirection.get(connector);
         JSONArray treasureJSON = rowGemJSON.getJSONArray(0);
@@ -154,15 +154,15 @@ public class JsonDeserializer {
   public static List<Position> goals(JSONObject jsonGame) throws JSONException {
     JSONArray jsonPlmt = jsonGame.getJSONArray("plmt");
     List<Position> goals = new ArrayList<>();
-    for(int i=0; i<jsonPlmt.length(); i++){
+    for (int i = 0; i < jsonPlmt.length(); i++) {
       JSONObject playerJSON = jsonPlmt.getJSONObject(i);
       Position goal = coordinate(playerJSON.getJSONObject("goto"));
       goals.add(goal);
     }
 
-    if(!jsonGame.isNull("goals")){
+    if (!jsonGame.isNull("goals")) {
       JSONArray jsonGoals = jsonGame.getJSONArray("goals");
-      for(int i=0; i<jsonGame.length(); i++){
+      for (int i = 0; i < jsonGoals.length(); i++) {
         JSONObject jsonPosition = jsonGoals.getJSONObject(i);
         Position p = JsonDeserializer.coordinate(jsonPosition);
         goals.add(p);

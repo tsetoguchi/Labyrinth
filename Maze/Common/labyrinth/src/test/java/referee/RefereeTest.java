@@ -116,16 +116,18 @@ class RefereeTest {
 
     this.board = (Board) JsonDeserializer.board(this.jsonBoard, this.jsonSpare);
     this.state = new State(this.board, this.players);
-    this.goals = new ArrayList<>(List.of(new Position(1,1), new Position(3,5), new Position(5,5)));
+    this.goals = new ArrayList<>(
+        List.of(new Position(1, 1), new Position(3, 5), new Position(5, 5)));
     this.referee = new Referee(this.state, this.iPlayers, this.goals);
 
   }
 
 
   @Test
-  void mapPlayerAvatarsToPlayerHandlers(){
+  void mapPlayerAvatarsToPlayerHandlers() {
     for (PlayerAvatar player : this.state.getPlayerList()) {
-      assertTrue(this.referee.mapPlayerAvatarsToPlayerHandlers(this.state, this.iPlayers).containsKey(player));
+      assertTrue(this.referee.mapPlayerAvatarsToPlayerHandlers(this.state, this.iPlayers)
+          .containsKey(player));
     }
   }
 
@@ -137,6 +139,7 @@ class RefereeTest {
     this.referee = new Referee(this.state, this.iPlayers, this.goals);
     GameResults results = this.referee.runGame();
     assertEquals(new ArrayList<>(), results.getEliminated());
+    assertEquals(new ArrayList<>(List.of(this.ip2.getName())), results.getWinners());
   }
 
   @Test
