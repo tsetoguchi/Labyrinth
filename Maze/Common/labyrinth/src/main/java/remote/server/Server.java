@@ -59,6 +59,7 @@ public class Server implements Callable<GameResults> {
 
     try {
       this.beginSignUp();
+      this.createPlayers();
     } catch (Throwable ignore) {}
 
     if (this.players.size() >= MIN_NUMBER_OF_PLAYERS) {
@@ -88,9 +89,6 @@ public class Server implements Callable<GameResults> {
         this.connections.add(this.signUpClient(waitTimeRemaining));
       }
     }
-
-    this.createPlayers();
-
   }
 
   /**
