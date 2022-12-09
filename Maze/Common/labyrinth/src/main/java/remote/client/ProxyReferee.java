@@ -77,6 +77,10 @@ public class ProxyReferee implements Runnable {
     }
   }
 
+  /**
+   * Calls takeTurn on corresponding IPlayer. The ITurn received from the method call
+   * on the IPlayer is then serialized and sent to the the corresponding ProxyPlayer.
+   */
   private void handleTakeTurn(JSONArray args) throws JSONException, IOException {
 
     IState state = JsonDeserializer.state(args.getJSONObject(0));
@@ -84,7 +88,6 @@ public class ProxyReferee implements Runnable {
     StateProjection projection = state.getStateProjection();
 
     ITurn turn = this.player.takeTurn(projection);
-
 
 
     String toSend;
@@ -99,6 +102,9 @@ public class ProxyReferee implements Runnable {
 
   }
 
+  /**
+   * Calls win on corresponding IPlayer and sends "void" to the corresponding ProxyPlayer.
+   */
   private void handleWin(JSONArray args) throws JSONException, IOException {
     boolean didWin = args.getBoolean(0);
     this.player.win(didWin);
@@ -106,6 +112,9 @@ public class ProxyReferee implements Runnable {
     this.socket.close();
   }
 
+  /**
+   * Calls setup on corresponding IPlayer and sends "void" to the corresponding ProxyPlayer.
+   */
   private void handleSetup(JSONArray args) throws JSONException, IOException {
     Optional<StateProjection> maybeProjection;
 
