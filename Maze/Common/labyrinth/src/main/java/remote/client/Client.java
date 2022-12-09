@@ -40,7 +40,7 @@ public class Client implements Runnable {
 
     try {
       //TODO debug Client
-      System.out.println(this.player.getName() + " connected");
+//      System.out.println(this.player.getName() + " connected");
       ProxyReferee proxyRef = new ProxyReferee(socket.get(), this.player);
       proxyRef.run();
     } catch (IOException e) {

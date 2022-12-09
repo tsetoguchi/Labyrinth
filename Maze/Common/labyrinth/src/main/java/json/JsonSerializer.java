@@ -16,10 +16,13 @@ import referee.GameResults;
 import referee.Move;
 
 /**
- * Represents a json serializer for labyrinth
+ * Represents a JSON serializer for Labyrinth.
  */
 public class JsonSerializer {
 
+  /**
+   * Serializes a Move into a JSON Move.
+   */
   public static JSONArray move(Move move) throws JSONException {
     JSONArray resultArray = new JSONArray();
     resultArray.put(move.getSlideIndex());
@@ -30,6 +33,9 @@ public class JsonSerializer {
   }
 
 
+  /**
+   * Serializes a StateProjection into a JSON State.
+   */
   public static JSONObject stateProjection(StateProjection game) throws JSONException {
     JSONObject result = new JSONObject();
     JSONObject board = board(game.getBoard());
@@ -45,6 +51,9 @@ public class JsonSerializer {
     return result;
   }
 
+  /**
+   * Serializes an IBoard into a JSON Board.
+   */
   public static JSONObject board(IBoard board) throws JSONException {
     JSONObject result = new JSONObject();
     JSONArray connectors = new JSONArray();
@@ -78,6 +87,9 @@ public class JsonSerializer {
     return result;
   }
 
+  /**
+   * Serializes a Tile into a JSON Tile.
+   */
   public static JSONObject tile(Tile tile) throws JSONException {
     JSONObject result = new JSONObject();
     result.put("tilekey", tile.toSymbol());
@@ -92,6 +104,9 @@ public class JsonSerializer {
     return 90 * netCounterclockwiseRotations;
   }
 
+  /**
+   * Serializes a GameResults into a JSON array [[winner names],[eliminated names]].
+   */
   public static JSONArray gameResults(GameResults results) {
     JSONArray winnersJSON = new JSONArray(results.getWinners());
     JSONArray eliminatedJSON = new JSONArray(results.getEliminated());
@@ -101,6 +116,9 @@ public class JsonSerializer {
     return result;
   }
 
+  /**
+   * Serializes a Position into a JSON Coordinate.
+   */
   public static JSONObject coordinate(Position position) throws JSONException {
     JSONObject result = new JSONObject();
     result.put("row#", position.getRow());
@@ -108,7 +126,49 @@ public class JsonSerializer {
     return result;
   }
 
+  /**
+   * Serializes a PlayerAvatar into a JSON Player.
+   */
+  public static JSONObject player(PlayerAvatar player) throws JSONException {
+    JSONObject result = new JSONObject();
+    result.put("current", coordinate(player.getCurrentPosition()));
+    result.put("home", coordinate(player.getHome()));
+    result.put("color", Utils.colorToString(player.getColor()));
+    return result;
+  }
 
+  /**
+   * Serializes a List<PlayerAvatar> into a JSON Plmt.
+   */
+  public static JSONArray plmt(List<PlayerAvatar> players) throws JSONException {
+    JSONArray plmt = new JSONArray();
+    for (PlayerAvatar player : players) {
+      plmt.put(player(player));
+    }
+    return plmt;
+  }
+
+  /**
+   * Serializes a Optional<SlideAndInsertRecord> into null if empty, or a JSON Action if present.
+   */
+  public static JSONArray last(Optional<SlideAndInsertRecord> last) {
+
+    if (last.isEmpty()) {
+      return null;
+    }
+
+    JSONArray action = new JSONArray();
+    action.put(last.get().getIndex());
+    action.put(last.get().getDirection());
+    return action;
+  }
+
+  // Serialization into Method Call Formats
+  // [ MName, [Argument, ...] ]
+
+  /**
+   * Serializes a StateProjection into a JSON take-turn in method call format.
+   */
   public static JSONArray takeTurn(StateProjection game) throws JSONException {
     JSONArray result = new JSONArray();
     result.put("take-turn");
@@ -118,6 +178,9 @@ public class JsonSerializer {
     return result;
   }
 
+  /**
+   * Serializes a boolean into a JSON win in method call format.
+   */
   public static JSONArray win(boolean won) {
     JSONArray result = new JSONArray();
     result.put("win");
@@ -127,6 +190,10 @@ public class JsonSerializer {
     return result;
   }
 
+  /**
+   * Serializes an Optional<StateProjection> and a Position into a JSON setup in method call
+   * format.
+   */
   public static JSONArray setup(Optional<StateProjection> game, Position goal)
       throws JSONException {
     JSONArray result = new JSONArray();
@@ -141,34 +208,6 @@ public class JsonSerializer {
 
     result.put(args);
     return result;
-  }
-
-  public static JSONArray plmt(List<PlayerAvatar> players) throws JSONException {
-    JSONArray plmt = new JSONArray();
-    for (PlayerAvatar player : players) {
-      plmt.put(player(player));
-    }
-    return plmt;
-  }
-
-  public static JSONObject player(PlayerAvatar player) throws JSONException {
-    JSONObject result = new JSONObject();
-    result.put("current", coordinate(player.getCurrentPosition()));
-    result.put("home", coordinate(player.getHome()));
-    result.put("color", Utils.colorToString(player.getColor()));
-    return result;
-  }
-
-  public static JSONArray last(Optional<SlideAndInsertRecord> last) {
-
-    if (last.isEmpty()) {
-      return null;
-    }
-
-    JSONArray action = new JSONArray();
-    action.put(last.get().getIndex());
-    action.put(last.get().getDirection());
-    return action;
   }
 
 }
