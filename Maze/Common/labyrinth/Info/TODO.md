@@ -9,6 +9,9 @@
   * Our referee no longer has the functionality of starting a game given a list of players. Given a list of players, the referee would need to ask the players to propose a board, choose one the boards proposed, create an IState, randomly generate goals, and then play the game to completion. This was out of our scope for the final weeks and something we never got around.
   * ObserverHandler: currently our Referee is not protected from Observers. Ideally, the Referee would interact with the Observer in a similar fashion to how to communicates with Players using our PlayerHandler.
 
+* Observer:
+  * Our observer is no longer functioning due to the redesigning of the logical architecture.
+
 * AbstractStrategy + EuclidStrategy + RiemannStrategy:
   * This code can be kind of cluttered, and the methods are long. Duplicated code could potentially be better designed.
 

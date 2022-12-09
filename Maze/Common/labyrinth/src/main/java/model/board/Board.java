@@ -58,8 +58,8 @@ public class Board implements IBoard {
   }
 
   /**
-   * Generates a random tile grid based on the given width and height.
-   * The tile grid will also contain random gems from the given gem pool.
+   * Generates a random tile grid based on the given width and height. The tile grid will also
+   * contain random gems from the given gem pool.
    */
   private Tile[][] generateRandomBoard(int width, int height, List<Gem> gemPool) {
     Tile[][] tileGrid = new Tile[height][width];
@@ -127,8 +127,8 @@ public class Board implements IBoard {
   }
 
   /**
-   * Apply a slide and insert to the board, with the given
-   * direction, row/col index, and clockwise rotation of spare tile.
+   * Apply a slide and insert to the board, with the given direction, row/col index, and clockwise
+   * rotation of spare tile.
    */
   @Override
   public void slideAndInsert(Direction direction, int index, int rotations) {
@@ -193,13 +193,13 @@ public class Board implements IBoard {
    */
   @Override
   public ExperimentationBoard getExperimentationBoard() {
-      Tile[][] newGrid = new Tile[this.getHeight()][this.getWidth()];
-      for (int row = 0; row < newGrid.length; row++) {
-        for (int col = 0; col < newGrid[row].length; col++) {
-          newGrid[row][col] = (this.getTileAt(new Position(row, col)).deepCopy());
-        }
+    Tile[][] newGrid = new Tile[this.getHeight()][this.getWidth()];
+    for (int row = 0; row < newGrid.length; row++) {
+      for (int col = 0; col < newGrid[row].length; col++) {
+        newGrid[row][col] = (this.getTileAt(new Position(row, col)).deepCopy());
       }
-      return new ExperimentationBoard(this.width, this.height, newGrid, this.spareTile.deepCopy());
+    }
+    return new ExperimentationBoard(this.width, this.height, newGrid, this.spareTile.deepCopy());
   }
 
   /**
@@ -384,7 +384,7 @@ public class Board implements IBoard {
     }
   }
 
-  public String toString(){
+  public String toString() {
     String result = " 0123456\n";
     for (int row = 0; row < this.getHeight(); row++) {
 
