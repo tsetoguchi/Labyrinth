@@ -7,7 +7,8 @@ import java.util.Optional;
 import player.IPlayer;
 
 /**
- *
+ * Class responsible for establishing a connection with a server then kickstarting a ProxyReferee
+ * to facilitate network calls on the given IPlayer.
  */
 public class Client implements Runnable {
 

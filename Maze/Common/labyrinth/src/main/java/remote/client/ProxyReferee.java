@@ -23,6 +23,7 @@ import remote.NetUtil;
  */
 public class ProxyReferee implements Runnable {
 
+  //Socket connected to the corresponding ProxyPlayer
   private final Socket socket;
   private final IPlayer player;
 
@@ -31,10 +32,16 @@ public class ProxyReferee implements Runnable {
     this.player = p;
   }
 
+  /**
+   * Sends the player's name over the network.
+   */
   private void sendName() {
     NetUtil.sendOutput(this.player.getName(), this.socket);
   }
 
+  /**
+   * Runs until the connection to the ProxyPlayer is closed.
+   */
   @Override
   public void run() {
     this.sendName();
@@ -48,15 +55,14 @@ public class ProxyReferee implements Runnable {
       try {
         this.execute(new JSONArray(str.toString()));
         str = new StringBuilder();
-      } catch (JSONException ignore) {
-        //e.printStackTrace();
-      }
+      } catch (Exception ignore) {}
     }
   }
 
 
   /**
-   * Delegates to the appropriate method call by receiving json input
+   * Delegates to the appropriate method call after receiving json input.
+   * Throws an exception if the input doesn't yet evaluate to any of the known method calls.
    */
   private void execute(JSONArray methodCall) throws JSONException {
     String methodName = methodCall.getString(0);
@@ -79,7 +85,7 @@ public class ProxyReferee implements Runnable {
 
   /**
    * Calls takeTurn on corresponding IPlayer. The ITurn received from the method call on the IPlayer
-   * is then serialized and sent to the the corresponding ProxyPlayer.
+   * is then serialized and sent to the corresponding ProxyPlayer.
    */
   private void handleTakeTurn(JSONArray args) throws JSONException, IOException {
 
