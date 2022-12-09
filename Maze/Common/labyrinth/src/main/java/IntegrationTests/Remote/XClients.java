@@ -29,7 +29,6 @@ public class XClients {
     int port = Integer.parseInt(args[0]);
     JSONTokener jsonTokener = IntegrationUtils.getInput();
 
-//    int port = 12345;
 //    JSONTokener jsonTokener = new JSONTokener("");
 
 
