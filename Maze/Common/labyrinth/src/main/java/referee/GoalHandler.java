@@ -28,8 +28,6 @@ public class GoalHandler {
 
   // the players on their way home
   private final Set<PlayerAvatar> playersGoingHome;
-
-  // first player to reach their home after reaching every assigned goal
   private Optional<PlayerAvatar> playerHome;
 
   /**
@@ -63,19 +61,11 @@ public class GoalHandler {
     this.playersGoingHome.add(player);
     this.currentGoals.replace(player, playerHome);
 
-//    Position playerHome = player.getHome();
-//    if (this.potentialGoals.size() == 1 && this.potentialGoals.peek().equals(playerHome)) {
-//      this.potentialGoals.poll();
-//      this.playersGoingHome.add(player);
-//      this.currentGoals.replace(player, playerHome);
-//    } else {
-//      this.assignNextGoal(player);
-//    }
-
-
-
   }
 
+  /**
+   * Assigns the given player the next goal in the queue.
+   */
   private void assignNextGoal(PlayerAvatar player){
     Position nextGoal = this.potentialGoals.poll();
     this.goalCount.replace(player, this.goalCount.get(player) + 1);
@@ -112,8 +102,8 @@ public class GoalHandler {
   }
 
   /**
-   * Returns an optional that contains the player to have reached their home after
-   * getting all potential goals. Otherwise, returns an empty optional.
+   * Returns an optional of the player who ended the game by reaching their home.
+   * If the optional is empty then no player has reached their home and ended the game.
    */
   public Optional<PlayerAvatar> getPlayerHome(){
     return this.playerHome;
@@ -126,12 +116,6 @@ public class GoalHandler {
     return this.goalCount.get(player);
   }
 
-  /**
-   * Returns true if there are goals left to be handed out
-   */
-  private boolean goalsLeft() {
-    return !this.potentialGoals.isEmpty();
-  }
 
   /**
    * Assigns each player an initial goal and sets their goal counts to 0

@@ -102,6 +102,10 @@ public class Referee implements IReferee {
 //    this.observers = new ArrayList<>();
 //    this.eliminated = new ArrayList<>();
 //  }
+
+  /**
+   * Builds a map of the player avatars to their corresponding handlers.
+   */
   protected Map<PlayerAvatar, PlayerHandler> mapPlayerAvatarsToPlayerHandlers(IState game,
       List<IPlayer> IPlayers) {
     if (IPlayers.size() != game.getPlayerList().size()) {
@@ -179,6 +183,9 @@ public class Referee implements IReferee {
 
   }
 
+  /**
+   * Returns true if the given move is valid for the current player.
+   */
   private boolean isValidMove(Move move, PlayerAvatar player) {
     Position moveDestination = move.getMoveDestination();
     Position currentPosition = player.getCurrentPosition();
@@ -195,6 +202,9 @@ public class Referee implements IReferee {
         .contains(moveDestination);
   }
 
+  /**
+   * Assigns a player their next goal if needed.
+   */
   private void assignNextGoal(PlayerAvatar player) {
     if (this.goalHandler.playerReachedGoal(player)) {
       this.goalHandler.nextGoal(player);
@@ -214,12 +224,21 @@ public class Referee implements IReferee {
   /*
   End of Game Handling:
    */
+
+  /**
+   * Returns true if the game is over.
+   */
   private boolean isGameOver() {
     boolean status = this.game.isGameOver();
     boolean homeReached = this.goalHandler.anyPlayersHome();
     return status || homeReached;
   }
 
+  /**
+   * Returns the list of winners. If the player who ended the game has the most goals, they win.
+   * Otherwise, winners are whoever has the most goals. If there is a tie, then it
+   * assesses winners off of the distance to their next goal.
+   */
   private List<PlayerAvatar> getWinners() {
     List<PlayerAvatar> candidates = this.getWinnerCandidates();
 
@@ -232,6 +251,9 @@ public class Referee implements IReferee {
     return this.assesWinnerDistance(candidates);
   }
 
+  /**
+   * Get all the players with the most goals that would be candidates to win the game.
+   */
   private List<PlayerAvatar> getWinnerCandidates(){
     List<PlayerAvatar> candidates = new ArrayList<>();
     int maxGoals = 0;
@@ -249,6 +271,9 @@ public class Referee implements IReferee {
     return candidates;
   }
 
+  /**
+   * Given a list of candidates, decides who is closest to their next goal.
+   */
   private List<PlayerAvatar> assesWinnerDistance(List<PlayerAvatar> candidates){
     List<PlayerAvatar> winners = new ArrayList<>();
     double minDistance = Double.MAX_VALUE;
@@ -267,6 +292,9 @@ public class Referee implements IReferee {
     return winners;
   }
 
+  /**
+   * Creates the results of the game. Includes the winners and the eliminated players.
+   */
   private GameResults createGameResults() {
     this.winners.removeAll(this.eliminated);
     List<String> winners = this.getNamesFromAvatars(this.winners);
@@ -274,6 +302,9 @@ public class Referee implements IReferee {
     return new GameResults(winners, kicked);
   }
 
+  /**
+   * Get a list of names that corresponds to the PlayerAvatars
+   */
   private List<String> getNamesFromAvatars(List<PlayerAvatar> playerAvatars) {
     List<String> names = new ArrayList<>();
     for (PlayerAvatar player : playerAvatars) {
@@ -288,6 +319,9 @@ public class Referee implements IReferee {
   Player Communication
    */
 
+  /**
+   * Send each player a boolean of whether they won or not.
+   */
   private void sendWin() {
     List<PlayerAvatar> players = this.game.getPlayerList();
     this.winners.addAll(this.getWinners());
@@ -306,6 +340,9 @@ public class Referee implements IReferee {
     }
   }
 
+  /**
+   * Sends the initial setup message to the players that includes the starting state.
+   */
   private void sendInitialSetup() {
     List<PlayerAvatar> players = this.game.getPlayerList();
 
@@ -316,6 +353,9 @@ public class Referee implements IReferee {
     }
   }
 
+  /**
+   * Sends setups to players to communicate their next goal.
+   */
   private void sendSetup(PlayerAvatar player, Optional<StateProjection> stateProjection,
       Position nextGoal) {
     PlayerHandler playerHandler = this.playerAvatarToHandler.get(player);
@@ -325,26 +365,38 @@ public class Referee implements IReferee {
     }
   }
 
+  /**
+   * Sends the setup method to the player through the PlayerHandler.
+   */
   private void sendSetup(PlayerAvatar player, Position nextGoal) {
     this.sendSetup(player, Optional.empty(), nextGoal);
   }
 
+  /**
+   * Asks the given player for their turn and returns the response. Uses PlayerHandler.
+   */
   private Optional<ITurn> getTurn(PlayerAvatar player) {
     PlayerHandler playerHandler = this.playerAvatarToHandler.get(player);
     return playerHandler.takeTurn(this.game.getStateProjection());
   }
 
   /**
-   * Wrapper for the Client class, adding exception and timeout handling for any Client calls.
+   * Wrapper for the IPlayer, adding exception and timeout handling for any IPlayer calls.
    */
   private class PlayerHandler {
 
     private final IPlayer player;
 
+    /**
+     * Creates a PlayerHandler to wrap the player and protect the Referee
+     */
     public PlayerHandler(IPlayer player) {
       this.player = player;
     }
 
+    /**
+     * Applies a timeout to a method call.
+     */
     private <T> Optional<T> timeoutExceptionHandler(Supplier<T> function) {
       try {
         ExecutorService service = Executors.newCachedThreadPool();
@@ -383,9 +435,6 @@ public class Referee implements IReferee {
       return this.player.getName();
     }
 
-    public IPlayer getPlayerClient() {
-      return this.player;
-    }
 
   }
 

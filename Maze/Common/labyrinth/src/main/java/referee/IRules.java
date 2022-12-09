@@ -14,6 +14,9 @@ public interface IRules {
    */
   boolean isValidSlideAndInsert(Move move, int width, int height);
 
+  /**
+   * Returns true if the given position is immovable.
+   */
   boolean immovablePosition(Position position);
 
 }
