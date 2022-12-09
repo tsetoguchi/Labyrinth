@@ -28,6 +28,8 @@ public class GoalHandler {
 
   // the players on their way home
   private final Set<PlayerAvatar> playersGoingHome;
+
+  // first player to reach their home after reaching every assigned goal
   private Optional<PlayerAvatar> playerHome;
 
   /**
@@ -109,6 +111,10 @@ public class GoalHandler {
     return this.playerHome.isPresent();
   }
 
+  /**
+   * Returns an optional that contains the player to have reached their home after
+   * getting all potential goals. Otherwise, returns an empty optional.
+   */
   public Optional<PlayerAvatar> getPlayerHome(){
     return this.playerHome;
   }

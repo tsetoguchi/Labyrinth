@@ -1,9 +1,9 @@
-package model.state;
+package referee;
 
 import java.util.List;
 
 /**
- * Represents the results of the game
+ * Represents the results of the game; the winner(s) and eliminated (players who were kicked).
  */
 public class GameResults {
 

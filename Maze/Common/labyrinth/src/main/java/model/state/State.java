@@ -150,11 +150,17 @@ public class State implements IState {
    */
   private void nextTurn() {
     this.activePlayer = (this.activePlayer + 1) % this.playerList.size();
+
+    // handle round logic at the start of every new round
     if (this.activePlayer == 0) {
       this.roundHandler();
     }
   }
 
+  /**
+   * Increments the round count and checks if the state has run more than the MAX_ROUNDS or if
+   * all players have passed.
+   */
   private void roundHandler(){
     this.roundsElapsed += 1;
 
@@ -199,6 +205,9 @@ public class State implements IState {
     this.nextTurn();
   }
 
+  /**
+   * Returns true if the game is over, else returns false.
+   */
   public boolean isGameOver() {
     return this.status != IN_PROGRESS;
   }
@@ -207,6 +216,11 @@ public class State implements IState {
   Move Execution:
    */
 
+  /**
+   * Executes a full turn in the state. First the move is validated, then applied.
+   * Then the active player currently making the move is repositioned to the destination
+   * of the move. Lastly, we set the state to the next turn.
+   */
   public void executeTurn(Move move) {
     this.assertValidTurn(move);
     this.slideAndInsert(move);
@@ -214,12 +228,15 @@ public class State implements IState {
     this.nextTurn();
   }
 
+  /**
+   * Validates the given move by seeing if the destination of the move is reachable.
+   */
   private void assertValidTurn(Move move) throws IllegalGameActionException{
     Position current = this.getActivePlayer().getCurrentPosition();
     ExperimentationBoard eBoard = this.board.getExperimentationBoard();
     Set<Position> reachable = eBoard.findReachableTilePositionsAfterSlideAndInsert(move, current);
     if(!reachable.contains(move.getMoveDestination())){
-      throw new IllegalGameActionException("Illegal move: " + move.toString());
+      throw new IllegalGameActionException("Illegal move: " + move);
     }
   }
 
@@ -270,6 +287,10 @@ public class State implements IState {
     }
   }
 
+  /**
+   * Returns true if the given slide and insert is the opposite of the previous side and insert.
+   * Otherwise, returns false.
+   */
   private boolean doesSlideUndoPrevious(Direction direction, int index) {
     if (this.previousSlideAndInsert.isPresent()) {
       return this.previousSlideAndInsert.get().getDirection() == Direction.opposite(direction)

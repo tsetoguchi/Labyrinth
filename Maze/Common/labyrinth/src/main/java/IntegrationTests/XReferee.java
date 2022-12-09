@@ -4,7 +4,7 @@ import java.util.List;
 import json.JsonDeserializer;
 import json.JsonSerializer;
 import model.Position;
-import model.state.GameResults;
+import referee.GameResults;
 import model.state.IState;
 import org.json.JSONArray;
 import org.json.JSONException;

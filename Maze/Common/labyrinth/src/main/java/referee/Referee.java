@@ -10,12 +10,10 @@ import java.util.function.Supplier;
 import model.board.ExperimentationBoard;
 import model.board.IBoard;
 import model.state.StateProjection;
-import model.state.GameResults;
 import model.state.IState;
 import model.state.PlayerAvatar;
 import observer.Controller.IObserver;
 import player.IPlayer;
-import player.Player;
 
 import java.util.*;
 

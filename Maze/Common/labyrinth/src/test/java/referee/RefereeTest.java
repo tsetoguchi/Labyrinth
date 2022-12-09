@@ -8,12 +8,10 @@ import java.util.List;
 import json.JsonDeserializer;
 import model.Position;
 import model.board.Board;
-import model.state.GameResults;
 import model.state.PlayerAvatar;
 import model.state.State;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import player.EuclideanStrategy;
@@ -27,7 +25,6 @@ class RefereeTest {
   PlayerAvatar p1;
   PlayerAvatar p2;
   List<PlayerAvatar> players;
-
   IPlayer ip1;
   IPlayer ip2;
   List<IPlayer> iPlayers;

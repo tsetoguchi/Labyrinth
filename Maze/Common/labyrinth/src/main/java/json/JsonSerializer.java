@@ -8,7 +8,7 @@ import java.util.Optional;
 import model.Position;
 import model.board.IBoard;
 import model.board.Tile;
-import model.state.GameResults;
+import referee.GameResults;
 import model.state.PlayerAvatar;
 import model.state.SlideAndInsertRecord;
 import model.state.StateProjection;

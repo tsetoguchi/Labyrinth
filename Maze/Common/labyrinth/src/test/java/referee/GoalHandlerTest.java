@@ -17,7 +17,6 @@ import model.board.Board;
 import model.board.Direction;
 import model.board.IBoard;
 import model.board.Tile;
-import model.state.GameResults;
 import model.state.IState;
 import model.state.PlayerAvatar;
 import model.state.State;
@@ -31,7 +30,6 @@ import player.RiemannStrategy;
 public class GoalHandlerTest {
 
   GoalHandler goalHandler;
-
   IState state;
   Referee ref;
   IPlayer player1;

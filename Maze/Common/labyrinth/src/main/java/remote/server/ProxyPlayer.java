@@ -48,11 +48,9 @@ public class ProxyPlayer implements IPlayer {
       throw new RuntimeException(e);
     }
 
-
     StringBuilder response = new StringBuilder();
     while (true) {
       NetUtil.readInput(response, this.socket);
-
 
       try {
         JSONArray moveJSON = new JSONArray(response.toString());
@@ -68,8 +66,8 @@ public class ProxyPlayer implements IPlayer {
   }
 
   /**
-   * Prompts the ProxyReferee to tell the corresponding Player to setup. Once a "void" response
-   * is received, true is returned.
+   * Prompts the ProxyReferee to tell the corresponding Player to setup. Once a "void" response is
+   * received, true is returned.
    */
   @Override
   public boolean setup(Optional<StateProjection> game, Position goal) {
@@ -85,7 +83,6 @@ public class ProxyPlayer implements IPlayer {
     StringBuilder response = new StringBuilder();
     while (true) {
       NetUtil.readInput(response, this.socket);
-
 
       if (response.toString().equals("\"void\"")) {
         return true;

@@ -14,7 +14,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 import model.Position;
-import model.state.GameResults;
+import referee.GameResults;
 import model.state.IState;
 import player.IPlayer;
 import referee.IReferee;
