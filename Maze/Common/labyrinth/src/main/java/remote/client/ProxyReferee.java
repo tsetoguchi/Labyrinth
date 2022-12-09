@@ -55,6 +55,9 @@ public class ProxyReferee implements Runnable {
   }
 
 
+  /**
+   *  Delegates to the appropriate method call by receiving json input
+   */
   private void execute(JSONArray methodCall) throws JSONException {
     String methodName = methodCall.getString(0);
     JSONArray args = methodCall.getJSONArray(1);
