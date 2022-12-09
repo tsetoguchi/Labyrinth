@@ -141,7 +141,7 @@ public class State implements IState {
   }
 
   /*
-  Move Handling
+  Turn Handling
    */
 
   /**
@@ -183,7 +183,6 @@ public class State implements IState {
     if(playerIndex < this.activePlayer && playerIndex != -1){
       this.activePlayer--;
     }
-
 
     this.playerList.remove(player);
     this.haveSkipped.remove(player);
@@ -316,7 +315,6 @@ public class State implements IState {
   public IBoard getBoard() {
     return this.board;
   }
-
   public List<PlayerAvatar> getPlayerList() {
     List<PlayerAvatar> players = new ArrayList<>();
     int size = this.playerList.size();

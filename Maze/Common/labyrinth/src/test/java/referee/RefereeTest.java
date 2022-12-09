@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import json.JsonDeserializer;
 import model.Position;
+import model.Utils;
 import model.board.Board;
 import model.state.PlayerAvatar;
 import model.state.State;
@@ -39,7 +40,7 @@ class RefereeTest {
 
   @BeforeEach
   void setUp() throws JSONException {
-    this.p1 = new PlayerAvatar(JsonDeserializer.stringToColor("AAFFCC"),
+    this.p1 = new PlayerAvatar(Utils.stringToColor("AAFFCC"),
         new Position(3, 3));
     this.p2 = new PlayerAvatar(Color.YELLOW, new Position(5, 5));
     this.players = List.of(this.p1, this.p2);

@@ -1,26 +1,24 @@
-//package model.model;
+//package game.model;
 //
 //import model.TestUtils;
 //import model.board.Board;
+//import model.board.ExperimentationBoard;
 //import model.board.Gem;
 //
 //import org.junit.jupiter.api.BeforeEach;
 //import org.junit.jupiter.api.Test;
-//
-//import java.util.Set;
-//
 //import static model.board.Direction.*;
 //import static org.junit.jupiter.api.Assertions.*;
 //
-//public class StandardExperimentationIBoardTest {
-//    private DefaultExperimentationBoard exBoard;
+//public class ExperimentationBoardTest {
+//    private ExperimentationBoard exBoard;
 //
 //    @BeforeEach
 //    public void setup() {
 //        Board defaultBoard = TestUtils.createUniformBoard(false, false, true, true,
 //                TestUtils.makeTile(true, true, false, false,
 //                        TestUtils.makeTreasure(Gem.ammolite, Gem.labradorite)));
-//        exBoard = new DefaultExperimentationBoard(defaultBoard);
+//        exBoard = new ExperimentationBoard(defaultBoard);
 //    }
 //
 //    @Test

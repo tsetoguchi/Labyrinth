@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import model.Position;
+import model.Utils;
 import model.board.Board;
 import model.board.Direction;
 import model.board.Gem;
@@ -29,11 +30,11 @@ import org.json.JSONObject;
 import referee.Move;
 
 /**
- * Represents a json deserializer for labyrinth
+ * Represents a JSON deserializer for Labyrinth.
  */
 public class JsonDeserializer {
 
-  private static final Map<String, Color> stringToColor;
+
   static Map<String, Set<Direction>> symbolToDirection = new HashMap<>();
   static Map<Set<Direction>, String> directionToSymbol = new HashMap<>();
 
@@ -53,19 +54,11 @@ public class JsonDeserializer {
     for (Map.Entry<String, Set<Direction>> entry : symbolToDirection.entrySet()) {
       directionToSymbol.put(entry.getValue(), entry.getKey());
     }
-
-    stringToColor = new HashMap<>();
-    stringToColor.put("purple", new Color(218, 112, 214));
-    stringToColor.put("orange", Color.ORANGE);
-    stringToColor.put("pink", Color.PINK);
-    stringToColor.put("red", Color.RED);
-    stringToColor.put("blue", Color.BLUE);
-    stringToColor.put("green", Color.GREEN);
-    stringToColor.put("yellow", Color.YELLOW);
-    stringToColor.put("white", Color.WHITE);
-    stringToColor.put("black", Color.BLACK);
   }
 
+  /**
+   * Deserializes a JSON state into an IState.
+   */
   public static IState state(JSONObject game) throws JSONException {
     IBoard board = board(game.getJSONObject("board"), game.getJSONObject("spare"));
     List<PlayerAvatar> playerAvatars = playerAvatars(game.getJSONArray("plmt"));
@@ -77,12 +70,18 @@ public class JsonDeserializer {
     return new State(board, playerAvatars);
   }
 
+  /**
+   * Deserializes a JSON last into a SlideAndInsertRecord.
+   */
   private static SlideAndInsertRecord lastTurn(JSONArray last) throws JSONException {
     int index = last.getInt(0);
     Direction direction = Direction.valueOf(last.getString(1));
     return new SlideAndInsertRecord(direction, index, 0);
   }
 
+  /**
+   * Deserializes a JSON plmt into a List<PlayerAvatar>.
+   */
   private static List<PlayerAvatar> playerAvatars(JSONArray plmt) throws JSONException {
     List<PlayerAvatar> players = new ArrayList<>();
     for (int i = 0; i < plmt.length(); i++) {
@@ -91,27 +90,29 @@ public class JsonDeserializer {
     return players;
   }
 
+  /**
+   * Deserializes a JSON Player into a PlayerAvatar.
+   */
   private static PlayerAvatar playerAvatar(JSONObject jsonPlayer) throws JSONException {
-    Color color = stringToColor(jsonPlayer.getString("color"));
+    Color color = Utils.stringToColor(jsonPlayer.getString("color"));
     Position current = coordinate(jsonPlayer.getJSONObject("current"));
     Position home = coordinate(jsonPlayer.getJSONObject("home"));
     return new PlayerAvatar(color, home, current);
   }
 
-  public static Color stringToColor(String color) {
-    if (stringToColor.containsKey(color)) {
-      return stringToColor.get(color);
-    }
-    return Color.decode("#" + color);
-  }
-
-  public static Position coordinate(JSONObject jsonPosition) throws JSONException {
-    int row = jsonPosition.getInt("row#");
-    int col = jsonPosition.getInt("column#");
+  /**
+   * Deserializes a JSON Coordinate into a Position.
+   */
+  public static Position coordinate(JSONObject jsonCoordinate) throws JSONException {
+    int row = jsonCoordinate.getInt("row#");
+    int col = jsonCoordinate.getInt("column#");
     return new Position(row, col);
   }
 
 
+  /**
+   * Deserializes a JSON Board and Spare Tile into an IBoard.
+   */
   public static IBoard board(JSONObject boardJSON, JSONObject spareJSON) throws JSONException {
     Tile spare = spare(spareJSON);
 
@@ -141,6 +142,9 @@ public class JsonDeserializer {
     return new Board(width, height, tiles, spare);
   }
 
+  /**
+   * Deserializes a JSON Spare Tile into a Tile.
+   */
   public static Tile spare(JSONObject spareJSON) throws JSONException {
     String connector = spareJSON.getString("tilekey");
     Set<Direction> pathwayConnections = symbolToDirection.get(connector);
@@ -150,7 +154,9 @@ public class JsonDeserializer {
     return new Tile(pathwayConnections, treasure);
   }
 
-
+  /**
+   * Deserializes a JSON RefereeState or RefereeState2 into a List<Positions> (list of goals).
+   */
   public static List<Position> goals(JSONObject jsonGame) throws JSONException {
     JSONArray jsonPlmt = jsonGame.getJSONArray("plmt");
     List<Position> goals = new ArrayList<>();
@@ -163,8 +169,8 @@ public class JsonDeserializer {
     if (!jsonGame.isNull("goals")) {
       JSONArray jsonGoals = jsonGame.getJSONArray("goals");
       for (int i = 0; i < jsonGoals.length(); i++) {
-        JSONObject jsonPosition = jsonGoals.getJSONObject(i);
-        Position p = JsonDeserializer.coordinate(jsonPosition);
+        JSONObject jsonCoordinate = jsonGoals.getJSONObject(i);
+        Position p = JsonDeserializer.coordinate(jsonCoordinate);
         goals.add(p);
       }
     }
@@ -172,19 +178,18 @@ public class JsonDeserializer {
     return goals;
   }
 
-
+  /**
+   * Deserializes a JSON Move (choice of four values) into a move.
+   */
   public static Move move(JSONArray moveJSON) throws JSONException {
     int index = moveJSON.getInt(0);
     Direction direction = Direction.valueOf(moveJSON.getString(1));
-    int rotations = degreesToRotations(moveJSON.getInt(2));
+    int rotations = Utils.degreesToRotations(moveJSON.getInt(2));
     Position moveTo = JsonDeserializer.coordinate(moveJSON.getJSONObject(3));
     return new Move(direction, index, rotations, moveTo);
   }
 
-  public static int degreesToRotations(int degrees) {
-    int counterClockwiseRotations = degrees / 90;
-    return (4 - counterClockwiseRotations) % 4;
-  }
+
 
 
 }

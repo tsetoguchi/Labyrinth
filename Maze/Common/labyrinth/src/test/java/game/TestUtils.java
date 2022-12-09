@@ -1,6 +1,6 @@
-//package model;
+//package game;
 //
-//import model.model.*;
+//import model.board.Board;
 //import model.board.Direction;
 //import model.board.Gem;
 //import model.board.Tile;
@@ -14,7 +14,7 @@
 //
 //public class TestUtils {
 //
-//  public static DefaultBoard NON_UNIFORM_BOARD;
+//  public static Board NON_UNIFORM_BOARD;
 //
 //  public static Gem[] rowGems = {Gem.alexandrite, Gem.mexican_opal, Gem.aplite, Gem.apatite,
 //      Gem.hackmanite, Gem.beryl, Gem.orange_radiant};
@@ -25,7 +25,7 @@
 //    NON_UNIFORM_BOARD = createNonUniformBoard();
 //  }
 //
-//  public static DefaultBoard createUniformBoard(boolean up, boolean down, boolean left,
+//  public static Board createUniformBoard(boolean up, boolean down, boolean left,
 //                                                boolean right) {
 //    Tile[][] grid = new Tile[7][7];
 //    for (int rowIndex = 0; rowIndex < 7; rowIndex++) {
@@ -34,7 +34,7 @@
 //            makeTreasure(rowGems[rowIndex], colGems[colIndex]));
 //      }
 //    }
-//    DefaultBoard board = new DefaultBoard(grid,
+//    Board board = new Board(grid,
 //        makeTile(up, down, left, right, makeTreasure(Gem.ammolite, Gem.mexican_opal)));
 //    return board;
 //  }

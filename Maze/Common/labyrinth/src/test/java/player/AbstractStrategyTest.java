@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.util.List;
 import json.JsonDeserializer;
 import model.Position;
+import model.Utils;
 import model.board.Board;
 import model.board.Direction;
 import model.board.IBoard;
@@ -40,7 +41,7 @@ class AbstractStrategyTest {
     this.euclid = new EuclideanStrategy();
     this.riemann = new RiemannStrategy();
     this.pass = new PassStrategy();
-    this.p1 = new PlayerAvatar(JsonDeserializer.stringToColor("AAFFCC"),
+    this.p1 = new PlayerAvatar(Utils.stringToColor("AAFFCC"),
         new Position(3, 3));
     this.p2 = new PlayerAvatar(Color.YELLOW, new Position(5, 5));
     this.players = List.of(this.p1, this.p2);

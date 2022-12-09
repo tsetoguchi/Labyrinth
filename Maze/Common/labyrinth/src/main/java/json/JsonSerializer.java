@@ -1,42 +1,24 @@
 package json;
 
-import java.awt.Color;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import model.Position;
+import model.Utils;
 import model.board.IBoard;
 import model.board.Tile;
-import referee.GameResults;
 import model.state.PlayerAvatar;
 import model.state.SlideAndInsertRecord;
 import model.state.StateProjection;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import referee.GameResults;
 import referee.Move;
 
 /**
  * Represents a json serializer for labyrinth
  */
 public class JsonSerializer {
-
-  private static final Map<Color, String> colorToString;
-
-
-  static{
-    colorToString = new HashMap<>();
-    colorToString.put(new Color(218, 112, 214), "purple");
-    colorToString.put(Color.ORANGE, "orange");
-    colorToString.put(Color.PINK, "pink");
-    colorToString.put(Color.RED, "red");
-    colorToString.put(Color.BLUE, "blue");
-    colorToString.put(Color.GREEN, "green");
-    colorToString.put(Color.YELLOW, "yellow");
-    colorToString.put(Color.WHITE, "white");
-    colorToString.put(Color.BLACK, "black");
-  }
 
   public static JSONArray move(Move move) throws JSONException {
     JSONArray resultArray = new JSONArray();
@@ -175,18 +157,9 @@ public class JsonSerializer {
     JSONObject result = new JSONObject();
     result.put("current", coordinate(player.getCurrentPosition()));
     result.put("home", coordinate(player.getHome()));
-    result.put("color", colorToString(player.getColor()));
+    result.put("color", Utils.colorToString(player.getColor()));
     return result;
   }
-
-  public static String colorToString(Color color) {
-    if (colorToString.containsKey(color)) {
-      return colorToString.get(color);
-    } else {
-      return String.format("%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue());
-    }
-  }
-
 
   public static JSONArray last(Optional<SlideAndInsertRecord> last) {
 

@@ -28,7 +28,7 @@ public class XState {
     int index = (int) jsonTokener.nextValue();
     Direction direction = Direction.valueOf((String) jsonTokener.nextValue());
     int degree = (int) jsonTokener.nextValue();
-    int rotations = JsonDeserializer.degreesToRotations(degree);
+    int rotations = Utils.degreesToRotations(degree);
 
     Move move = new Move(direction, index, rotations, new Position(0,0));
 
