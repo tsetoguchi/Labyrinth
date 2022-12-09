@@ -36,16 +36,13 @@ public abstract class AbstractStrategy implements IStrategy {
   public AbstractStrategy() {
     this(new DefaultRules());
   }
+
   /**
    * Gets all candidates to be considered in the desired order.
    */
   abstract protected List<Position> getCandidatesInOrder(IBoard board, Position goal);
 
-  /**
-   * Given the current board, spare tile, and player information, produces a plan for the turn which
-   * includes all the actions the player wishes to take, prioritizing getting to the given goal if
-   * possible. Returns Optional.empty() if the player wishes to pass.
-   */
+
   @Override
   public ITurn createTurn(StateProjection state, Position goal) {
     this.state = state;
@@ -94,6 +91,9 @@ public abstract class AbstractStrategy implements IStrategy {
     return new Pass();
   }
 
+  /**
+   * Returns true if the move is valid and reaches it's desired destination from the current position.
+   */
   private boolean validTurn(Position current, Move move) {
     ExperimentationBoard board = this.state.getBoard();
     Optional<SlideAndInsertRecord> previousSlide = this.state.getPreviousSlideAndInsert();
