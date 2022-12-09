@@ -117,11 +117,11 @@ public class Referee implements IReferee {
       Move move = turn.getMove();
 
       //TODO debug gameplay
-      System.out.print(this.getNamesFromAvatars(List.of(activePlayer)) + " ");
-      System.out.println(
-          "(" + activePlayer + ", goal: " + goalHandler.getPlayerCurrentGoal(activePlayer) + ")");
-      System.out.println("Move: " + move.toString());
-      System.out.println(this.game.getBoard().toString());
+//      System.out.print(this.getNamesFromAvatars(List.of(activePlayer)) + " ");
+//      System.out.println(
+//          "(" + activePlayer + ", goal: " + goalHandler.getPlayerCurrentGoal(activePlayer) + ")");
+//      System.out.println("Move: " + move.toString());
+//      System.out.println(this.game.getBoard().toString());
 
       if (this.isValidMove(move, activePlayer)) {
         this.game.executeTurn(move);
@@ -444,8 +444,8 @@ public class Referee implements IReferee {
 //  }
 
   /**
-   * Initialize a Referee with a just a set of players, building a new randomized State from
-   * scratch.
+   * Initialize a Referee with a just a set of players and rules, running a new randomized game
+   * from scratch.
    */
 //  public Referee(List<IPlayer> players, IRules rules) {
 //    List<IBoard> proposedBoards = new ArrayList<>();
