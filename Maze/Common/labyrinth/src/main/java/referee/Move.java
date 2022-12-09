@@ -7,7 +7,7 @@ import model.Position;
 /**
  * The set of actions that a player intends to perform on its turn.
  */
-public class Move implements ITurn{
+public class Move implements ITurn {
 
   private final Direction slideDirection;
   private final int slideIndex;
@@ -15,7 +15,7 @@ public class Move implements ITurn{
   private final Position moveDestination;
 
   public Move(Direction slideDirection, int slideIndex, int spareTileRotations,
-              Position moveDestination) {
+      Position moveDestination) {
     this.slideDirection = slideDirection;
     this.slideIndex = slideIndex;
     this.spareTileRotations = spareTileRotations % 4;
@@ -48,9 +48,9 @@ public class Move implements ITurn{
     return this;
   }
 
-  public String toString(){
-    return "Direction:" + this.slideDirection + "| Index:" + this.slideIndex + "| Rotations:" +
-            + this.spareTileRotations + "| Destination:" + this.moveDestination.toString();
+  public String toString() {
+    return "Direction:" + this.slideDirection + " |Index:" + this.slideIndex + " |Rotations:" +
+        +this.spareTileRotations + " |Destination:" + this.moveDestination.toString();
   }
 
   @Override
@@ -63,11 +63,13 @@ public class Move implements ITurn{
     }
     Move move = (Move) o;
     return this.slideIndex == move.slideIndex && this.spareTileRotations == move.spareTileRotations
-        && this.slideDirection == move.slideDirection && this.moveDestination.equals(move.moveDestination);
+        && this.slideDirection == move.slideDirection && this.moveDestination.equals(
+        move.moveDestination);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(this.slideDirection, this.slideIndex, this.spareTileRotations, this.moveDestination);
+    return Objects.hash(this.slideDirection, this.slideIndex, this.spareTileRotations,
+        this.moveDestination);
   }
 }

@@ -139,7 +139,6 @@ public class Referee implements IReferee {
       this.informObserverOfState();
     }
 
-
     this.sendWin();
     this.informObserversOfGameEnd();
 
@@ -165,10 +164,11 @@ public class Referee implements IReferee {
       Move move = turn.getMove();
 
       //TODO debug gameplay
-//      System.out.print(this.getNamesFromAvatars(List.of(activePlayer)));
-//      System.out.println(activePlayer + " goal: " + goalHandler.getPlayerCurrentGoal(activePlayer));
-//      System.out.println(move.toString());
-//      System.out.println(this.game.getBoard().toString());
+      System.out.print(this.getNamesFromAvatars(List.of(activePlayer)) + " ");
+      System.out.println(
+          "(" + activePlayer + ", goal: " + goalHandler.getPlayerCurrentGoal(activePlayer) + ")");
+      System.out.println("Move: " + move.toString());
+      System.out.println(this.game.getBoard().toString());
 
       if (this.isValidMove(move, activePlayer)) {
         this.game.executeTurn(move);
@@ -236,15 +236,15 @@ public class Referee implements IReferee {
 
   /**
    * Returns the list of winners. If the player who ended the game has the most goals, they win.
-   * Otherwise, winners are whoever has the most goals. If there is a tie, then it
-   * assesses winners off of the distance to their next goal.
+   * Otherwise, winners are whoever has the most goals. If there is a tie, then it assesses winners
+   * off of the distance to their next goal.
    */
   private List<PlayerAvatar> getWinners() {
     List<PlayerAvatar> candidates = this.getWinnerCandidates();
 
     //If player who ended game has enough goals:
     Optional<PlayerAvatar> potentialGameEnder = this.goalHandler.getPlayerHome();
-    if(potentialGameEnder.isPresent() && candidates.contains(potentialGameEnder.get())){
+    if (potentialGameEnder.isPresent() && candidates.contains(potentialGameEnder.get())) {
       return List.of(potentialGameEnder.get());
     }
 
@@ -254,7 +254,7 @@ public class Referee implements IReferee {
   /**
    * Get all the players with the most goals that would be candidates to win the game.
    */
-  private List<PlayerAvatar> getWinnerCandidates(){
+  private List<PlayerAvatar> getWinnerCandidates() {
     List<PlayerAvatar> candidates = new ArrayList<>();
     int maxGoals = 0;
     List<PlayerAvatar> gamePlayers = this.game.getPlayerList();
@@ -274,7 +274,7 @@ public class Referee implements IReferee {
   /**
    * Given a list of candidates, decides who is closest to their next goal.
    */
-  private List<PlayerAvatar> assesWinnerDistance(List<PlayerAvatar> candidates){
+  private List<PlayerAvatar> assesWinnerDistance(List<PlayerAvatar> candidates) {
     List<PlayerAvatar> winners = new ArrayList<>();
     double minDistance = Double.MAX_VALUE;
     for (PlayerAvatar player : candidates) {

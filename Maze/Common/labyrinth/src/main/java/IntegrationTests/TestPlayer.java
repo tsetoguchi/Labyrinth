@@ -18,101 +18,100 @@ import referee.ITurn;
 
 public class TestPlayer extends Player {
 
-    private final String bad;
-    private final int count;
-    private int current;
+  private final String bad;
+  private final int count;
+  private int current;
 
 
-    public TestPlayer(String name, IStrategy strategy, String bad, int count){
-        super(name, strategy);
-        this.bad = bad;
-        this.count = count;
-        this.current = 0;
+  public TestPlayer(String name, IStrategy strategy, String bad, int count) {
+    super(name, strategy);
+    this.bad = bad;
+    this.count = count;
+    this.current = 0;
+  }
+
+  @Override
+  public ITurn takeTurn(StateProjection game) {
+
+    if (this.bad.equals("takeTurn")) {
+      this.current++;
+      this.loop();
+      this.errorOut();
     }
 
-    @Override
-    public ITurn takeTurn(StateProjection game) {
+    return super.takeTurn(game);
+  }
 
-        if(this.bad.equals("takeTurn")){
-            this.current++;
-            this.loop();
-            this.errorOut();
-        }
+  @Override
+  public boolean setup(Optional<StateProjection> game, Position goal) {
 
-        return super.takeTurn(game);
+    if (this.bad.equals("setUp")) {
+      this.current++;
+      this.loop();
+      this.errorOut();
     }
 
-    @Override
-    public boolean setup(Optional<StateProjection> game, Position goal) {
+    return super.setup(game, goal);
+  }
 
-        if(this.bad.equals("setUp")){
-            this.current++;
-            this.loop();
-            this.errorOut();
-        }
+  @Override
+  public boolean win(boolean playerWon) {
 
-        return super.setup(game, goal);
+    if (this.bad.equals("win")) {
+      this.current++;
+      this.loop();
+      this.errorOut();
     }
 
-    @Override
-    public boolean win(boolean playerWon) {
+    return super.win(playerWon);
+  }
 
-        if(this.bad.equals("win")){
-            this.current++;
-            this.loop();
-            this.errorOut();
-        }
 
-        return super.win(playerWon);
+  private void errorOut() {
+    if (this.count == -1) {
+      int x = 1 / 0;
+    }
+  }
+
+  private void loop() {
+    if (this.count == this.current) {
+      while (true) {
+      }
+    }
+  }
+
+  public static List<IPlayer> jsonToTestPlayers(JSONArray playersSpecJson) throws JSONException {
+    List<IPlayer> players = new ArrayList<>();
+
+    for (int i = 0; i < playersSpecJson.length(); i++) {
+      JSONArray playerJson = playersSpecJson.getJSONArray(i);
+      int length = playerJson.length();
+
+      String name = playerJson.getString(0);
+      String stratString = playerJson.getString(1);
+      IStrategy strategy = null;
+      if (stratString.equals("Euclid")) {
+        strategy = new EuclideanStrategy();
+      } else if (stratString.equals("Riemann")) {
+        strategy = new RiemannStrategy();
+      }
+
+      String bad = "none";
+      int count = -1;
+
+      switch (length) {
+        case 4:
+          count = playerJson.getInt(3);
+        case 3:
+          bad = playerJson.getString(2);
+          break;
+      }
+
+      players.add(new TestPlayer(name, strategy, bad, count));
     }
 
-
-    private void errorOut(){
-        if(this.count == -1){
-            int x = 1/0;
-        }
-    }
-
-    private void loop(){
-        if(this.count == this.current){
-            while(true){
-            }
-        }
-    }
-
-    public static List<IPlayer> jsonToTestPlayers(JSONArray playersSpecJson) throws JSONException {
-        List<IPlayer> players = new ArrayList<>();
-
-        for(int i=0; i<playersSpecJson.length(); i++){
-            JSONArray playerJson = playersSpecJson.getJSONArray(i);
-            int length = playerJson.length();
-
-            String name = playerJson.getString(0);
-            String stratString = playerJson.getString(1);
-            IStrategy strategy = null;
-            if(stratString.equals("Euclid")){
-                strategy = new EuclideanStrategy();
-            } else if (stratString.equals("Riemann")){
-                strategy = new RiemannStrategy();
-            }
-
-            String bad = "none";
-            int count = -1;
-
-            switch(length){
-                case 4:
-                    count = playerJson.getInt(3);
-                case 3:
-                    bad = playerJson.getString(2);
-                    break;
-            }
-
-            players.add(new TestPlayer(name, strategy, bad, count));
-        }
-
-
-        return players;
-    }
+    return players;
+  }
 
 
 }

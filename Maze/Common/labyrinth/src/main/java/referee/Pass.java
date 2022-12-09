@@ -5,7 +5,7 @@ import java.util.NoSuchElementException;
 /**
  * A pass represents a turn of the Labyrinth game in which the player does not act.
  */
-public class Pass implements ITurn{
+public class Pass implements ITurn {
 
   @Override
   public boolean isMove() {

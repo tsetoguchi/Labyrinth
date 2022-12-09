@@ -32,7 +32,8 @@ public class GoalHandler {
 
   /**
    * Creates a goal handler
-   * @param players the players of the game
+   *
+   * @param players  the players of the game
    * @param allGoals the sequence of goals that the referee will hand out
    */
   public GoalHandler(List<PlayerAvatar> players, List<Position> allGoals) {
@@ -52,7 +53,7 @@ public class GoalHandler {
    */
   public void nextGoal(PlayerAvatar player) {
 
-    if(this.potentialGoals.size() > 0){
+    if (this.potentialGoals.size() > 0) {
       this.assignNextGoal(player);
       return;
     }
@@ -66,7 +67,7 @@ public class GoalHandler {
   /**
    * Assigns the given player the next goal in the queue.
    */
-  private void assignNextGoal(PlayerAvatar player){
+  private void assignNextGoal(PlayerAvatar player) {
     Position nextGoal = this.potentialGoals.poll();
     this.goalCount.replace(player, this.goalCount.get(player) + 1);
     this.currentGoals.replace(player, nextGoal);
@@ -80,7 +81,7 @@ public class GoalHandler {
     Position goal = this.currentGoals.get(player);
     boolean onGoal = player.getCurrentPosition().equals(goal);
 
-    if(onGoal && this.playersGoingHome.contains(player)){
+    if (onGoal && this.playersGoingHome.contains(player)) {
       this.playerHome = Optional.of(player);
     }
 
@@ -102,10 +103,10 @@ public class GoalHandler {
   }
 
   /**
-   * Returns an optional of the player who ended the game by reaching their home.
-   * If the optional is empty then no player has reached their home and ended the game.
+   * Returns an optional of the player who ended the game by reaching their home. If the optional is
+   * empty then no player has reached their home and ended the game.
    */
-  public Optional<PlayerAvatar> getPlayerHome(){
+  public Optional<PlayerAvatar> getPlayerHome() {
     return this.playerHome;
   }
 
@@ -127,7 +128,6 @@ public class GoalHandler {
       this.goalCount.put(player, 0);
     }
   }
-
 
 
 }

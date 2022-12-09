@@ -55,14 +55,15 @@ public class ProxyReferee implements Runnable {
       try {
         this.execute(new JSONArray(str.toString()));
         str = new StringBuilder();
-      } catch (Exception ignore) {}
+      } catch (Exception ignore) {
+      }
     }
   }
 
 
   /**
-   * Delegates to the appropriate method call after receiving json input.
-   * Throws an exception if the input doesn't yet evaluate to any of the known method calls.
+   * Delegates to the appropriate method call after receiving json input. Throws an exception if the
+   * input doesn't yet evaluate to any of the known method calls.
    */
   private void execute(JSONArray methodCall) throws JSONException {
     String methodName = methodCall.getString(0);

@@ -20,8 +20,6 @@ public class XServer {
 
 //    JSONTokener jsonTokener = new JSONTokener("");
 
-
-
     JSONObject jsonGame = (JSONObject) jsonTokener.nextValue();
     IState game = JsonDeserializer.state(jsonGame);
 

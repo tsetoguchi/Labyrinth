@@ -47,12 +47,12 @@ public class Position {
 
   @Override
   public boolean equals(Object o) {
-      if (this == o) {
-          return true;
-      }
-      if (o == null || this.getClass() != o.getClass()) {
-          return false;
-      }
+    if (this == o) {
+      return true;
+    }
+    if (o == null || this.getClass() != o.getClass()) {
+      return false;
+    }
     Position position = (Position) o;
     return this.row == position.getRow() && this.column == position.getColumn();
   }

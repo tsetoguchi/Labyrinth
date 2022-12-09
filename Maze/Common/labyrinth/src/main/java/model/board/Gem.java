@@ -114,7 +114,7 @@ public enum Gem {
     return this.name().replace("_", "-");
   }
 
-  public static Gem getGem(String str){
+  public static Gem getGem(String str) {
     return Gem.valueOf(str.replace("-", "_"));
   }
 }

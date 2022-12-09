@@ -31,12 +31,10 @@ public class XClients {
 
 //    JSONTokener jsonTokener = new JSONTokener("");
 
-
     InetAddress inetAddress = InetAddress.getLocalHost();
     if (args.length > 1) {
       inetAddress = InetAddress.getByName(args[1]);
     }
-
 
     JSONArray playersJSON = (JSONArray) jsonTokener.nextValue();
     List<IPlayer> playerSpec = TestPlayer.jsonToTestPlayers(playersJSON);

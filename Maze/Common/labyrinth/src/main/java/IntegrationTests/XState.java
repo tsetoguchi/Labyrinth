@@ -19,7 +19,6 @@ public class XState {
 
     JSONTokener jsonTokener = IntegrationUtils.getInput();
 
-
     JSONObject stateJSON = (JSONObject) jsonTokener.nextValue();
     IState game = JsonDeserializer.state(stateJSON);
     ExperimentationBoard eBoard = game.getBoard().getExperimentationBoard();
@@ -30,7 +29,7 @@ public class XState {
     int degree = (int) jsonTokener.nextValue();
     int rotations = Utils.degreesToRotations(degree);
 
-    Move move = new Move(direction, index, rotations, new Position(0,0));
+    Move move = new Move(direction, index, rotations, new Position(0, 0));
 
     Set<Position> positions = eBoard.findReachableTilePositionsAfterSlideAndInsert(move, current);
     positions.add(current);

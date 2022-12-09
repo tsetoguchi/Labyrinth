@@ -7,8 +7,8 @@ import java.util.Optional;
 import player.IPlayer;
 
 /**
- * Class responsible for establishing a connection with a server then kickstarting a ProxyReferee
- * to facilitate network calls on the given IPlayer.
+ * Class responsible for establishing a connection with a server then kickstarting a ProxyReferee to
+ * facilitate network calls on the given IPlayer.
  */
 public class Client implements Runnable {
 
@@ -40,7 +40,7 @@ public class Client implements Runnable {
 
     try {
       //TODO debug Client
-      //System.out.println(this.player.getName() + " connected");
+      System.out.println(this.player.getName() + " connected");
       ProxyReferee proxyRef = new ProxyReferee(socket.get(), this.player);
       proxyRef.run();
     } catch (IOException e) {

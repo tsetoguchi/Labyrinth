@@ -68,7 +68,6 @@
 //
 //            return this.getCandidatesInOrder(experimentationUniformBoardView,
 //                new Position(0,0));
-//            //ToDo fix this!
 //        }
 //    }
 //}

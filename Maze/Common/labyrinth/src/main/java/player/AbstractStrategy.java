@@ -61,16 +61,16 @@ public abstract class AbstractStrategy implements IStrategy {
   /**
    * Returns an ITurn which will result in reaching the given candidate Tile, or a Pass.
    */
-  private ITurn createTurnForCandidate(Position currentPosition, Position candidate){
+  private ITurn createTurnForCandidate(Position currentPosition, Position candidate) {
     ExperimentationBoard board = this.state.getBoard();
     int boardHeight = board.getHeight();
     int boardWidth = board.getWidth();
 
     for (int rowIndex = 0; rowIndex < boardHeight; rowIndex++) {
       for (Direction direction : new Direction[]{LEFT, RIGHT}) {
-        for (int rotations = 4; rotations >= 1; rotations--){
+        for (int rotations = 4; rotations >= 1; rotations--) {
           Move toTry = new Move(direction, rowIndex, rotations, candidate);
-          if(this.validTurn(currentPosition, toTry)){
+          if (this.validTurn(currentPosition, toTry)) {
             return toTry;
           }
         }
@@ -79,9 +79,9 @@ public abstract class AbstractStrategy implements IStrategy {
 
     for (int colIndex = 0; colIndex < boardWidth; colIndex++) {
       for (Direction direction : new Direction[]{UP, DOWN}) {
-        for (int rotations = 4; rotations >= 1; rotations--){
+        for (int rotations = 4; rotations >= 1; rotations--) {
           Move toTry = new Move(direction, colIndex, rotations, candidate);
-          if(this.validTurn(currentPosition, toTry)){
+          if (this.validTurn(currentPosition, toTry)) {
             return toTry;
           }
         }
@@ -92,12 +92,14 @@ public abstract class AbstractStrategy implements IStrategy {
   }
 
   /**
-   * Returns true if the move is valid and reaches it's desired destination from the current position.
+   * Returns true if the move is valid and reaches it's desired destination from the current
+   * position.
    */
   private boolean validTurn(Position current, Move move) {
     ExperimentationBoard board = this.state.getBoard();
     Optional<SlideAndInsertRecord> previousSlide = this.state.getPreviousSlideAndInsert();
-    boolean slideValid = this.rules.isValidSlideAndInsert(move, board.getWidth(), board.getHeight());
+    boolean slideValid = this.rules.isValidSlideAndInsert(move, board.getWidth(),
+        board.getHeight());
     Position candidate = move.getMoveDestination();
     boolean reversesPrevious = previousSlide.isPresent() && previousSlide.get().revertsCheck(move);
 

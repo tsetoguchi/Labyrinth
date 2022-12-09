@@ -7,8 +7,8 @@ import model.board.IBoard;
 import referee.Move;
 
 /**
- * Represents a game state with a full set of functionality that is needed to manage a State.
- * This is mainly to be given to the Referee only.
+ * Represents a game state with a full set of functionality that is needed to manage a State. This
+ * is mainly to be given to the Referee only.
  */
 public interface IState {
 

@@ -54,10 +54,8 @@ public class PlayerAvatar {
 
   @Override
   public String toString() {
-    return "Player{" +
-        ", homePosition=" + this.home +
-        ", currentAvatarPosition=" + this.currentPosition +
-        '}';
+    return "home: " + this.home +
+        ", current: " + this.currentPosition;
   }
 
 

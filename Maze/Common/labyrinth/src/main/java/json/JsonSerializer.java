@@ -22,7 +22,6 @@ public class JsonSerializer {
 
   public static JSONArray move(Move move) throws JSONException {
     JSONArray resultArray = new JSONArray();
-    //
     resultArray.put(move.getSlideIndex());
     resultArray.put(move.getSlideDirection());
     resultArray.put(rotationsToDegrees(move.getSpareTileRotations()));
@@ -65,7 +64,6 @@ public class JsonSerializer {
         String[] currentTreasure = new String[2];//currentTile.getTreasure().toStringArray();
         currentTreasure[0] = "aplite";
         currentTreasure[1] = "aplite";
-
 
         currentConnectorsRow.put(currentConnectors);
         currentTreasureRow.put(currentTreasure);

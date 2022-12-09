@@ -14,7 +14,6 @@ import static model.board.Direction.UP;
 public class DefaultRules implements IRules {
 
 
-
   public DefaultRules() {
   }
 
