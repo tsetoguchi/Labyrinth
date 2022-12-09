@@ -14,8 +14,7 @@ public class EuclideanStrategy extends AbstractStrategy {
 
   /**
    * Gets all candidates to be considered in order of Euclidean distance from the goal Tile,
-   * breaking ties by row-column ordering, but always starting with the goal Tile. If the goal Tile
-   * is the spare Tile, all candidates are ranked in row-column order.
+   * breaking ties by row-column ordering, but always starting with the goal Tile.
    */
   @Override
   protected List<Position> getCandidatesInOrder(IBoard board,

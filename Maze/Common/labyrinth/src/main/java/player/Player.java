@@ -9,8 +9,7 @@ import referee.ITurn;
 import java.util.Optional;
 
 /**
- * Contains the logic involved in a player's decision making, handling a state and returns
- * TurnPlans.
+ * An AI player that determines its moves by asking its strategy.
  */
 public class Player implements IPlayer {
 
