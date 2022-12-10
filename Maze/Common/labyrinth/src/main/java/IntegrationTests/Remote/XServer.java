@@ -18,8 +18,6 @@ public class XServer {
     int port = Integer.parseInt(args[0]);
     JSONTokener jsonTokener = IntegrationUtils.getInput();
 
-//    JSONTokener jsonTokener = new JSONTokener("");
-
     JSONObject jsonGame = (JSONObject) jsonTokener.nextValue();
     IState game = JsonDeserializer.state(jsonGame);
 

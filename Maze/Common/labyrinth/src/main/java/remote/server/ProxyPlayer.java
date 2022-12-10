@@ -24,7 +24,7 @@ import remote.NetUtil;
 public class ProxyPlayer implements IPlayer {
 
   // The socket connected to the corresponding ProxyReferee
-  private final Socket socket;
+  protected final Socket socket;
   private final String playerName;
 
   public ProxyPlayer(Socket socket, String playerName) {

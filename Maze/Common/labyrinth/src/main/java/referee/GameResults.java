@@ -25,5 +25,4 @@ public class GameResults {
   public List<String> getEliminated() {
     return this.eliminated;
   }
-
 }

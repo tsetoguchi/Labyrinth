@@ -29,8 +29,6 @@ public class XClients {
     int port = Integer.parseInt(args[0]);
     JSONTokener jsonTokener = IntegrationUtils.getInput();
 
-//    JSONTokener jsonTokener = new JSONTokener("");
-
     InetAddress inetAddress = InetAddress.getLocalHost();
     if (args.length > 1) {
       inetAddress = InetAddress.getByName(args[1]);

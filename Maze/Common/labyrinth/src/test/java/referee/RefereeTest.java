@@ -141,6 +141,13 @@ class RefereeTest {
   }
 
   @Test
+  void runGame() {
+    GameResults results = this.referee.runGame();
+    assertEquals(new ArrayList<>(List.of(this.ip2.getName())), results.getWinners());
+    assertEquals(new ArrayList<>(), results.getEliminated());
+  }
+
+  @Test
   void addObserver() {
   }
 }
