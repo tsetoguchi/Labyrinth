@@ -1,41 +1,52 @@
 # Labyrinth
 
-The Labyrinth game takes place in a maze of twisty passages. Players navigate these passages, retrieved treasures, and race back to their home.
+**Labyrinth** is a maze-based board game where players navigate twisty passages to collect treasures and race back to their home tile to win.
 
-The game board is a rectangular grid of tiles. Each tile displays one of these Connector shapes: │, ─, ┐, └, ┌, ┘, ┬, ├, ┴, ┤, ┼. Since a player may rotate tiles by multiples of 90deg, there are really just four canonical shapes: │, └, ┬, ┼. These shapes connect tiles to each other if the ends of the shapes touch. In addition, every tile comes with a unique and unordered pair of The Gems, referred to as the treasure.
+## Game Overview
 
-The key complication is that every other row and column can slide in either direction. The outermost rows and columns are movable. A row or column can be moved by one tile at a time, which means one falls off and one spot on the grid is without a tile.
+In Labyrinth, players explore a maze filled with hidden treasures and shifting pathways. The objective is to collect a designated treasure and be the first to return to your starting position.
 
-The referee sets up the board, picks one spare tile, assigns players a home, and tells each player which treasure is to be retrieved and brought home.
+## Game Board
 
-A player performs a turn in three steps. Step 1 is to slide a row or a column by one tile. Step 2 is to rotate the spare tile and put it into the free spot on the grid. Step 3 is to move the player to any tile that is reachable according to the connectors on the tiles. The first player to wrap up the hunt for treasure is the winner; everyone else is a loser.
+The board consists of a **7x7 grid** of tiles, each displaying one of four connector shapes (`│`, `└`, `┬`, `┼`). These connectors form paths that link tiles together when their ends meet. Each tile also holds a unique, random pair of “gems,” which act as treasures.
 
-The marketing department has suggested that the initial board game size should be a 7x7 grid, with four movable rows and four movable columns. .. and that we will eventually sell expansion packs for larger maze parties.
+**Board mechanics**:
+- Rows and columns on the outer edges can slide left, right, up, or down, shifting tiles by one position.
+- Sliding creates an open spot on the grid, which can be filled by a spare tile.
+- Future expansions support larger grids for more complex mazes and gameplay.
 
-**Pieces**
+## Setting Up
 
-The game comes with a grid, enough tiles to populate each spot on the grid, and one spare tile. It also has (fake versions of) the gems specified in The Gems. Finally, the set includes player tokens of distinct colors and home tokens of corresponding colors.
+1. **Arrange the board** and place player avatars at their starting “home” tiles.
+2. **Assign treasures** for each player to collect and return home.
+3. **Place the spare tile** off the board.
 
-**Playing a Turn**
+## Playing a Turn
 
-After all players are set up, the game begins. The referee grants players turns, starting with the youngest one (and continuing by ascending age). At each turn a player must pass and do nothing or take action as follows:
+Each turn has three steps:
+1. **Slide a Row/Column**: Choose an outer row or column to slide by one tile. This creates an empty spot and sets aside a dislodged tile as the new spare. You cannot reverse the previous player's move.
+2. **Insert the Spare Tile**: Rotate the spare tile by 90° (if desired) and place it in the empty spot created by sliding the row or column.
+3. **Move Your Avatar**: Move your avatar along the connected pathways. You must move it at least one tile, but only as far as the connectors allow.
 
-1. Slide tiles
+## Winning the Game
 
-Pick a movable row or column. Slide all the tiles of that row/column over by one cell either left/right or up/down. This dislodges one tile at the end of that row/column. The dislodged tile becomes the new spare.
+- The game ends when a player collects their assigned treasure and returns to their starting position – they are the winner!
+- Alternatively, if all players pass on their turn during a full round, the game also ends.
 
-The player must not undo the previous sliding action.
+## Game Components
 
-2. Insert spare
+The game set includes:
+- A **7x7 grid** for the board
+- Enough **tiles** to fill each grid spot and one spare tile
+- **Gem tokens** representing treasures
+- Player avatars and matching home markers in distinct colors
 
-The player takes the old spare tile, rotates it by a multiple of 90deg, and places it into the grid where the sliding of a row or column left a hole.
+## Future Expansions
 
-3. Move avatar
+This game is designed to support:
+- **Larger grids** for extended mazes and gameplay variety in future expansions.
+- **Networked play** to allow players to compete remotely, adding an extra layer of challenge and engagement.
 
-Once the first two steps are completed, the player’s avatar must be moved through the connected pathways of the labyrinth. It may not remain on the tile where it is located in this re-configured board.
+--- 
 
-**Ending a Game**
-
-The first player to return home after visiting the assigned treasure is the winner. The game ends. The player must move to the goal tile to retrieve the treasure, and it must move from there to go back home.
-
-The game also ends if every player chooses not to move during one round.
+This structure keeps it concise and helps new players quickly understand the game flow and components. Let me know if you'd like further details or examples!
